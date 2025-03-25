@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import './App.css'
-import { Header } from './components/Header/Header'
-import { Courses } from './components/Courses/Courses'
+import { Header } from './components/Header/'
+import { Courses } from './components/Courses'
 import { mockedCoursesList } from "./constants";
-import { CourseInfo } from './components/CourseInfo/CourseInfo';
+import { CourseInfo } from './components/CourseInfo';
 import { SearchBar } from './common/SearchBar';
 
 function App() {

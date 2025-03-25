@@ -1,20 +1,8 @@
 import { CourseCard } from "./CourseCard/CourseCard";
 import { getAuthorNames } from "../../helpers";
 import { EmptyCourseList } from "./EmptyCourseList";
-
-export type Course = {
-  id: string,
-  title: string,
-  description: string,
-  creationDate: string,
-  duration: number,
-  authors: string[]
-}
-
-interface CoursesProps {
-  coursesList: Course[],
-  buttonClick: (arg: string) => void,
-}
+import { CoursesProps } from './types';
+import { mockedAuthorsList } from "../../constants/constants";
 
 export const Courses = ({ coursesList, buttonClick }: CoursesProps) => {
 
@@ -27,7 +15,7 @@ export const Courses = ({ coursesList, buttonClick }: CoursesProps) => {
             title={item.title}
             description={item.description}
             duration={item.duration}
-            authors={getAuthorNames(item.authors)}
+            authors={getAuthorNames(item.authors, mockedAuthorsList)}
             creationDate={item.creationDate.replaceAll('/', '.')}
             key={item.id}
             buttonClick={() => buttonClick(item.id)} />

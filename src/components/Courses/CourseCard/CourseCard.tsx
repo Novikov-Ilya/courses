@@ -1,54 +1,27 @@
-import styled from "styled-components";
-import { Button } from "../../../common/Button/Button";
-import { ICourseCard } from "./ICourseCard";
-import { formatDuration } from "../../../helpers";
-import { strings } from "../../../strings";
-
-const CourseCardWrapper = styled.div`
-  display: flex;
-  width: 1122px;
-  height: 240px;
-  padding: 20px;
-  border: 2px solid #007298;
-  border-left: 8px solid #007298;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  box-shadow: 4px 4px 10px #007298;
-  justify-content: space-between;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
-`
-
-const Description = styled.section`
-  width: 677px;
-`
-
-const InfoSection = styled.section`
-  width: 323px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`
+import { Button } from "../../../common/Button";
+import { ICourseCard } from "./types";
+import { formatDuration } from "../../../helpers/formatDuration";
+import { dictionary } from "../../../strings";
+import { CourseCardWrapper, DescriptionStyled, InfoSectionStyled } from "./styled";
 
 export const CourseCard = ({ title, description, duration, authors, creationDate, buttonClick }: ICourseCard) => {
 
   return (
     <CourseCardWrapper>
-      <Description>
+      <DescriptionStyled>
         <h3>{title}</h3>
         <p>{description}</p>
-      </Description>
-      <InfoSection>
+      </DescriptionStyled>
+      <InfoSectionStyled>
         <div>
-          <p><b>{strings.courseAuthors}: </b>{authors}</p>
-          <p><b>{strings.courseDuration}: </b>{formatDuration(duration)}</p>
-          <p><b>{strings.courseCreated}: </b>{creationDate}</p>
+          <p><b>{dictionary.courseAuthors}: </b>{authors}</p>
+          <p><b>{dictionary.courseDuration}: </b>{formatDuration(duration)}</p>
+          <p><b>{dictionary.courseCreated}: </b>{creationDate}</p>
         </div>
         <div>
-          <Button buttonText={strings.buttonShowCourse} handleClick={buttonClick ? buttonClick : () => {}} />
+          <Button buttonText={dictionary.buttonShowCourse} handleClick={buttonClick ? buttonClick : () => {}} />
         </div>
-      </InfoSection>
+      </InfoSectionStyled>
     </CourseCardWrapper>
   )
 }

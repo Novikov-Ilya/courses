@@ -1,0 +1,1 @@
+export {mockedCoursesList, mockedAuthorsList} from './constants'

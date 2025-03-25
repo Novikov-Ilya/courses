@@ -1,8 +1,4 @@
-interface InputProps {
-  placeholderText: string,
-  labelText: string,
-  onChange: () => void
-}
+import { InputProps } from "./types"
 
 export const Input = ({placeholderText, labelText, onChange}: InputProps) => {
   return (

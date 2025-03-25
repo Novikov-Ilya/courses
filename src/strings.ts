@@ -1,4 +1,4 @@
-export const strings = {
+export const dictionary = {
   buttonAddNewCourse: 'ADD NEW COURSE',
   buttonSearch: 'SEARCH',
   buttonLogout: 'LOGOUT',
