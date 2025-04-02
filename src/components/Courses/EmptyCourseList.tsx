@@ -1,5 +1,5 @@
-import { Button } from "../../common/Button";
-import { dictionary } from "../../strings";
+import { Button } from "@common/Button";
+import { dictionary } from "@i18n/strings";
 import { EmptyListWrapperStyled } from "./styled";
 
 export const EmptyCourseList = () => {

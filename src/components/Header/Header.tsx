@@ -1,5 +1,5 @@
-import { Button } from "../../common/Button";
-import { Logo } from "../Logo";
+import { Button } from "@common/Button";
+import { Logo } from "@components/Logo";
 import { HeaderProps } from "./types";
 import { HeaderStyled, LoginWrapper } from "./styled";
 

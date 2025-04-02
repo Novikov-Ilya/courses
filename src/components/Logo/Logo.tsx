@@ -3,8 +3,8 @@ import { LogoImageStyled } from './styled';
 
 export const Logo = () => {
   return (
-    <div>
+    <>
       <LogoImageStyled src={logo} alt="logo" />
-    </div>
+    </>
   )
 }

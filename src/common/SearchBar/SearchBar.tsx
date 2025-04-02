@@ -1,5 +1,6 @@
-import { Button, Input } from "../Button/";
-import { dictionary } from "../../strings";
+import { dictionary } from "@/i18n/strings";
+import { Button} from "@common/Button";
+import { Input } from "@common/Input";
 import { SearchPanelWrapper } from "./styled";
 import { SearchBarProps } from "./types";
 
