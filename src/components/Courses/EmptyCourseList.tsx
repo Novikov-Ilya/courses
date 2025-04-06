@@ -1,22 +1,13 @@
-import { Button } from "../../common/Button/Button";
-import styled from "styled-components";
-import { strings } from "../../strings";
-
-const EmptyListWrapper = styled.div`
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`
+import { Button } from "@common/Button";
+import { dictionary } from "@i18n/strings";
+import { EmptyListWrapperStyled } from "./styled";
 
 export const EmptyCourseList = () => {
   return (
-    <EmptyListWrapper>
-      <h1>{strings.courseListEmpty}</h1>
-      <p>{strings.courseListEmptyTip}</p>
-      <Button buttonText={strings.buttonAddNewCourse} handleClick={() => { }} />
-    </EmptyListWrapper>
+    <EmptyListWrapperStyled>
+      <h1>{dictionary.courseListEmpty}</h1>
+      <p>{dictionary.courseListEmptyTip}</p>
+      <Button buttonText={dictionary.buttonAddNewCourse} handleClick={() => { }} />
+    </EmptyListWrapperStyled>
   )
 }

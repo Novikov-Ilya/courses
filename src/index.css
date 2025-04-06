@@ -62,8 +62,11 @@ input {
   border: solid 1px #007298;
   background-color: #fff;
   color: #000;
+  height: 100%;
+  margin-right: 10px;
+  outline: none;
 }
 
 input:focus {
-  border: solid 2px #007298;
+  border: solid 1px #007298;
 }

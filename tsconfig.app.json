@@ -6,6 +6,15 @@
     "lib": ["ES2021", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@common/*": ["src/common/*"],
+      "@components/*": ["src/components/*"],
+      "@constants": ["src/constants"],
+      "@helpers": ["src/helpers"],
+      "@i18n/*": ["src/i18n/*"],
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",

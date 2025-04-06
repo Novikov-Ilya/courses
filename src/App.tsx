@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import './App.css'
-import { Header } from './components/Header/Header'
-import { Courses } from './components/Courses/Courses'
-import { mockedCoursesList } from "./constants";
-import { CourseInfo } from './components/CourseInfo/CourseInfo';
-import { SearchBar } from './common/SearchBar';
+import { Header } from '@components/Header'
+import { Courses } from '@components/Courses'
+import { mockedCoursesList } from "@constants";
+import { CourseInfo } from '@components/CourseInfo';
+import { SearchBar } from '@common/SearchBar';
 
 function App() {
   const [showCourseCard, setShowCourseCard] = useState<string | null>(null);
@@ -33,7 +33,7 @@ function App() {
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
-    if(!e.target.value.trim()) {
+    if (!e.target.value.trim()) {
       setCoursesList(mockedCoursesList);
     }
   }
@@ -42,13 +42,20 @@ function App() {
   return (
     <>
       <Header handleClick={loginAction} />
-      <SearchBar handleSearch={handleSearchByButtonClick} searchValue={searchValue} handleSearchInput={handleSearchInput} />
+      <SearchBar
+        handleSearch={handleSearchByButtonClick}
+        searchValue={searchValue}
+        handleSearchInput={handleSearchInput} />
       {!showCourseCard &&
         <Courses
           coursesList={coursesList}
           buttonClick={showCourse}
         />}
-      {showCourseCard && <CourseInfo coursesList={mockedCoursesList} onBack={backAction} showCourseId={showCourseCard!} />}
+      {showCourseCard &&
+        <CourseInfo
+          coursesList={mockedCoursesList}
+          onBack={backAction}
+          showCourseId={showCourseCard!} />}
     </>
   )
 }
