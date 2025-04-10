@@ -8,6 +8,5 @@ export type CourseType = {
 }
 
 export interface CoursesProps {
-  coursesList: CourseType[],
-  buttonClick: (arg: string) => void,
+  courses: CourseType[],
 }

@@ -14,6 +14,7 @@ export const CourseInfoWrapper = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
+  margin-top: 20px;
 `
 
 export const DescriptionStyled = styled.section`

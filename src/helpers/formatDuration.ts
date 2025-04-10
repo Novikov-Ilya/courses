@@ -1,6 +1,6 @@
 export function formatDuration(duration: number = 0) {
-  let hours = Math.trunc(duration / 60).toString();
-  const minutes = duration % 60;
-  if (+hours < 10) hours = '0' + hours;
+  const hours = Math.trunc(duration / 60).toString().padStart(2, '0');
+  const minutes = (duration % 60).toString().padStart(2, '0');
+  
   return `${hours}:${minutes} hours`
 }
