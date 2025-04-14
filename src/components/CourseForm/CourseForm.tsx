@@ -107,7 +107,7 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
         <fieldset className="duration">
           <legend>Duration</legend>
           <Input
-            type="text"
+            type="number"
             placeholderText="Input duration"
             labelText={dictionary.inputLabelDuration}
             required={true}

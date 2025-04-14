@@ -1,4 +1,4 @@
-type InputType = 'text' | 'password' | 'email';
+type InputType = 'text' | 'password' | 'email' | 'number';
 
 export interface InputProps {
   value: string,

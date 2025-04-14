@@ -1,9 +1,10 @@
+import { LabelStyled } from "./styled"
 import { InputProps } from "./types"
 import { dictionary } from "@i18n/strings"
 
 export const Input = ({ placeholderText, value, labelText, onChange, type, required, name, isError, onBlur }: InputProps) => {
   return (
-    <label>{labelText}
+    <LabelStyled>{labelText}
       <input
         type={type}
         onChange={onChange}
@@ -15,6 +16,6 @@ export const Input = ({ placeholderText, value, labelText, onChange, type, requi
         className={isError ? 'input-error' : ''}
         />
         {isError && <span style={{color: 'red', fontWeight: 400, fontSize: '16px'}}>{`${labelText}${dictionary.filedIsRequired}`}</span>}
-    </label>
+    </LabelStyled>
   )
 }
