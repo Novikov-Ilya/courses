@@ -1,15 +1,14 @@
 import { Button } from "@common/Button";
 import { Logo } from "@components/Logo";
 import { HeaderStyled, LoginWrapper } from "./styled";
-import { Link, useNavigate } from "react-router-dom";
-import { useLoggedIn } from "@hooks";
+import { useNavigate } from "react-router-dom";
 import { dictionary } from "@i18n/strings";
 import { useEffect, useState } from "react";
+import { publicPaths } from "@constants";
 
 export const Header = () => {
   const [userName, setUserName] = useState('Unknown');
-  const navigate = useNavigate()
-  const isAuthorized = useLoggedIn();
+  const navigate = useNavigate();
 
   console.log(userName)
 
@@ -19,35 +18,32 @@ export const Header = () => {
     }
     return '';
   };
-  
+
   useEffect(() => {
     setUserName(getUserNameFromLocalStorage());
   }, [userName]);
 
   const loginButtonAction = () => {
-    if (isAuthorized) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('userName');
-      setUserName('Unknown')
-      navigate('/login')
-    } else {
-      navigate('/courses');
-      setUserName(getUserNameFromLocalStorage());
-    }
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    setUserName('Unknown')
+    navigate('/login')
   }
+
   return (
     <HeaderStyled>
       <Logo />
       <LoginWrapper>
         <div>
-          User name: {userName}
+          {userName}
         </div>
         <div>
-          <Link to={'/login'}>
+          {
+            !publicPaths.includes(location.pathname) &&
             <Button
-              buttonText={isAuthorized ? dictionary.buttonLogout : dictionary.buttonLogin}
+              buttonText={dictionary.buttonLogout}
               handleClick={loginButtonAction} />
-          </Link>
+          }
         </div>
       </LoginWrapper>
     </HeaderStyled>
