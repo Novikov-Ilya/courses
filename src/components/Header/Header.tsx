@@ -4,13 +4,12 @@ import { HeaderStyled, LoginWrapper } from "./styled";
 import { useNavigate } from "react-router-dom";
 import { dictionary } from "@i18n/strings";
 import { useEffect, useState } from "react";
-import { publicPaths } from "@constants";
+import { useLoggedIn } from "@hooks";
 
 export const Header = () => {
   const [userName, setUserName] = useState('Unknown');
   const navigate = useNavigate();
-
-  console.log(userName)
+  const isAuthorized = useLoggedIn()
 
   const getUserNameFromLocalStorage = () => {
     if (typeof window !== 'undefined') {
@@ -34,12 +33,12 @@ export const Header = () => {
     <HeaderStyled>
       <Logo />
       <LoginWrapper>
-        <div>
+        <span>
           {userName}
-        </div>
+        </span>
         <div>
           {
-            !publicPaths.includes(location.pathname) &&
+            isAuthorized &&
             <Button
               buttonText={dictionary.buttonLogout}
               handleClick={loginButtonAction} />

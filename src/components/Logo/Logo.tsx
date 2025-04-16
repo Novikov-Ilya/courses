@@ -4,10 +4,8 @@ import { LogoImageStyled } from './styled';
 
 export const Logo = () => {
   return (
-    <>
-      <Link to={'/courses'}>
-        <LogoImageStyled src={logo} alt="logo" />
-      </Link>
-    </>
+    <Link to='/courses'>
+      <LogoImageStyled src={logo} alt="logo" />
+    </Link>
   )
 }
