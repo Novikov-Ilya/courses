@@ -32,19 +32,19 @@ export const Header = () => {
   return (
     <HeaderStyled>
       <Logo />
-      <LoginWrapper>
-        <span>
-          {userName}
-        </span>
-        <div>
-          {
-            isAuthorized &&
+      {
+        isAuthorized &&
+        <LoginWrapper>
+          <span>
+            {userName}
+          </span>
+          <div>
             <Button
               buttonText={dictionary.buttonLogout}
               handleClick={loginButtonAction} />
-          }
-        </div>
-      </LoginWrapper>
+          </div>
+        </LoginWrapper>
+      }
     </HeaderStyled>
   )
 }
