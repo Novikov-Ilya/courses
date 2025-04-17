@@ -2,9 +2,9 @@ import { Button } from "@common/Button"
 import { Input } from "@common/Input"
 import { dictionary } from "@i18n/strings"
 import { Link, useNavigate } from "react-router-dom"
-import { StyledLoginForm } from "./styled"
 import { login } from "@api"
 import { useInputHandler, useLoggedIn } from "@hooks"
+import { FormWrapperStyled } from "@common/Styled"
 
 export const Login = () => {
   const { formData, onChange } = useInputHandler({
@@ -13,7 +13,7 @@ export const Login = () => {
   });
   const navigate = useNavigate();
   const isAuthorized = useLoggedIn();
-  if(isAuthorized) navigate('/courses');
+  if (isAuthorized) navigate('/courses');
 
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -30,34 +30,37 @@ export const Login = () => {
   return (
     <>
       <h1>Login</h1>
-      <StyledLoginForm onSubmit={(e) => submitForm(e)}>
-        <Input
-          placeholderText="Input email"
-          labelText={dictionary.inputLabelEmail}
-          type="text"
-          name="email"
-          onChange={onChange}
-          required={true}
-          value={formData.email}
-        />
-        <Input
-          placeholderText="Input password"
-          labelText={dictionary.inputLabelPassword}
-          type="password"
-          name="password"
-          onChange={onChange}
-          required={true}
-          value={formData.password}
-        />
-        <Button
-          buttonText={dictionary.buttonLogin}
-          type="submit"
-        />
+      <FormWrapperStyled>
+        <form onSubmit={(e) => submitForm(e)}>
 
-        <p>{dictionary.registerIfNoAccount}
-          <Link to={'/registration'}>{dictionary.linkRegistration}</Link>
-        </p>
-      </StyledLoginForm>
+          <Input
+            placeholderText="Input email"
+            labelText={dictionary.inputLabelEmail}
+            type="text"
+            name="email"
+            onChange={onChange}
+            required={true}
+            value={formData.email}
+          />
+          <Input
+            placeholderText="Input password"
+            labelText={dictionary.inputLabelPassword}
+            type="password"
+            name="password"
+            onChange={onChange}
+            required={true}
+            value={formData.password}
+          />
+          <Button
+            buttonText={dictionary.buttonLogin}
+            type="submit"
+          />
+
+          <p>{dictionary.registerIfNoAccount}
+            <Link to={'/registration'}>{dictionary.linkRegistration}</Link>
+          </p>
+        </form>
+      </FormWrapperStyled>
     </>
   )
 }

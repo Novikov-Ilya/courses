@@ -3,13 +3,14 @@ import styled from "styled-components";
 export const LabelStyled = styled.label`
   font-size: 14px;
   font-weight: 700;
+  display: flex;
+  flex-direction: column;
 
   & > textarea {
     border-radius: 4px;
     border: solid 1px #000000;
     background-color: #fff;
     color: #000;
-    margin-right: 10px;
     outline: none;
     font-family: inherit;
     font-size: 16px;
