@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { IFormValidateState } from "./types";
+import { UseFormValidationResult } from "./types";
 
-export function useFormValidate() {
-  const [inputError, setInputError] = useState<IFormValidateState>({});
+export function useFormValidate<T extends Record<string, boolean>>(
+  initialState: T
+): UseFormValidationResult<T> {
+
+  const [inputError, setInputError] = useState(initialState);
   return {
     inputError,
     onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -18,7 +21,6 @@ export function useFormValidate() {
           [name]: false,
         }));
       }
-
     }
   }
 }

@@ -1,6 +1,7 @@
 type InputType = 'text' | 'password' | 'email' | 'number';
 
 export interface InputProps {
+  id?: string,
   value: string,
   placeholderText: string,
   labelText?: string,

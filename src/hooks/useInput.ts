@@ -1,6 +1,10 @@
 import { useState } from "react";
+import { UseInputHanlderResult } from "./types";
 
-export function useInputHandler<T extends Record<string, string>>(initialState: T) {
+export function useInputHandler<T extends Record<string, string>>(
+  initialState: T
+): UseInputHanlderResult<T> {
+
   const [formData, setFormData] = useState(initialState);
 
   return {
@@ -19,5 +23,4 @@ export function useInputHandler<T extends Record<string, string>>(initialState: 
       }))
     }
   }
-
 }

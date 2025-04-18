@@ -4,15 +4,23 @@ import { dictionary } from "@i18n/strings"
 import { Link, useNavigate } from "react-router-dom"
 import { useInputHandler, useFormValidate } from "@hooks"
 import { register } from "@api"
-import { FormWrapperStyled } from "@common/Styled"
+import { FormWrapperStyled, SimpleFormStyled } from "@common/Styled"
+
+const formFieldsInitValue = {
+  name: '',
+  email: '',
+  password: ''
+}
+
+const formFieldsErrors = {
+  name: false,
+  email: false,
+  password: false
+}
 
 export const Registration = () => {
-  const { formData, onChange } = useInputHandler({
-    name: '',
-    email: '',
-    password: ''
-  });
-  const { inputError, onBlur } = useFormValidate();
+  const { formData, onChange } = useInputHandler(formFieldsInitValue);
+  const { inputError, onBlur } = useFormValidate(formFieldsErrors);
   const navigate = useNavigate();
 
   const submitForm = async (event: React.FormEvent) => {
@@ -29,7 +37,7 @@ export const Registration = () => {
     <>
       <h1>Registration</h1>
       <FormWrapperStyled>
-        <form onSubmit={(e) => submitForm(e)}>
+        <SimpleFormStyled onSubmit={submitForm}>
 
           <Input
             placeholderText="Input name"
@@ -40,7 +48,7 @@ export const Registration = () => {
             onChange={onChange}
             value={formData.name}
             isError={inputError.name}
-            onBlur={(e) => onBlur(e)}
+            onBlur={onBlur}
           />
           <Input
             placeholderText="Input Email"
@@ -51,7 +59,7 @@ export const Registration = () => {
             onChange={onChange}
             value={formData.email}
             isError={inputError.email}
-            onBlur={(e) => onBlur(e)}
+            onBlur={onBlur}
           />
           <Input
             placeholderText="Input password"
@@ -62,7 +70,7 @@ export const Registration = () => {
             onChange={onChange}
             value={formData.password}
             isError={inputError.password}
-            onBlur={(e) => onBlur(e)}
+            onBlur={onBlur}
           />
           <Button
             buttonText={dictionary.buttonRegister}
@@ -71,7 +79,7 @@ export const Registration = () => {
           <p>{dictionary.loginIfHaveAccount}
             <Link to={'/login'}>{dictionary.linkLogin}</Link>
           </p>
-        </form>
+        </SimpleFormStyled>
       </FormWrapperStyled>
     </>
   )
