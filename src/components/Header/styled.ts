@@ -9,12 +9,11 @@ height: 65px;
 display: flex;
 justify-content: space-between;
 background-color: #fff;
-padding-left: 10px;
+padding: 0 20px;
 `
 
 export const LoginWrapper = styled.div`
   display: flex;
   align-items: center;
-  position: relative;
-  right: 40px;
+  gap: 10px;
 `
