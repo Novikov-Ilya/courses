@@ -2,7 +2,6 @@ import { Input } from "@common/Input"
 import { dictionary } from "@i18n/strings"
 import { useInputHandler, useFormValidate } from "@hooks"
 import { TextArea } from "@common/TextArea";
-// import { StyledNewCourseForm } from "./styled";
 import { formatDuration } from "@helpers";
 import { Button } from "@common/Button";
 import { useNavigate } from "react-router-dom";
@@ -13,15 +12,24 @@ import { CourseType } from "@components/Courses/types";
 import { CourseFormProps } from "./types";
 import { FormWrapperStyled } from "@common/Styled";
 
+const formFieldsInitValue = {
+  title: '',
+  description: '',
+  duration: '',
+  authors: ''
+}
+
+const formFieldsInitError = {
+  title: false,
+  description: false,
+  duration: false,
+  authors: false
+}
+
 export const CourseForm = ({ addCourse }: CourseFormProps) => {
   const [authors, setAuthors] = useState<Array<IAuthorItem>>([])
-  const { formData, onChange, clearAuthorsField } = useInputHandler({
-    title: '',
-    description: '',
-    duration: '',
-    authors: ''
-  });
-  const { inputError, onBlur } = useFormValidate();
+  const { formData, onChange, clearAuthorsField } = useInputHandler(formFieldsInitValue);
+  const { inputError, onBlur } = useFormValidate(formFieldsInitError);
   const navigate = useNavigate();
 
   const formattedDuration = formatDuration(Number(formData.duration));
