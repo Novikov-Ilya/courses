@@ -3,7 +3,7 @@ import { getAuthorNames } from "@helpers";
 import { EmptyCourseList } from "@components/Courses/EmptyCourseList";
 import { mockedAuthorsList, mockedCoursesList } from "@constants";
 import { SearchBar } from "@common/SearchBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@common/Button";
 import { dictionary } from "@i18n/strings";
@@ -15,9 +15,13 @@ export const Courses = ({ courses }: CoursesProps) => {
   const [coursesList, setCoursesList] = useState(courses);
   const [searchValue, setSearchValue] = useState<string>('');
   const navigate = useNavigate();
+  const { isAuthorized } = useLoggedIn();
 
-  const isAuthorized = useLoggedIn();
-  if (!isAuthorized) return null
+  useEffect(() => {
+    if (!isAuthorized) {
+      navigate('/login');
+    }
+  }, [isAuthorized, navigate])
 
   const showCourse = (id: string) => {
     navigate(`/courses/${id}`);

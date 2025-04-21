@@ -20,7 +20,7 @@ export const Login = () => {
   const { formData, onChange } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
   const navigate = useNavigate();
-  const isAuthorized = useLoggedIn();
+  const { isAuthorized } = useLoggedIn();
   if (isAuthorized) navigate('/courses');
 
   const submitForm = async (event: React.FormEvent) => {

@@ -1,25 +1,39 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { publicPaths } from "@constants";
 
 export const useLoggedIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null)
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    
-    if(publicPaths.includes(location.pathname)) {
-      return
+    const checkAuthorization = () => {
+      const token = localStorage.getItem('token');
+      const userNameFromLS = localStorage.getItem('userName');
+  
+      if (!token) {
+        setIsAuthorized(false);
+        setUserName(null)
+      } else {
+        setIsAuthorized(true);
+        setUserName(userNameFromLS);
+      }
     }
 
-    if (!token) {
-      setIsAuthorized(false)
-      navigate('/login');
-    } else {
-      setIsAuthorized(true)
+    checkAuthorization();
+
+    const handleStorageChange = () => {
+      checkAuthorization();
     }
-  }, [navigate, location.pathname])
-  return isAuthorized;
+
+    window.addEventListener('storage', () => {
+      handleStorageChange();
+    })
+    
+  }, [navigate, location.pathname]);
+  return {
+    isAuthorized,
+    userName
+  };
 }
