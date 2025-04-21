@@ -1,0 +1,1 @@
+export {setAuthData, clearAuthData} from './authStorage'

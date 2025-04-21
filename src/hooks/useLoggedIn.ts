@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
 
 export const useLoggedIn = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
 
@@ -12,26 +9,20 @@ export const useLoggedIn = () => {
       const token = localStorage.getItem('token');
       const userNameFromLS = localStorage.getItem('userName');
   
-      if (!token) {
-        setIsAuthorized(false);
-        setUserName(null)
-      } else {
-        setIsAuthorized(true);
-        setUserName(userNameFromLS);
-      }
+      setIsAuthorized(Boolean(token));
+      setUserName(userNameFromLS ?? null);
     }
 
     checkAuthorization();
 
-    const handleStorageChange = () => {
-      checkAuthorization();
-    }
+    window.addEventListener('storage', checkAuthorization);
 
-    window.addEventListener('storage', () => {
-      handleStorageChange();
-    })
+    return () => {
+      window.removeEventListener('storage', checkAuthorization)
+    }
     
-  }, [navigate, location.pathname]);
+  }, []);
+
   return {
     isAuthorized,
     userName

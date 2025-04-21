@@ -4,14 +4,14 @@ import { HeaderStyled, LoginWrapper } from "./styled";
 import { useNavigate } from "react-router-dom";
 import { dictionary } from "@i18n/strings";
 import { useLoggedIn } from "@hooks";
+import { clearAuthData } from "@utils";
 
 export const Header = () => {
   const navigate = useNavigate();
   const { isAuthorized, userName } = useLoggedIn();
 
   const loginButtonAction = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userName');
+    clearAuthData();
     navigate('/login')
   }
 

@@ -14,6 +14,7 @@ export default defineConfig({
       '@i18n': path.resolve(__dirname, 'src/i18n'),
       '@api': path.resolve(__dirname, 'src/api'),
       '@hooks': path.resolve(__dirname, 'src/hooks'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
     }
   }
 })

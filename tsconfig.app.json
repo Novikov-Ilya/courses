@@ -15,6 +15,7 @@
       "@i18n/*": ["src/i18n/*"],
       "@api": ["src/api"],
       "@hooks": ["src/hooks"],
+      "@utils": ["src/utils"],
     },
 
     /* Bundler mode */
