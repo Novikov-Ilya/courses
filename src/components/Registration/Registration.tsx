@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useInputHandler, useFormValidate } from "@hooks"
 import { register } from "@api"
 import { FormWrapperStyled, SimpleFormStyled } from "@common/Styled"
+import { useState } from "react"
 
 const formFieldsInitValue = {
   name: '',
@@ -21,6 +22,7 @@ const formFieldsErrors = {
 export const Registration = () => {
   const { formData, onChange } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsErrors);
+  const [registerError, setRegisterError] = useState<string | null>(null)
   const navigate = useNavigate();
 
   const submitForm = async (event: React.FormEvent) => {
@@ -29,7 +31,7 @@ export const Registration = () => {
     if (registerResult?.successful) {
       navigate('/login')
     } else {
-      console.log(registerResult?.errors);
+      setRegisterError(registerResult.toString());
     }
   }
 
@@ -37,7 +39,7 @@ export const Registration = () => {
     <>
       <h1>Registration</h1>
       <FormWrapperStyled>
-        <SimpleFormStyled onSubmit={submitForm}>
+        <SimpleFormStyled onSubmit={submitForm} noValidate>
 
           <Input
             placeholderText="Input name"
@@ -72,6 +74,7 @@ export const Registration = () => {
             isError={inputError.password}
             onBlur={onBlur}
           />
+          <span className="form__error-message">{registerError}</span>
           <Button
             buttonText={dictionary.buttonRegister}
             type="submit"

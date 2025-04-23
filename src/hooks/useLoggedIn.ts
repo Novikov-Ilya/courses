@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 
 export const useLoggedIn = () => {
-  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
-  const [userName, setUserName] = useState<string | null>(null);
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(() => 
+    Boolean(localStorage.getItem('token'))
+  );
+  const [userName, setUserName] = useState<string | null>(() => 
+    localStorage.getItem('userName') ?? null
+  );
 
   useEffect(() => {
     const checkAuthorization = () => {
@@ -12,8 +16,6 @@ export const useLoggedIn = () => {
       setIsAuthorized(Boolean(token));
       setUserName(userNameFromLS ?? null);
     }
-
-    checkAuthorization();
 
     window.addEventListener('storage', checkAuthorization);
 

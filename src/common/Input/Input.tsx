@@ -11,7 +11,7 @@ export const Input = ({
   name,
   isError,
   onBlur,
-  id
+  id,
 }: InputProps) => {
   return (
     <InputWrapperStyled>

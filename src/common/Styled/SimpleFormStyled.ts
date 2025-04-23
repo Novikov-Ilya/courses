@@ -19,4 +19,10 @@ export const SimpleFormStyled = styled.form`
     font-size: 24px;
     font-weight: 700;
   }
+
+  .form__error-message {
+    color: red;
+    font-size: 12px;
+    height: 16px;
+  }
 `

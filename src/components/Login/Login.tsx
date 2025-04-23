@@ -6,6 +6,7 @@ import { login } from "@api"
 import { useFormValidate, useInputHandler } from "@hooks"
 import { FormWrapperStyled, SimpleFormStyled } from "@common/Styled"
 import { setAuthData } from "@utils"
+import { useState } from "react"
 
 const formFieldsInitValue = {
   email: '',
@@ -20,6 +21,7 @@ const formFieldsInitError = {
 export const Login = () => {
   const { formData, onChange } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
+  const [loginError, setLoginError] = useState<string | null>(null)
   const navigate = useNavigate();
 
   const submitForm = async (event: React.FormEvent) => {
@@ -29,7 +31,7 @@ export const Login = () => {
       setAuthData(loginResult.result, loginResult.user?.name);
       navigate('/courses');
     } else {
-      console.log(loginResult);
+      setLoginError(loginResult.toString());
     }
   }
 
@@ -37,7 +39,7 @@ export const Login = () => {
     <>
       <h1>Login</h1>
       <FormWrapperStyled>
-        <SimpleFormStyled onSubmit={submitForm}>
+        <SimpleFormStyled onSubmit={submitForm} noValidate>
 
           <Input
             placeholderText="Input email"
@@ -63,6 +65,7 @@ export const Login = () => {
             isError={inputError.password}
             onBlur={onBlur}
           />
+          <span className="form__error-message">{loginError}</span>
           <Button
             buttonText={dictionary.buttonLogin}
             type="submit"

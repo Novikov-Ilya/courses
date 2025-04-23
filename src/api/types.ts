@@ -16,3 +16,5 @@ export interface IResponse {
     name: string
   }
 }
+
+export type Method = 'POST' | 'GET'
