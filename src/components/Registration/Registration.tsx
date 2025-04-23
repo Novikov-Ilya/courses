@@ -3,7 +3,7 @@ import { Input } from "@common/Input"
 import { dictionary } from "@i18n/strings"
 import { Link, useNavigate } from "react-router-dom"
 import { useInputHandler, useFormValidate } from "@hooks"
-import { register } from "@api"
+import { createUser } from "@services"
 import { FormWrapperStyled, SimpleFormStyled } from "@common/Styled"
 import { useState } from "react"
 
@@ -27,11 +27,12 @@ export const Registration = () => {
 
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
-    const registerResult = await register(event, formData);
-    if (registerResult?.successful) {
-      navigate('/login')
-    } else {
-      setRegisterError(registerResult.toString());
+    try {
+      await createUser(formData);
+      navigate('/login');
+    
+    } catch (error) {
+      setRegisterError((error as Error).message);
     }
   }
 

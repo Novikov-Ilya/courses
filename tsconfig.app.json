@@ -13,9 +13,9 @@
       "@constants": ["src/constants"],
       "@helpers": ["src/helpers"],
       "@i18n/*": ["src/i18n/*"],
-      "@api": ["src/api"],
       "@hooks": ["src/hooks"],
       "@utils": ["src/utils"],
+      "@services": ["src/services"],
     },
 
     /* Bundler mode */

@@ -2,7 +2,7 @@ import { Button } from "@common/Button"
 import { Input } from "@common/Input"
 import { dictionary } from "@i18n/strings"
 import { Link, useNavigate } from "react-router-dom"
-import { login } from "@api"
+import { login } from "@services"
 import { useFormValidate, useInputHandler } from "@hooks"
 import { FormWrapperStyled, SimpleFormStyled } from "@common/Styled"
 import { setAuthData } from "@utils"
@@ -26,12 +26,13 @@ export const Login = () => {
 
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
-    const loginResult = await login(event, formData);
-    if (loginResult?.successful && loginResult.result) {
-      setAuthData(loginResult.result, loginResult.user?.name);
+    try {
+      const loginResult = await login(formData);
+      setAuthData(loginResult.result as string, loginResult.user?.name);
       navigate('/courses');
-    } else {
-      setLoginError(loginResult.toString());
+    }
+     catch (error) {
+      setLoginError((error as Error).message);
     }
   }
 

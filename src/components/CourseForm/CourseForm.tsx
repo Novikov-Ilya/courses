@@ -50,7 +50,6 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
   }
 
   const deleteAuthor = (authorId: string) => {
-    console.log(authorId)
     setAuthors(
       authors.filter(author => author.id !== authorId)
     )
@@ -75,7 +74,6 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
       duration: Number(formData.duration),
       authors: authors.map(author => author.id)
     }
-    console.log(newCourse)
 
     addCourse((prev) => ([
       ...prev,
