@@ -28,7 +28,7 @@ export const Login = () => {
     event.preventDefault();
     try {
       const loginResult = await login(formData);
-      setAuthData(loginResult.result as string, loginResult.user?.name);
+      setAuthData(loginResult.result, loginResult.user?.name);
       navigate('/courses');
     }
      catch (error) {

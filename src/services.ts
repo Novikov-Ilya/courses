@@ -1,29 +1,41 @@
-import { IResponse, IUserLogin, IUserRegister, Method } from "./types";
+import { IErrorResponse, IResponse, IResponseWithResult, ISuccessLogin, ISuccessUserCration, IUserLogin, IUserRegister, Method } from "./types";
 
 const HOST = 'http://localhost:4000';
 const REQUEST_HEADERS = {
     'Content-Type': 'application/json'
 }
 
-const handleFetch = async <T>(path: string, method: Method, userData: T): Promise<IResponse> => {
+const isErrorResponse = <K extends IResponseWithResult>(result: K | IErrorResponse): result is IErrorResponse => {
+    return 'errors' in result;
+}
+
+const handleFetch = async <T, K extends IResponseWithResult>(path: string, method: Method, userData: T): Promise<K> => {
     try {
         const response = await fetch(`${HOST}/${path}`, {
             method: method,
             headers: REQUEST_HEADERS,
             body: JSON.stringify(userData)
         });
-        const result: IResponse = await response.json();
+        const result: K | IErrorResponse = await response.json();
         if (!response.ok) {
-            throw new Error(result.result ?? result.errors?.[0] ?? 'Unknown Error');
-        }
-        return result;
+            let errorMessage;
 
-    } catch (error: any) {
+            if (isErrorResponse(result)) {
+                errorMessage = result.errors?.[0]
+            } else {
+                errorMessage = result.result;
+            }
+
+            throw new Error(errorMessage ?? 'Unknown Error');
+        }
+        return result as K;
+
+    } catch (error: unknown) {
         console.error("Error:", error);
-        throw new Error(error);
+        throw error;
     }
 }
 
-export const login = async (userData: IUserLogin) => await handleFetch('login', Method.POST, userData);
+export const login = async (userData: IUserLogin) => await handleFetch<IUserLogin, ISuccessLogin>('login', Method.POST, userData);
 
-export const createUser = async (userData: IUserRegister) => await handleFetch('register', Method.POST, userData);
+export const createUser = async (userData: IUserRegister) => await handleFetch<IUserRegister, ISuccessUserCration>('register', Method.POST, userData);
