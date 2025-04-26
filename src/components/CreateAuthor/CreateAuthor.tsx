@@ -30,13 +30,14 @@ export const CreateAuthor = ({ authorsList, createAuthor, addCourseAuthor, delet
                 handleClick={() => createAuthor(formData.authors)}
             />
             <div className="create-author__authors-list">
-                {authorsList.map(author => <AuthorItem
-                    key={author.id}
-                    authorName={author.name}
-                    deleteAction={() => deleteAuthor(author.id)}
-                    addCourseAuthor={() => addCourseAuthor(author.id)}
-                />
-                )}
+                {authorsList.filter(author => !author.isCourseAuthor)
+                    .map(author => <AuthorItem
+                        key={author.id}
+                        authorName={author.name}
+                        deleteAction={() => deleteAuthor(author.id)}
+                        addCourseAuthor={() => addCourseAuthor(author.id)}
+                    />
+                    )}
             </div>
         </CreateAuthorStyled>
     )
