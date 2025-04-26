@@ -1,0 +1,1 @@
+export { CourseAuthors } from './CourseAuthors'

@@ -6,17 +6,17 @@ import { formatDuration } from "@helpers";
 import { Button } from "@common/Button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { AuthorItem } from "@components/AuthorItem/AuthorItem";
 import { IAuthorItem } from "@components/AuthorItem/types";
 import { CourseType } from "@components/Courses/types";
 import { CourseFormProps } from "./types";
-import { FormWrapperStyled } from "@common/Styled";
+import { WrapperStyled } from "@common/Styled";
+import { NewCourseFormStyled } from "./styled";
+import { Authors } from "@components/Authors/Authors";
 
 const formFieldsInitValue = {
   title: '',
   description: '',
   duration: '',
-  authors: ''
 }
 
 const formFieldsInitError = {
@@ -27,7 +27,7 @@ const formFieldsInitError = {
 }
 
 export const CourseForm = ({ addCourse }: CourseFormProps) => {
-  const [authors, setAuthors] = useState<Array<IAuthorItem>>([])
+  const [authors, setAuthors] = useState<Array<IAuthorItem>>([]);
   const { formData, onChange, clearAuthorsField } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
   const navigate = useNavigate();
@@ -36,23 +36,6 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
 
   const buttonCancelHandle = () => {
     navigate('/courses');
-  }
-
-  const createAuthor = () => {
-    const authorId = String(Date.now())
-    setAuthors(prev => ([
-      ...prev, {
-        name: formData.authors,
-        id: authorId
-      }
-    ]))
-    clearAuthorsField();
-  }
-
-  const deleteAuthor = (authorId: string) => {
-    setAuthors(
-      authors.filter(author => author.id !== authorId)
-    )
   }
 
   const generateDate = () => {
@@ -82,11 +65,37 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
     navigate('/courses');
   }
 
+  const createAuthor = (authorName: string) => {
+    const authorId = String(Date.now())
+    setAuthors(prev => ([
+      ...prev, {
+        name: authorName,
+        id: authorId,
+        isCourseAuthor: false,
+      }
+    ]))
+    clearAuthorsField();
+  }
+
+  const deleteAuthor = (authorId: string) => {
+    setAuthors(
+      authors.filter(author => author.id !== authorId)
+    )
+  }
+
+  const addAuthorToCourseAuthorsList = (authorId: string) => {
+    setAuthors(prevAuthors =>
+      prevAuthors.map(author =>
+        author.id === authorId ? { ...author, isCourseAuthor: true } : author
+      )
+    );
+  }
+
   return (
     <>
       <h1>Course Edit/Create Page</h1>
-      <form onSubmit={(e) => handleCreateNewCourse(e)}>
-        <FormWrapperStyled>
+      <WrapperStyled>
+        <NewCourseFormStyled onSubmit={(e) => handleCreateNewCourse(e)}>
 
           <fieldset>
             <legend>Main Info</legend>
@@ -128,40 +137,24 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
             />
             <span>{formattedDuration}</span>
           </fieldset>
-          <fieldset className="authors">
-            <legend>Authors</legend>
-            <Input
-              type="text"
-              placeholderText="Input new author"
-              labelText={dictionary.inputLabelAuthor}
-              required={false}
-              name={dictionary.inputNameAuthors}
-              onChange={(e) => onChange(e)}
-              value={formData.authors}
-            />
-            <Button
-              buttonText={dictionary.buttonCreateAuthor}
-              handleClick={createAuthor}
-            />
-            {authors.map(author => <AuthorItem
-              key={author.id}
-              authorName={author.name}
-              deleteAction={() => deleteAuthor(author.id)}
-            />
-            )}
-          </fieldset>
-          <div className="bottom-buttons">
-            <Button
-              buttonText={dictionary.buttonCancel}
-              handleClick={buttonCancelHandle}
-            />
-            <Button
-              buttonText={dictionary.buttonCreateCourse}
-              type="submit"
-            />
-          </div>
-        </FormWrapperStyled>
-      </form>
+        </NewCourseFormStyled>
+        <Authors
+          authors={authors}
+          createAuthor={createAuthor}
+          addCourseAuthor={addAuthorToCourseAuthorsList}
+          deleteAuthor={deleteAuthor}
+        />
+      </WrapperStyled>
+      <div className="bottom-buttons">
+        <Button
+          buttonText={dictionary.buttonCancel}
+          handleClick={buttonCancelHandle}
+        />
+        <Button
+          buttonText={dictionary.buttonCreateCourse}
+          type="submit"
+        />
+      </div>
     </>
   )
 }

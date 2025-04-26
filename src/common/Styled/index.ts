@@ -1,2 +1,2 @@
-export { FormWrapperStyled } from './FormWrapperStyled'
+export { WrapperStyled } from './WrapperStyled'
 export { SimpleFormStyled } from './SimpleFormStyled'

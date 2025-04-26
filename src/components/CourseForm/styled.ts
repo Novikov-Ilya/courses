@@ -1,15 +1,11 @@
 import styled from "styled-components";
 
-export const StyledNewCourseForm = styled.form`
+export const NewCourseFormStyled = styled.form`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  margin: auto;
   align-items: center;
-  width: 1104px;
-  height: 825px;
+  gap: 20px;
   background-color: #fff;
-  border: solid 1px #CFCFCF;
 
   fieldset {
     width: 944px;
@@ -21,10 +17,6 @@ export const StyledNewCourseForm = styled.form`
     font-weight: 700;
   }
 
-  label {
-    margin-top: 20px;
-  }
-
   .duration {
     display: flex;
     align-items: center;
@@ -33,10 +25,6 @@ export const StyledNewCourseForm = styled.form`
       font-weight: 700;
       line-height: 20px;
     }
-  }
-
-  .authors > button {
-    margin-top: 10px;
   }
 
   label {

@@ -4,7 +4,7 @@ import { dictionary } from "@i18n/strings"
 import { Link, useNavigate } from "react-router-dom"
 import { useInputHandler, useFormValidate } from "@hooks"
 import { createUser } from "@services"
-import { FormWrapperStyled, SimpleFormStyled } from "@common/Styled"
+import { WrapperStyled, SimpleFormStyled } from "@common/Styled"
 import { useState } from "react"
 
 const formFieldsInitValue = {
@@ -39,7 +39,7 @@ export const Registration = () => {
   return (
     <>
       <h1>Registration</h1>
-      <FormWrapperStyled>
+      <WrapperStyled>
         <SimpleFormStyled onSubmit={submitForm} noValidate>
 
           <Input
@@ -84,7 +84,7 @@ export const Registration = () => {
             <Link to={'/login'}>{dictionary.linkLogin}</Link>
           </p>
         </SimpleFormStyled>
-      </FormWrapperStyled>
+      </WrapperStyled>
     </>
   )
 }

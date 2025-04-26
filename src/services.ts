@@ -1,4 +1,4 @@
-import { IErrorResponse, IResponse, IResponseWithResult, ISuccessLogin, ISuccessUserCration, IUserLogin, IUserRegister, Method } from "./types";
+import { IErrorResponse, IResponseWithResult, ISuccessLogin, ISuccessUserCration, IUserLogin, IUserRegister, Method } from "./types";
 
 const HOST = 'http://localhost:4000';
 const REQUEST_HEADERS = {
