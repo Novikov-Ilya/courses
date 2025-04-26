@@ -1,7 +1,7 @@
 export interface AuthorItemProps {
   authorName: string,
   deleteAction: () => void,
-  addCourseAuthor: () => void,
+  addCourseAuthor?: () => void,
 }
 
 export interface IAuthorItem {

@@ -7,10 +7,10 @@ export const AuthorItem = ({ authorName, deleteAction, addCourseAuthor }: Author
     <AuthorItemStyled>
       <p>{authorName}</p>
       <div className="buttons">
-        <Button
+        {addCourseAuthor && <Button
           buttonText="+"
           handleClick={addCourseAuthor}
-        />
+        />}
         <Button
           icon="/src/assets/delete.png"
           handleClick={deleteAction}

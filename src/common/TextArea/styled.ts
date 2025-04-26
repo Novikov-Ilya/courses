@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const LabelStyled = styled.label`
+export const TextAreaStyled = styled.label`
   font-size: 14px;
   font-weight: 700;
   display: flex;

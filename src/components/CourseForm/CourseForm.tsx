@@ -12,6 +12,8 @@ import { CourseFormProps } from "./types";
 import { WrapperStyled } from "@common/Styled";
 import { NewCourseFormStyled } from "./styled";
 import { Authors } from "@components/Authors/Authors";
+import { ActionButtonsStyled } from "@common/Styled/ActionButtons";
+import { Wrapper } from "@common/Styled/Wrapper";
 
 const formFieldsInitValue = {
   title: '',
@@ -48,14 +50,14 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
   }
 
   const handleCreateNewCourse = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     const newCourse: CourseType = {
       id: String(Date.now()),
       title: formData.title,
       description: formData.description,
       creationDate: generateDate(),
       duration: Number(formData.duration),
-      authors: authors.map(author => author.id)
+      authors: authors.filter(author => author.isCourseAuthor).map(author => author.id)
     }
 
     addCourse((prev) => ([
@@ -83,6 +85,14 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
     )
   }
 
+  const removeCourseAuthor = (authorId: string) => {
+    setAuthors(
+      authors.map(author => 
+        author.id === authorId ? {...author, isCourseAuthor: false} : author
+      )
+    )
+  }
+
   const addAuthorToCourseAuthorsList = (authorId: string) => {
     setAuthors(prevAuthors =>
       prevAuthors.map(author =>
@@ -92,10 +102,13 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
   }
 
   return (
-    <>
+    <Wrapper>
       <h1>Course Edit/Create Page</h1>
       <WrapperStyled>
-        <NewCourseFormStyled onSubmit={(e) => handleCreateNewCourse(e)}>
+        <NewCourseFormStyled
+        onSubmit={(e) => handleCreateNewCourse(e)}
+        id="new-course-form"
+        >
 
           <fieldset>
             <legend>Main Info</legend>
@@ -109,6 +122,7 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
               onBlur={(e) => onBlur(e)}
               value={formData.title}
               isError={inputError.title}
+              id={dictionary.inputLabelTitle.toLowerCase()}
             />
             <TextArea
               placeholderText="Input description"
@@ -120,6 +134,7 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
               value={formData.description}
               isError={inputError.description}
               rows={4}
+              id={dictionary.inputLabelDescription.toLowerCase()}
             />
           </fieldset>
           <fieldset className="duration">
@@ -134,6 +149,7 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
               onBlur={(e) => onBlur(e)}
               value={formData.duration}
               isError={inputError.duration}
+              id={dictionary.inputLabelDuration.toLowerCase()}
             />
             <span>{formattedDuration}</span>
           </fieldset>
@@ -143,9 +159,10 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
           createAuthor={createAuthor}
           addCourseAuthor={addAuthorToCourseAuthorsList}
           deleteAuthor={deleteAuthor}
+          removeCourseAuthor={removeCourseAuthor}
         />
       </WrapperStyled>
-      <div className="bottom-buttons">
+      <ActionButtonsStyled>
         <Button
           buttonText={dictionary.buttonCancel}
           handleClick={buttonCancelHandle}
@@ -153,8 +170,9 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
         <Button
           buttonText={dictionary.buttonCreateCourse}
           type="submit"
+          form="new-course-form"
         />
-      </div>
-    </>
+      </ActionButtonsStyled>
+    </Wrapper>
   )
 }

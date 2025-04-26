@@ -1,10 +1,11 @@
 import { dictionary } from "@i18n/strings"
 import { TextAreaProps } from "./types"
-import { LabelStyled } from "./styled"
+import { TextAreaStyled } from "./styled"
 
-export const TextArea = ({ placeholderText, labelText, rows, onChange, required, name, isError, onBlur }: TextAreaProps) => {
+export const TextArea = ({ placeholderText, labelText, rows, onChange, required, name, isError, onBlur, id }: TextAreaProps) => {
   return (
-    <LabelStyled>{labelText}
+    <TextAreaStyled>
+      <label htmlFor={id}>{labelText}</label>
       <textarea
         onChange={onChange}
         placeholder={placeholderText}
@@ -12,8 +13,9 @@ export const TextArea = ({ placeholderText, labelText, rows, onChange, required,
         name={name}
         onBlur={onBlur}
         rows={rows}
+        id={id}
         />
         {isError && <span style={{color: 'red', fontWeight: 200}}>{`${labelText}${dictionary.filedIsRequired}`}</span>}
-    </LabelStyled>
+    </TextAreaStyled>
   )
 }

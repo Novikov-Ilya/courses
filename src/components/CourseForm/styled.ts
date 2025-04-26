@@ -20,11 +20,7 @@ export const NewCourseFormStyled = styled.form`
   .duration {
     display: flex;
     align-items: center;
-
-    span {
-      font-weight: 700;
-      line-height: 20px;
-    }
+    gap: 20px;
   }
 
   label {

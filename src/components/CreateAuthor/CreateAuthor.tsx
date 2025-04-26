@@ -4,16 +4,17 @@ import { AuthorItem } from "@components/AuthorItem/AuthorItem"
 import { useInputHandler } from "@hooks"
 import { dictionary } from "@i18n/strings"
 import { ICreateAuthorProps } from "./types"
+import { CreateAuthorStyled } from "./styled"
 
 const initialInputValue = {
     authors: ''
 }
 
-export const CreateAuthor = ({authorsList, createAuthor, addCourseAuthor, deleteAuthor}: ICreateAuthorProps) => {
+export const CreateAuthor = ({ authorsList, createAuthor, addCourseAuthor, deleteAuthor }: ICreateAuthorProps) => {
     const { formData, onChange } = useInputHandler(initialInputValue);
 
     return (
-        <div className="authors">
+        <CreateAuthorStyled>
             <span>Authors</span>
             <Input
                 type="text"
@@ -28,13 +29,15 @@ export const CreateAuthor = ({authorsList, createAuthor, addCourseAuthor, delete
                 buttonText={dictionary.buttonCreateAuthor}
                 handleClick={() => createAuthor(formData.authors)}
             />
-            {authorsList.map(author => <AuthorItem
-                key={author.id}
-                authorName={author.name}
-                deleteAction={() => deleteAuthor(author.id)}
-                addCourseAuthor={() => addCourseAuthor(author.id)}
-            />
-            )}
-        </div>
+            <div className="create-author__authors-list">
+                {authorsList.map(author => <AuthorItem
+                    key={author.id}
+                    authorName={author.name}
+                    deleteAction={() => deleteAuthor(author.id)}
+                    addCourseAuthor={() => addCourseAuthor(author.id)}
+                />
+                )}
+            </div>
+        </CreateAuthorStyled>
     )
 }

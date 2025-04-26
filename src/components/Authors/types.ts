@@ -5,4 +5,5 @@ export interface IAuthorsProps {
     createAuthor: (name: string) => void,
     addCourseAuthor: (id: string) => void,
     deleteAuthor: (id: string) => void,
+    removeCourseAuthor: (id: string) => void,
 }

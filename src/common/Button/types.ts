@@ -4,5 +4,6 @@ export interface ButtonProps {
   buttonText?: string,
   handleClick?: (e?: React.MouseEvent) => void,
   type?: ButtonType,
-  icon?: string
+  icon?: string,
+  form?: string,
 }
