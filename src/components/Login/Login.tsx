@@ -7,6 +7,8 @@ import { useFormValidate, useInputHandler } from "@hooks"
 import { WrapperStyled, SimpleFormStyled } from "@common/Styled"
 import { setAuthData } from "@utils"
 import { useState } from "react"
+import { InputType } from "@common/Input/types"
+import { ButtonType } from "@common/Button/types"
 
 const formFieldsInitValue = {
   email: '',
@@ -38,30 +40,30 @@ export const Login = () => {
 
   return (
     <>
-      <h1>Login</h1>
+      <h1>{dictionary.loginPageTitle}</h1>
       <WrapperStyled>
         <SimpleFormStyled onSubmit={submitForm} noValidate>
 
           <Input
-            placeholderText="Input email"
+            placeholderText={dictionary.inputPlaceholderEmail}
             labelText={dictionary.inputLabelEmail}
-            type="text"
-            name="email"
-            id="email"
+            type={InputType.EMAIL}
+            name={dictionary.inputNameEmail}
+            id={dictionary.inputNameEmail}
             onChange={onChange}
-            required={true}
+            required
             value={formData.email}
             isError={inputError.email}
             onBlur={onBlur}
           />
           <Input
-            placeholderText="Input password"
+            placeholderText={dictionary.inputPlaceholderPassword}
             labelText={dictionary.inputLabelPassword}
-            type="password"
-            name="password"
-            id="password"
+            type={InputType.PASSWORD}
+            name={dictionary.inputNamePassword}
+            id={dictionary.inputNamePassword}
             onChange={onChange}
-            required={true}
+            required
             value={formData.password}
             isError={inputError.password}
             onBlur={onBlur}
@@ -69,7 +71,7 @@ export const Login = () => {
           <span className="form__error-message">{loginError}</span>
           <Button
             buttonText={dictionary.buttonLogin}
-            type="submit"
+            type={ButtonType.SUBMIT}
           />
 
           <p>{dictionary.registerIfNoAccount}

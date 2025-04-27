@@ -27,7 +27,8 @@ export const Header = () => {
           <div>
             <Button
               buttonText={dictionary.buttonLogout}
-              handleClick={loginButtonAction} />
+              handleClick={loginButtonAction}
+            />
           </div>
         </LoginWrapper>
       }

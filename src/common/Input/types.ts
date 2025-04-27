@@ -1,4 +1,8 @@
-type InputType = 'text' | 'password' | 'email' | 'number';
+export enum InputType {
+  PASSWORD = 'password',
+  EMAIL = 'email',
+  NUMBER = 'number',
+}
 
 export interface InputProps {
   id?: string,

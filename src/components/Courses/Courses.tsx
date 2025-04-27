@@ -63,7 +63,8 @@ export const Courses = ({ courses }: CoursesProps) => {
               authors={authorNames}
               creationDate={item.creationDate.replaceAll('/', '.')}
               key={item.id}
-              buttonClick={() => showCourse(item.id)} />
+              buttonClick={() => showCourse(item.id)}
+            />
           }
           )}
         </div>

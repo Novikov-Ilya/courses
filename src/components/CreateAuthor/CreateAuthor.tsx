@@ -17,8 +17,7 @@ export const CreateAuthor = ({ authorsList, createAuthor, addCourseAuthor, delet
         <CreateAuthorStyled>
             <span>Authors</span>
             <Input
-                type="text"
-                placeholderText="Input new author"
+                placeholderText={dictionary.inputPlaceholderAuthor}
                 labelText={dictionary.inputLabelAuthor}
                 required={false}
                 name={dictionary.inputNameAuthors}

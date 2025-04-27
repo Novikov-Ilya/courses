@@ -19,7 +19,10 @@ export const CourseCard = ({ title, description, duration, authors, creationDate
           <p><b>{dictionary.courseCreated}: </b>{creationDate}</p>
         </div>
         <div>
-          <Button buttonText={dictionary.buttonShowCourse} handleClick={buttonClick ? buttonClick : () => {}} />
+          <Button
+            buttonText={dictionary.buttonShowCourse}
+            handleClick={buttonClick}
+          />
         </div>
       </InfoSectionStyled>
     </CourseCardWrapper>

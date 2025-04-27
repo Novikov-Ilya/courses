@@ -12,7 +12,6 @@ export const SearchBar = ({ handleSearch, searchValue, handleSearchInput }: Sear
         placeholderText={dictionary.searchPlaceholder}
         value={searchValue}
         onChange={handleSearchInput}
-        type="text"
       />
       <Button
         buttonText={dictionary.buttonSearch}

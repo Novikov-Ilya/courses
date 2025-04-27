@@ -1,4 +1,8 @@
-type ButtonType = 'button' | 'reset' | 'submit'
+export enum ButtonType {
+  BUTTON = 'button',
+  RESET = 'reset',
+  SUBMIT = 'submit'
+}
 
 export interface ButtonProps {
   buttonText?: string,

@@ -14,6 +14,8 @@ import { NewCourseFormStyled } from "./styled";
 import { Authors } from "@components/Authors/Authors";
 import { ActionButtonsStyled } from "@common/Styled/ActionButtons";
 import { Wrapper } from "@common/Styled/Wrapper";
+import { InputType } from "@common/Input/types";
+import { ButtonType } from "@common/Button/types";
 
 const formFieldsInitValue = {
   title: '',
@@ -103,7 +105,7 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
 
   return (
     <Wrapper>
-      <h1>Course Edit/Create Page</h1>
+      <h1>{dictionary.courseFormTitle}</h1>
       <WrapperStyled>
         <NewCourseFormStyled
         onSubmit={(e) => handleCreateNewCourse(e)}
@@ -113,8 +115,7 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
           <fieldset>
             <legend>Main Info</legend>
             <Input
-              type="text"
-              placeholderText="Input title"
+              placeholderText={dictionary.inputPlaceholderTitle}
               labelText={dictionary.inputLabelTitle}
               required={true}
               name={dictionary.inputLabelTitle.toLowerCase()}
@@ -125,9 +126,9 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
               id={dictionary.inputLabelTitle.toLowerCase()}
             />
             <TextArea
-              placeholderText="Input description"
+              placeholderText={dictionary.inputPlaceholderDescription}
               labelText={dictionary.inputLabelDescription}
-              required={true}
+              required
               name={dictionary.inputLabelDescription.toLowerCase()}
               onChange={(e) => onChange(e)}
               onBlur={(e) => onBlur(e)}
@@ -140,10 +141,10 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
           <fieldset className="duration">
             <legend>Duration</legend>
             <Input
-              type="number"
-              placeholderText="Input duration"
+              type={InputType.NUMBER}
+              placeholderText={dictionary.inputPlaceholderDuration}
               labelText={dictionary.inputLabelDuration}
-              required={true}
+              required
               name={dictionary.inputLabelDuration.toLowerCase()}
               onChange={(e) => onChange(e)}
               onBlur={(e) => onBlur(e)}
@@ -169,7 +170,7 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
         />
         <Button
           buttonText={dictionary.buttonCreateCourse}
-          type="submit"
+          type={ButtonType.SUBMIT}
           form="new-course-form"
         />
       </ActionButtonsStyled>

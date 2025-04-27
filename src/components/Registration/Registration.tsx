@@ -6,6 +6,8 @@ import { useInputHandler, useFormValidate } from "@hooks"
 import { createUser } from "@services"
 import { WrapperStyled, SimpleFormStyled } from "@common/Styled"
 import { useState } from "react"
+import { InputType } from "@common/Input/types"
+import { ButtonType } from "@common/Button/types"
 
 const formFieldsInitValue = {
   name: '',
@@ -38,14 +40,13 @@ export const Registration = () => {
 
   return (
     <>
-      <h1>Registration</h1>
+      <h1>{dictionary.registerPageTitle}</h1>
       <WrapperStyled>
         <SimpleFormStyled onSubmit={submitForm} noValidate>
 
           <Input
             placeholderText="Input name"
             labelText={dictionary.inputLabelName}
-            type="text"
             required={true}
             name="name"
             onChange={onChange}
@@ -56,7 +57,7 @@ export const Registration = () => {
           <Input
             placeholderText="Input Email"
             labelText={dictionary.inputLabelEmail}
-            type="email"
+            type={InputType.EMAIL}
             required={true}
             name="email"
             onChange={onChange}
@@ -67,7 +68,7 @@ export const Registration = () => {
           <Input
             placeholderText="Input password"
             labelText={dictionary.inputLabelPassword}
-            type="password"
+            type={InputType.PASSWORD}
             required={true}
             name="password"
             onChange={onChange}
@@ -78,7 +79,7 @@ export const Registration = () => {
           <span className="form__error-message">{registerError}</span>
           <Button
             buttonText={dictionary.buttonRegister}
-            type="submit"
+            type={ButtonType.SUBMIT}
           />
           <p>{dictionary.loginIfHaveAccount}
             <Link to={'/login'}>{dictionary.linkLogin}</Link>
