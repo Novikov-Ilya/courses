@@ -6,7 +6,7 @@ export const CourseAuthorsStyled = styled.div`
     font-size: 24px;
     font-weight: 700;
   }
-  .course-authors__emtpy-message {
+  & p {
     text-align: center;
   }
 `

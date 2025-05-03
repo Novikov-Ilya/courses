@@ -7,13 +7,6 @@ export const InputWrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
 
-  span {
-    color: red;
-    font-weight: 400;
-    font-size: 16px;
-    height: 20px;
-  }
-
   input {
     border-radius: 4px;
     border: solid 1px #000000;
@@ -32,6 +25,5 @@ export const InputWrapperStyled = styled.div`
     &.input-error {
       border-color: red;
     }
-    
   }
 `

@@ -5,6 +5,10 @@ export const AuthorItemStyled = styled.div`
   justify-content: space-between;
   max-width: 180px;
 
+  p {
+    text-align: start;
+  }
+
   .buttons {
     display: flex;
     gap: 8px;

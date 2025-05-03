@@ -23,11 +23,5 @@ export const TextAreaStyled = styled.label`
     &.error {
       border-color: red;
     }
-
-    & > span {
-      color: 'red';
-      font-weight: 400;
-      font-size: '16px';
-    }
   }
 `

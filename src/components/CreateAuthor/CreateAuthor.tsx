@@ -4,7 +4,7 @@ import { AuthorItem } from "@components/AuthorItem/AuthorItem"
 import { useInputHandler } from "@hooks"
 import { dictionary } from "@i18n/strings"
 import { ICreateAuthorProps } from "./types"
-import { CreateAuthorStyled } from "./styled"
+import { AuthorsListStyled, CreateAuthorStyled } from "./styled"
 
 const initialInputValue = {
     authors: ''
@@ -15,20 +15,19 @@ export const CreateAuthor = ({ authorsList, createAuthor, addCourseAuthor, delet
 
     return (
         <CreateAuthorStyled>
-            <span>Authors</span>
+            <span>{dictionary.createAuthorTitle}</span>
             <Input
                 placeholderText={dictionary.inputPlaceholderAuthor}
                 labelText={dictionary.inputLabelAuthor}
-                required={false}
                 name={dictionary.inputNameAuthors}
-                onChange={(e) => onChange(e)}
+                onChange={onChange}
                 value={formData.authors}
             />
             <Button
                 buttonText={dictionary.buttonCreateAuthor}
                 handleClick={() => createAuthor(formData.authors)}
             />
-            <div className="create-author__authors-list">
+            <AuthorsListStyled>
                 {authorsList.filter(author => !author.isCourseAuthor)
                     .map(author => <AuthorItem
                         key={author.id}
@@ -37,7 +36,7 @@ export const CreateAuthor = ({ authorsList, createAuthor, addCourseAuthor, delet
                         addCourseAuthor={() => addCourseAuthor(author.id)}
                     />
                     )}
-            </div>
+            </AuthorsListStyled>
         </CreateAuthorStyled>
     )
 }

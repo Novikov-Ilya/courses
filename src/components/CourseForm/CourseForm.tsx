@@ -2,7 +2,7 @@ import { Input } from "@common/Input"
 import { dictionary } from "@i18n/strings"
 import { useInputHandler, useFormValidate } from "@hooks"
 import { TextArea } from "@common/TextArea";
-import { formatDuration } from "@helpers";
+import { createId, formatDuration } from "@helpers";
 import { Button } from "@common/Button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -12,10 +12,11 @@ import { CourseFormProps } from "./types";
 import { WrapperStyled } from "@common/Styled";
 import { NewCourseFormStyled } from "./styled";
 import { Authors } from "@components/Authors/Authors";
-import { ActionButtonsStyled } from "@common/Styled/ActionButtons";
-import { Wrapper } from "@common/Styled/Wrapper";
+import { ActionButtonsWrapperStyled } from "@common/Styled/ActionButtons";
+import { PageWrapperStyled } from "@common/Styled/PageWrapper";
 import { InputType } from "@common/Input/types";
 import { ButtonType } from "@common/Button/types";
+import { generateDate } from "@helpers";
 
 const formFieldsInitValue = {
   title: '',
@@ -30,6 +31,11 @@ const formFieldsInitError = {
   authors: false
 }
 
+const COURSE_FORM_ID = "new-course-form";
+const DURATION = dictionary.inputLabelDuration;
+const TITLE = dictionary.inputLabelTitle;
+const DESCRIPTION = dictionary.inputLabelDescription;
+
 export const CourseForm = ({ addCourse }: CourseFormProps) => {
   const [authors, setAuthors] = useState<Array<IAuthorItem>>([]);
   const { formData, onChange, clearAuthorsField } = useInputHandler(formFieldsInitValue);
@@ -42,19 +48,10 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
     navigate('/courses');
   }
 
-  const generateDate = () => {
-    const today = new Date();
-    const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth()).padStart(2, '0');
-    const year = String(today.getFullYear());
-
-    return `${day}/${month}/${year}`
-  }
-
   const handleCreateNewCourse = (e: React.FormEvent) => {
     e.preventDefault();
     const newCourse: CourseType = {
-      id: String(Date.now()),
+      id: createId(),
       title: formData.title,
       description: formData.description,
       creationDate: generateDate(),
@@ -70,7 +67,7 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
   }
 
   const createAuthor = (authorName: string) => {
-    const authorId = String(Date.now())
+    const authorId = createId();
     setAuthors(prev => ([
       ...prev, {
         name: authorName,
@@ -82,72 +79,66 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
   }
 
   const deleteAuthor = (authorId: string) => {
-    setAuthors(
-      authors.filter(author => author.id !== authorId)
+    setAuthors(prevAuthors =>
+      prevAuthors.filter(author => author.id !== authorId)
     )
   }
 
-  const removeCourseAuthor = (authorId: string) => {
-    setAuthors(
-      authors.map(author => 
-        author.id === authorId ? {...author, isCourseAuthor: false} : author
-      )
-    )
-  }
-
-  const addAuthorToCourseAuthorsList = (authorId: string) => {
+  const setCourseAuthor = (authorId: string) => {
     setAuthors(prevAuthors =>
       prevAuthors.map(author =>
-        author.id === authorId ? { ...author, isCourseAuthor: true } : author
-      )
-    );
+        author.id === authorId ? {
+          ...author,
+          isCourseAuthor: !author.isCourseAuthor
+        } : author
+      ))
   }
 
+
   return (
-    <Wrapper>
+    <PageWrapperStyled>
       <h1>{dictionary.courseFormTitle}</h1>
       <WrapperStyled>
         <NewCourseFormStyled
-        onSubmit={(e) => handleCreateNewCourse(e)}
-        id="new-course-form"
+          onSubmit={handleCreateNewCourse}
+          id={COURSE_FORM_ID}
         >
-
           <fieldset>
-            <legend>Main Info</legend>
+            <legend>{dictionary.courseFormMainInfo}</legend>
             <Input
               placeholderText={dictionary.inputPlaceholderTitle}
-              labelText={dictionary.inputLabelTitle}
-              required={true}
-              name={dictionary.inputLabelTitle.toLowerCase()}
-              onChange={(e) => onChange(e)}
-              onBlur={(e) => onBlur(e)}
+              labelText={TITLE}
+              required
+              name={TITLE.toLowerCase()}
+              onChange={onChange}
+              onBlur={onBlur}
               value={formData.title}
               isError={inputError.title}
-              id={dictionary.inputLabelTitle.toLowerCase()}
+              id={TITLE.toLowerCase()}
             />
             <TextArea
               placeholderText={dictionary.inputPlaceholderDescription}
-              labelText={dictionary.inputLabelDescription}
+              labelText={DESCRIPTION}
               required
-              name={dictionary.inputLabelDescription.toLowerCase()}
-              onChange={(e) => onChange(e)}
-              onBlur={(e) => onBlur(e)}
+              name={DESCRIPTION.toLowerCase()}
+              onChange={onChange}
+              onBlur={onBlur}
               value={formData.description}
               isError={inputError.description}
               rows={4}
-              id={dictionary.inputLabelDescription.toLowerCase()}
+              id={DESCRIPTION.toLowerCase()}
             />
           </fieldset>
           <fieldset className="duration">
-            <legend>Duration</legend>
+            <legend>{DURATION}</legend>
             <Input
               type={InputType.NUMBER}
               placeholderText={dictionary.inputPlaceholderDuration}
-              labelText={dictionary.inputLabelDuration}
+              labelText={DURATION}
               required
-              name={dictionary.inputLabelDuration.toLowerCase()}
-              onChange={(e) => onChange(e)}
-              onBlur={(e) => onBlur(e)}
+              name={DURATION.toLowerCase()}
+              onChange={onChange}
+              onBlur={onBlur}
               value={formData.duration}
               isError={inputError.duration}
               id={dictionary.inputLabelDuration.toLowerCase()}
@@ -158,12 +149,11 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
         <Authors
           authors={authors}
           createAuthor={createAuthor}
-          addCourseAuthor={addAuthorToCourseAuthorsList}
+          setCourseAuthor={setCourseAuthor}
           deleteAuthor={deleteAuthor}
-          removeCourseAuthor={removeCourseAuthor}
         />
       </WrapperStyled>
-      <ActionButtonsStyled>
+      <ActionButtonsWrapperStyled>
         <Button
           buttonText={dictionary.buttonCancel}
           handleClick={buttonCancelHandle}
@@ -171,9 +161,9 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
         <Button
           buttonText={dictionary.buttonCreateCourse}
           type={ButtonType.SUBMIT}
-          form="new-course-form"
+          form={COURSE_FORM_ID}
         />
-      </ActionButtonsStyled>
-    </Wrapper>
+      </ActionButtonsWrapperStyled>
+    </PageWrapperStyled>
   )
 }

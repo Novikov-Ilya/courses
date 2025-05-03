@@ -8,6 +8,8 @@ import { WrapperStyled, SimpleFormStyled } from "@common/Styled"
 import { useState } from "react"
 import { InputType } from "@common/Input/types"
 import { ButtonType } from "@common/Button/types"
+import { FormErrorStyled } from "@common/Styled/FormErrorStyled"
+import { PageWrapperStyled } from "@common/Styled/PageWrapper"
 
 const formFieldsInitValue = {
   name: '',
@@ -21,6 +23,10 @@ const formFieldsErrors = {
   password: false
 }
 
+const PASSWORD = dictionary.inputLabelPassword;
+const NAME = dictionary.inputLabelName;
+const EMAIL = dictionary.inputLabelEmail;
+
 export const Registration = () => {
   const { formData, onChange } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsErrors);
@@ -32,51 +38,52 @@ export const Registration = () => {
     try {
       await createUser(formData);
       navigate('/login');
-    
     } catch (error) {
       setRegisterError((error as Error).message);
     }
   }
 
   return (
-    <>
+    <PageWrapperStyled>
       <h1>{dictionary.registerPageTitle}</h1>
       <WrapperStyled>
         <SimpleFormStyled onSubmit={submitForm} noValidate>
 
           <Input
-            placeholderText="Input name"
-            labelText={dictionary.inputLabelName}
-            required={true}
-            name="name"
+            placeholderText={dictionary.inputPlaceholderName}
+            labelText={NAME}
+            required
+            name={NAME.toLowerCase()}
             onChange={onChange}
             value={formData.name}
             isError={inputError.name}
             onBlur={onBlur}
           />
           <Input
-            placeholderText="Input Email"
-            labelText={dictionary.inputLabelEmail}
+            placeholderText={dictionary.inputPlaceholderEmail}
+            labelText={EMAIL}
             type={InputType.EMAIL}
-            required={true}
-            name="email"
+            required
+            name={EMAIL.toLowerCase()}
             onChange={onChange}
             value={formData.email}
             isError={inputError.email}
             onBlur={onBlur}
           />
           <Input
-            placeholderText="Input password"
-            labelText={dictionary.inputLabelPassword}
+            placeholderText={dictionary.inputPlaceholderPassword}
+            labelText={PASSWORD}
             type={InputType.PASSWORD}
-            required={true}
-            name="password"
+            required
+            name={PASSWORD.toLowerCase()}
             onChange={onChange}
             value={formData.password}
             isError={inputError.password}
             onBlur={onBlur}
           />
-          <span className="form__error-message">{registerError}</span>
+          <FormErrorStyled>
+            {registerError}
+          </FormErrorStyled>
           <Button
             buttonText={dictionary.buttonRegister}
             type={ButtonType.SUBMIT}
@@ -86,6 +93,6 @@ export const Registration = () => {
           </p>
         </SimpleFormStyled>
       </WrapperStyled>
-    </>
+    </PageWrapperStyled>
   )
 }

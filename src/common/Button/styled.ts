@@ -12,12 +12,11 @@ export const ButtonStyled = styled.button`
   font-family: inherit;
   background-color: #007298;
   cursor: pointer;
-  transition: border-color 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
   width: auto;
   white-space: nowrap;
 
   &:hover {
-    border-color: #646cff;
-    border: 2px solid;
+    background-color:#006486;
   }
 `

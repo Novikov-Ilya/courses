@@ -21,7 +21,7 @@ export const Courses = ({ courses }: CoursesProps) => {
 
   const handleSearchByButtonClick = (searchInputValue: string) => {
     setCoursesList(() => {
-      if (!searchInputValue.trim().length) return courses;
+      if (!searchInputValue.trim()) return courses;
       return coursesList.filter(
         item =>
           item.title.toLowerCase().includes(searchInputValue.toLowerCase()))

@@ -5,21 +5,19 @@ import { dictionary } from "@i18n/strings";
 
 
 export const CourseAuthors = ({ authorsList, deleteAction }: ICourseAuthorsProps) => {
-    const courseAuthorsList = authorsList.filter(author => author.isCourseAuthor);
     return (
         <CourseAuthorsStyled>
             <span>{dictionary.courseAuthorsTitle}</span>
-            {!courseAuthorsList.length &&
-                <p className="course-authors__emtpy-message">{dictionary.authorsListIsEmpty}</p>
+            {!authorsList.length &&
+                <p>{dictionary.authorsListIsEmpty}</p>
             }
-            {courseAuthorsList.map(
+            {authorsList.map(
                 author =>
                     <AuthorItem
                         key={author.id}
                         deleteAction={() => deleteAction(author.id)}
                         authorName={author.name}
                     />)}
-
         </CourseAuthorsStyled>
     )
 }

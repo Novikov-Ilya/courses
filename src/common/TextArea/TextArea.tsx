@@ -1,6 +1,7 @@
 import { dictionary } from "@i18n/strings"
 import { TextAreaProps } from "./types"
 import { TextAreaStyled } from "./styled"
+import { InputErroMessageStyled } from "@common/Styled/InputErrorMessage"
 
 export const TextArea = ({ placeholderText, labelText, rows, onChange, required, name, isError, onBlur, id }: TextAreaProps) => {
   return (
@@ -14,8 +15,11 @@ export const TextArea = ({ placeholderText, labelText, rows, onChange, required,
         onBlur={onBlur}
         rows={rows}
         id={id}
-        />
-        {isError && <span style={{color: 'red', fontWeight: 200}}>{`${labelText}${dictionary.filedIsRequired}`}</span>}
+        className={isError ? 'error' : ''}
+      />
+      <InputErroMessageStyled>
+        {isError && `${labelText}${dictionary.filedIsRequired}`}
+      </InputErroMessageStyled>
     </TextAreaStyled>
   )
 }

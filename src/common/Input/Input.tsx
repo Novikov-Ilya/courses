@@ -1,3 +1,4 @@
+import { InputErroMessageStyled } from "@common/Styled/InputErrorMessage"
 import { InputWrapperStyled } from "./styled"
 import { InputProps } from "./types"
 import { dictionary } from "@i18n/strings"
@@ -7,7 +8,7 @@ export const Input = ({
   value, labelText,
   onChange,
   type,
-  required,
+  required = false,
   name,
   isError,
   onBlur,
@@ -27,7 +28,9 @@ export const Input = ({
         value={value}
         className={isError ? 'input-error' : ''}
       />
-      {<span>{isError && `${labelText}${dictionary.filedIsRequired}`}</span>}
+      <InputErroMessageStyled>
+        {isError && `${labelText}${dictionary.filedIsRequired}`}
+      </InputErroMessageStyled>
     </InputWrapperStyled>
   )
 }

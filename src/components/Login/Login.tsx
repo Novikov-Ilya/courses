@@ -9,6 +9,8 @@ import { setAuthData } from "@utils"
 import { useState } from "react"
 import { InputType } from "@common/Input/types"
 import { ButtonType } from "@common/Button/types"
+import { PageWrapperStyled } from "@common/Styled/PageWrapper"
+import { FormErrorStyled } from "@common/Styled/FormErrorStyled"
 
 const formFieldsInitValue = {
   email: '',
@@ -33,17 +35,16 @@ export const Login = () => {
       setAuthData(loginResult.result, loginResult.user?.name);
       navigate('/courses');
     }
-     catch (error) {
+    catch (error) {
       setLoginError((error as Error).message);
     }
   }
 
   return (
-    <>
+    <PageWrapperStyled>
       <h1>{dictionary.loginPageTitle}</h1>
       <WrapperStyled>
         <SimpleFormStyled onSubmit={submitForm} noValidate>
-
           <Input
             placeholderText={dictionary.inputPlaceholderEmail}
             labelText={dictionary.inputLabelEmail}
@@ -68,7 +69,9 @@ export const Login = () => {
             isError={inputError.password}
             onBlur={onBlur}
           />
-          <span className="form__error-message">{loginError}</span>
+          <FormErrorStyled>
+            {loginError}
+          </FormErrorStyled>
           <Button
             buttonText={dictionary.buttonLogin}
             type={ButtonType.SUBMIT}
@@ -79,6 +82,6 @@ export const Login = () => {
           </p>
         </SimpleFormStyled>
       </WrapperStyled>
-    </>
+    </PageWrapperStyled>
   )
 }

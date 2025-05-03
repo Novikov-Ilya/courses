@@ -4,7 +4,7 @@ export enum InputType {
   NUMBER = 'number',
 }
 
-export interface InputProps {
+export interface GeneralInput {
   id?: string,
   value: string,
   placeholderText: string,
@@ -13,6 +13,8 @@ export interface InputProps {
   type?: InputType,
   required?: boolean,
   isError?: boolean,
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
-  onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+}
+export interface InputProps extends GeneralInput  {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
 }
