@@ -141,7 +141,7 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
               onBlur={onBlur}
               value={formData.duration}
               isError={inputError.duration}
-              id={dictionary.inputLabelDuration.toLowerCase()}
+              id={DURATION.toLowerCase()}
             />
             <span>{formattedDuration}</span>
           </fieldset>
