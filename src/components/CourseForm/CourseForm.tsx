@@ -42,7 +42,7 @@ const DESCRIPTION_IN_LOW_CASE = DESCRIPTION.toLowerCase();
 
 export const CourseForm = ({ addCourse }: CourseFormProps) => {
   const [authors, setAuthors] = useState<Array<IAuthorItem>>([]);
-  const { formData, onChange, clearAuthorsField } = useInputHandler(formFieldsInitValue);
+  const { formData, onChange } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
   const navigate = useNavigate();
 
@@ -79,7 +79,6 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
         isCourseAuthor: false,
       }
     ]))
-    clearAuthorsField();
   }
 
   const deleteAuthor = (authorId: string) => {

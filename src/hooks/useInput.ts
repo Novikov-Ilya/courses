@@ -16,10 +16,10 @@ export function useInputHandler<T extends Record<string, string>>(
         [name]: value,
       }));
     },
-    clearAuthorsField: () => {
+    clearField: (fieldName: string) => {
       setFormData(prevData => ({
         ...prevData,
-        authors: ''
+        [fieldName]: ''
       }))
     }
   }

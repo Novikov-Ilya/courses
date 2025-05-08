@@ -29,11 +29,6 @@ export const NewCourseFormStyled = styled.form`
     font-weight: 700;
   }
 
-  button {
-    height: 50px;
-    width: 185px;
-  }
-
   input {
     font-weight: 400;
     font-size: 16px;
@@ -54,9 +49,5 @@ export const NewCourseFormStyled = styled.form`
     justify-content: end;
     align-items: start;
     width: 944px;
-
-    button {
-      margin-left: 20px;
-    }
   }
 `

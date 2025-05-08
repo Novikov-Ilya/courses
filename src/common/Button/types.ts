@@ -15,5 +15,5 @@ export interface ButtonProps {
   type?: ButtonType,
   icon?: string,
   form?: string,
-  style?: ButtonStyle
+  variant?: ButtonStyle
 }

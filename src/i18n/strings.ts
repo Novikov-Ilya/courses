@@ -34,7 +34,6 @@ export const dictionary = {
   inputPlaceholderDuration: 'Input duration',
   inputLabelAuthor: 'Author name',
   createAuthorTitle: 'Authors',
-  inputNameAuthors: 'authors',
   inputPlaceholderAuthor: 'Input new author',
   filedIsRequired: ' is required',
   authorsListIsEmpty: 'Authors list is empty',

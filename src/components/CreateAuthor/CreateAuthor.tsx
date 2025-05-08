@@ -11,8 +11,14 @@ const initialInputValue = {
     authors: ''
 }
 
+const AUTHORS_INPUT_NAME = 'authors';
+
 export const CreateAuthor = ({ authorsList, createAuthor, addCourseAuthor, deleteAuthor }: ICreateAuthorProps) => {
-    const { formData, onChange } = useInputHandler(initialInputValue);
+    const { formData, onChange, clearField } = useInputHandler(initialInputValue);
+    const handleCreateAuthor = () => {
+        createAuthor(formData.authors);
+        clearField(AUTHORS_INPUT_NAME);
+    }
 
     return (
         <CreateAuthorStyled>
@@ -21,13 +27,13 @@ export const CreateAuthor = ({ authorsList, createAuthor, addCourseAuthor, delet
                 <Input
                     placeholderText={dictionary.inputPlaceholderAuthor}
                     labelText={dictionary.inputLabelAuthor}
-                    name={dictionary.inputNameAuthors}
+                    name={AUTHORS_INPUT_NAME}
                     onChange={onChange}
                     value={formData.authors}
                 />
                 <Button
                     buttonText={dictionary.buttonCreateAuthor}
-                    handleClick={() => createAuthor(formData.authors)}
+                    handleClick={handleCreateAuthor}
                 />
             </FlextRowStyled>
             {authorsList.filter(author => !author.isCourseAuthor)
