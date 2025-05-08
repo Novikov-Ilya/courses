@@ -4,9 +4,9 @@ export enum ButtonType {
   SUBMIT = 'submit'
 }
 
-export enum ButtonStyle {
-  TEXT = 'text',
-  ICON = 'icon'
+export enum ButtonVariant {
+  WITH_TEXT = 'text',
+  WITH_ICON = 'icon'
 }
 
 export interface ButtonProps {
@@ -15,5 +15,5 @@ export interface ButtonProps {
   type?: ButtonType,
   icon?: string,
   form?: string,
-  variant?: ButtonStyle
+  variant?: ButtonVariant
 }

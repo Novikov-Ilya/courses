@@ -1,7 +1,7 @@
 import { Button } from "@common/Button"
 import { AuthorItemProps } from "./types"
 import { AuthorItemActionButtonsStyled, AuthorItemStyled } from "./styled"
-import { ButtonStyle } from "@common/Button/types"
+import { ButtonVariant } from "@common/Button/types"
 
 export const AuthorItem = ({ authorName, deleteAction, addCourseAuthor }: AuthorItemProps) => {
   return (
@@ -11,12 +11,12 @@ export const AuthorItem = ({ authorName, deleteAction, addCourseAuthor }: Author
         {addCourseAuthor && <Button
           icon="/src/assets/plus.png"
           handleClick={addCourseAuthor}
-          variant={ButtonStyle.ICON}
+          variant={ButtonVariant.WITH_ICON}
         />}
         <Button
           icon="/src/assets/delete.png"
           handleClick={deleteAction}
-          variant={ButtonStyle.ICON}
+          variant={ButtonVariant.WITH_ICON}
         />
       </AuthorItemActionButtonsStyled>
     </AuthorItemStyled>

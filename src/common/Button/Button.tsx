@@ -1,8 +1,8 @@
-import { ButtonProps, ButtonStyle, ButtonType } from "./types"
+import { ButtonProps, ButtonVariant, ButtonType } from "./types"
 import { ButtonIconStyled, ButtonStyled } from "./styled"
 
-export const Button = ({ buttonText, handleClick, type = ButtonType.BUTTON, icon, form, variant = ButtonStyle.TEXT }: ButtonProps) => {
-  return variant === ButtonStyle.TEXT ?
+export const Button = ({ buttonText, handleClick, type = ButtonType.BUTTON, icon, form, variant = ButtonVariant.WITH_TEXT }: ButtonProps) => {
+  return variant === ButtonVariant.WITH_TEXT ?
     <ButtonStyled
       onClick={handleClick}
       type={type}
