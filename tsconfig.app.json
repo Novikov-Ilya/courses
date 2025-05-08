@@ -8,12 +8,14 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
       "@common/*": ["src/common/*"],
       "@components/*": ["src/components/*"],
       "@constants": ["src/constants"],
       "@helpers": ["src/helpers"],
       "@i18n/*": ["src/i18n/*"],
+      "@hooks": ["src/hooks"],
+      "@utils": ["src/utils"],
+      "@services": ["src/services"],
     },
 
     /* Bundler mode */

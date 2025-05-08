@@ -1,13 +1,21 @@
 import { Button } from "@common/Button";
 import { getAuthorNames, formatDuration } from "@helpers";
-import { CourseInfoProps } from "./types";
 import { dictionary } from "@i18n/strings";
 import { CourseInfoWrapper, InfoSectionStyled, DescriptionStyled } from './styled';
 import { mockedAuthorsList } from "@constants";
+import { useNavigate, useParams } from "react-router-dom";
+import { CourseInfoProps } from "./types";
 
-export const CourseInfo = ({ coursesList, onBack, showCourseId }: CourseInfoProps) => {
-  const getCourse = (id: string) => {
-    const currentCourse = coursesList.find(item => item.id === id);
+export const CourseInfo = ({courses}: CourseInfoProps) => {
+  const { courseId } = useParams();
+  const navigate = useNavigate();
+
+  const onBack = () => {
+    navigate('/courses');
+  }
+
+  const getCourse = (id?: string) => {
+    const currentCourse = courses.find(item => item.id === id);
     if (!currentCourse) {
       return {
         title: 'No title',
@@ -28,7 +36,7 @@ export const CourseInfo = ({ coursesList, onBack, showCourseId }: CourseInfoProp
     duration,
     creationDate,
     authors
-  } = getCourse(showCourseId);
+  } = getCourse(courseId);
 
   const formattedDuration = formatDuration(duration);
   const authorNames = getAuthorNames(authors, mockedAuthorsList);

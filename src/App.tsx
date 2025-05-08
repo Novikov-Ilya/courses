@@ -1,61 +1,35 @@
-import { useState } from 'react'
 import './App.css'
 import { Header } from '@components/Header'
 import { Courses } from '@components/Courses'
-import { mockedCoursesList } from "@constants";
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { Registration } from '@components/Registration';
 import { CourseInfo } from '@components/CourseInfo';
-import { SearchBar } from '@common/SearchBar';
+import { Login } from '@components/Login';
+import { CourseForm } from '@components/CourseForm/CourseForm';
+import { mockedCoursesList } from '@constants';
+import { useState } from 'react';
+import { PublicOnlyRoute } from '@components/RouteComponents/PublicOnlyRoute';
+import { ProtectedRoute } from '@components/RouteComponents/ProtectedRoute';
 
 function App() {
-  const [showCourseCard, setShowCourseCard] = useState<string | null>(null);
-  const [coursesList, setCoursesList] = useState(mockedCoursesList);
-  const [searchValue, setSearchValue] = useState<string>('');
-
-  const showCourse = (id: string) => {
-    setShowCourseCard(id)
-  }
-
-  const loginAction = () => {
-
-  }
-
-  const backAction = () => {
-    setShowCourseCard(null);
-  }
-
-  const handleSearchByButtonClick = (searchInputValue: string) => {
-    const list = coursesList;
-    setCoursesList(() => {
-      if (!searchInputValue.trim().length) return mockedCoursesList;
-      return list.filter(item => item.title.toLocaleLowerCase().includes(searchInputValue.toLocaleLowerCase()))
-    })
-  }
-
-  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-    if (!e.target.value.trim()) {
-      setCoursesList(mockedCoursesList);
-    }
-  }
-
+  const [allCourses, setAllCourses] = useState(mockedCoursesList);
 
   return (
     <>
-      <Header handleClick={loginAction} />
-      <SearchBar
-        handleSearch={handleSearchByButtonClick}
-        searchValue={searchValue}
-        handleSearchInput={handleSearchInput} />
-      {!showCourseCard &&
-        <Courses
-          coursesList={coursesList}
-          buttonClick={showCourse}
-        />}
-      {showCourseCard &&
-        <CourseInfo
-          coursesList={mockedCoursesList}
-          onBack={backAction}
-          showCourseId={showCourseCard!} />}
+      <Header />
+      <Routes>
+        <Route element={<PublicOnlyRoute />}>
+          <Route path='registration' element={<Registration />} />
+          <Route path='login' element={<Login />} />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route path='courses' element={<Courses courses={allCourses} />} />
+          <Route path='courses/add' element={<CourseForm addCourse={setAllCourses} />} />
+          <Route path='courses/:courseId' element={<CourseInfo courses={allCourses} />} />
+        </Route>
+
+        <Route path='*' element={<Navigate to={'/courses'} />} />
+      </Routes>
     </>
   )
 }

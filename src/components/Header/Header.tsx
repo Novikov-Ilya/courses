@@ -1,20 +1,37 @@
 import { Button } from "@common/Button";
 import { Logo } from "@components/Logo";
-import { HeaderProps } from "./types";
 import { HeaderStyled, LoginWrapper } from "./styled";
+import { useNavigate } from "react-router-dom";
+import { dictionary } from "@i18n/strings";
+import { useLoggedIn } from "@hooks";
+import { clearAuthData } from "@utils";
 
-export const Header = ({ handleClick }: HeaderProps) => {
+export const Header = () => {
+  const navigate = useNavigate();
+  const { isAuthorized, userName } = useLoggedIn();
+
+  const loginButtonAction = () => {
+    clearAuthData();
+    navigate('/login')
+  }
+
   return (
     <HeaderStyled>
       <Logo />
-      <LoginWrapper>
-        <div>
-          User name: Super Admin!
-        </div>
-        <div>
-          <Button buttonText="Logout" handleClick={handleClick} />
-        </div>
-      </LoginWrapper>
+      {
+        isAuthorized &&
+        <LoginWrapper>
+          <span>
+            {userName}
+          </span>
+          <div>
+            <Button
+              buttonText={dictionary.buttonLogout}
+              handleClick={loginButtonAction}
+            />
+          </div>
+        </LoginWrapper>
+      }
     </HeaderStyled>
   )
 }

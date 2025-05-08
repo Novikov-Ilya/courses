@@ -1,1 +1,1 @@
-export {mockedCoursesList, mockedAuthorsList} from './constants'
+export { mockedCoursesList, mockedAuthorsList } from './constants'
