@@ -10,6 +10,7 @@ import { InputType } from "@common/Input/types"
 import { ButtonType } from "@common/Button/types"
 import { FormErrorStyled } from "@common/Styled/FormErrorStyled"
 import { PageWrapperStyled } from "@common/Styled/PageWrapper"
+import { Align, HeadingStyled } from "@common/Styled/HeadingStyled"
 
 const formFieldsInitValue = {
   name: '',
@@ -24,8 +25,11 @@ const formFieldsErrors = {
 }
 
 const PASSWORD = dictionary.inputLabelPassword;
+const PASSWORD_IN_LOW_CASE = PASSWORD.toLowerCase();
 const NAME = dictionary.inputLabelName;
+const NAME_IN_LOW_CASE = NAME.toLowerCase();
 const EMAIL = dictionary.inputLabelEmail;
+const EMAIL_IN_LOW_CASE = EMAIL.toLowerCase()
 
 export const Registration = () => {
   const { formData, onChange } = useInputHandler(formFieldsInitValue);
@@ -45,7 +49,7 @@ export const Registration = () => {
 
   return (
     <PageWrapperStyled>
-      <h1>{dictionary.registerPageTitle}</h1>
+      <HeadingStyled align={Align.CENTER}>{dictionary.registerPageTitle}</HeadingStyled>
       <WrapperStyled>
         <SimpleFormStyled onSubmit={submitForm} noValidate>
 
@@ -53,7 +57,7 @@ export const Registration = () => {
             placeholderText={dictionary.inputPlaceholderName}
             labelText={NAME}
             required
-            name={NAME.toLowerCase()}
+            name={NAME_IN_LOW_CASE}
             onChange={onChange}
             value={formData.name}
             isError={inputError.name}
@@ -64,7 +68,7 @@ export const Registration = () => {
             labelText={EMAIL}
             type={InputType.EMAIL}
             required
-            name={EMAIL.toLowerCase()}
+            name={EMAIL_IN_LOW_CASE}
             onChange={onChange}
             value={formData.email}
             isError={inputError.email}
@@ -75,7 +79,7 @@ export const Registration = () => {
             labelText={PASSWORD}
             type={InputType.PASSWORD}
             required
-            name={PASSWORD.toLowerCase()}
+            name={PASSWORD_IN_LOW_CASE}
             onChange={onChange}
             value={formData.password}
             isError={inputError.password}

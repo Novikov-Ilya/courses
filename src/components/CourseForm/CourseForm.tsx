@@ -17,6 +17,7 @@ import { PageWrapperStyled } from "@common/Styled/PageWrapper";
 import { InputType } from "@common/Input/types";
 import { ButtonType } from "@common/Button/types";
 import { generateDate } from "@helpers";
+import { HeadingStyled } from "@common/Styled/HeadingStyled";
 
 const formFieldsInitValue = {
   title: '',
@@ -33,8 +34,11 @@ const formFieldsInitError = {
 
 const COURSE_FORM_ID = "new-course-form";
 const DURATION = dictionary.inputLabelDuration;
+const DURATION_IN_LOW_CASE = DURATION.toLowerCase();
 const TITLE = dictionary.inputLabelTitle;
+const TITLE_IN_LOW_CASE = TITLE.toLowerCase();
 const DESCRIPTION = dictionary.inputLabelDescription;
+const DESCRIPTION_IN_LOW_CASE = DESCRIPTION.toLowerCase();
 
 export const CourseForm = ({ addCourse }: CourseFormProps) => {
   const [authors, setAuthors] = useState<Array<IAuthorItem>>([]);
@@ -97,7 +101,7 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
 
   return (
     <PageWrapperStyled>
-      <h1>{dictionary.courseFormTitle}</h1>
+      <HeadingStyled>{dictionary.courseFormTitle}</HeadingStyled>
       <WrapperStyled>
         <NewCourseFormStyled
           onSubmit={handleCreateNewCourse}
@@ -109,24 +113,24 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
               placeholderText={dictionary.inputPlaceholderTitle}
               labelText={TITLE}
               required
-              name={TITLE.toLowerCase()}
+              name={TITLE_IN_LOW_CASE}
               onChange={onChange}
               onBlur={onBlur}
               value={formData.title}
               isError={inputError.title}
-              id={TITLE.toLowerCase()}
+              id={TITLE_IN_LOW_CASE}
             />
             <TextArea
               placeholderText={dictionary.inputPlaceholderDescription}
               labelText={DESCRIPTION}
               required
-              name={DESCRIPTION.toLowerCase()}
+              name={DESCRIPTION_IN_LOW_CASE}
               onChange={onChange}
               onBlur={onBlur}
               value={formData.description}
               isError={inputError.description}
               rows={4}
-              id={DESCRIPTION.toLowerCase()}
+              id={DESCRIPTION_IN_LOW_CASE}
             />
           </fieldset>
           <fieldset className="duration">
@@ -136,12 +140,12 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
               placeholderText={dictionary.inputPlaceholderDuration}
               labelText={DURATION}
               required
-              name={DURATION.toLowerCase()}
+              name={DURATION_IN_LOW_CASE}
               onChange={onChange}
               onBlur={onBlur}
               value={formData.duration}
               isError={inputError.duration}
-              id={DURATION.toLowerCase()}
+              id={DURATION_IN_LOW_CASE}
             />
             <span>{formattedDuration}</span>
           </fieldset>

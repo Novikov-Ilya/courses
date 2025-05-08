@@ -7,8 +7,3 @@ export const CreateAuthorStyled = styled.div`
     font-weight: 700;
   }
 `
-
-export const AuthorsListStyled = styled.div`
-  min-height: 100px;
-  padding: 20px 0;
-`

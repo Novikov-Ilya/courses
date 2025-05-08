@@ -2,6 +2,7 @@ import { Button } from "@common/Button";
 import { dictionary } from "@i18n/strings";
 import { EmptyListWrapperStyled } from "./styled";
 import { useNavigate } from "react-router-dom";
+import { Align, HeadingStyled } from "@common/Styled/HeadingStyled";
 
 export const EmptyCourseList = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ export const EmptyCourseList = () => {
   }
   return (
     <EmptyListWrapperStyled>
-      <h1>{dictionary.courseListEmpty}</h1>
+      <HeadingStyled align={Align.CENTER}>{dictionary.courseListEmpty}</HeadingStyled>
       <p>{dictionary.courseListEmptyTip}</p>
       <Button
         buttonText={dictionary.buttonAddNewCourse}

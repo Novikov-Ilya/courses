@@ -1,3 +1,4 @@
+import { getErrorMessage } from "@helpers";
 import { IErrorResponse, IResponseWithResult, ISuccessLogin, ISuccessUserCration, IUserLogin, IUserRegister, Method } from "./types";
 
 const HOST = 'http://localhost:4000';
@@ -21,9 +22,9 @@ const handleFetch = async <T, K extends IResponseWithResult>(path: string, metho
             let errorMessage;
 
             if (isErrorResponse(result)) {
-                errorMessage = result.errors?.[0]
+                errorMessage = getErrorMessage(result.errors?.[0])
             } else {
-                errorMessage = result.result;
+                errorMessage = getErrorMessage(result.result);
             }
 
             throw new Error(errorMessage ?? 'Unknown Error');

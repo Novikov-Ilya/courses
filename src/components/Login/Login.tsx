@@ -11,6 +11,7 @@ import { InputType } from "@common/Input/types"
 import { ButtonType } from "@common/Button/types"
 import { PageWrapperStyled } from "@common/Styled/PageWrapper"
 import { FormErrorStyled } from "@common/Styled/FormErrorStyled"
+import { Align, HeadingStyled } from "@common/Styled/HeadingStyled"
 
 const formFieldsInitValue = {
   email: '',
@@ -42,7 +43,7 @@ export const Login = () => {
 
   return (
     <PageWrapperStyled>
-      <h1>{dictionary.loginPageTitle}</h1>
+      <HeadingStyled align={Align.CENTER}>{dictionary.loginPageTitle}</HeadingStyled>
       <WrapperStyled>
         <SimpleFormStyled onSubmit={submitForm} noValidate>
           <Input

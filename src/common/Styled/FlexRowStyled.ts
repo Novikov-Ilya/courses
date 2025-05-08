@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
-export const AuthorsStyled = styled.div`
+export const FlextRowStyled = styled.div`
     display: flex;
+    align-items: center;
     gap: 20px;
 `

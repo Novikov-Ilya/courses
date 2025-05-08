@@ -4,7 +4,8 @@ import { AuthorItem } from "@components/AuthorItem/AuthorItem"
 import { useInputHandler } from "@hooks"
 import { dictionary } from "@i18n/strings"
 import { ICreateAuthorProps } from "./types"
-import { AuthorsListStyled, CreateAuthorStyled } from "./styled"
+import { CreateAuthorStyled } from "./styled"
+import { FlextRowStyled } from "@common/Styled/FlexRowStyled"
 
 const initialInputValue = {
     authors: ''
@@ -16,27 +17,27 @@ export const CreateAuthor = ({ authorsList, createAuthor, addCourseAuthor, delet
     return (
         <CreateAuthorStyled>
             <span>{dictionary.createAuthorTitle}</span>
-            <Input
-                placeholderText={dictionary.inputPlaceholderAuthor}
-                labelText={dictionary.inputLabelAuthor}
-                name={dictionary.inputNameAuthors}
-                onChange={onChange}
-                value={formData.authors}
-            />
-            <Button
-                buttonText={dictionary.buttonCreateAuthor}
-                handleClick={() => createAuthor(formData.authors)}
-            />
-            <AuthorsListStyled>
-                {authorsList.filter(author => !author.isCourseAuthor)
-                    .map(author => <AuthorItem
-                        key={author.id}
-                        authorName={author.name}
-                        deleteAction={() => deleteAuthor(author.id)}
-                        addCourseAuthor={() => addCourseAuthor(author.id)}
-                    />
-                    )}
-            </AuthorsListStyled>
+            <FlextRowStyled>
+                <Input
+                    placeholderText={dictionary.inputPlaceholderAuthor}
+                    labelText={dictionary.inputLabelAuthor}
+                    name={dictionary.inputNameAuthors}
+                    onChange={onChange}
+                    value={formData.authors}
+                />
+                <Button
+                    buttonText={dictionary.buttonCreateAuthor}
+                    handleClick={() => createAuthor(formData.authors)}
+                />
+            </FlextRowStyled>
+            {authorsList.filter(author => !author.isCourseAuthor)
+                .map(author => <AuthorItem
+                    key={author.id}
+                    authorName={author.name}
+                    deleteAction={() => deleteAuthor(author.id)}
+                    addCourseAuthor={() => addCourseAuthor(author.id)}
+                />
+                )}
         </CreateAuthorStyled>
     )
 }

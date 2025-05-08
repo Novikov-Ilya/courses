@@ -18,16 +18,14 @@ function App() {
     <>
       <Header />
       <Routes>
-        <Route path='/registration' element={<PublicOnlyRoute />}>
-          <Route path='' element={<Registration />} />
+        <Route element={<PublicOnlyRoute />}>
+          <Route path='registration' element={<Registration />} />
+          <Route path='login' element={<Login />} />
         </Route>
-        <Route path='/login' element={<PublicOnlyRoute />}>
-          <Route path='' element={<Login />} />
-        </Route>
-        <Route path='/courses' element={<ProtectedRoute />}>
-          <Route path='' element={<Courses courses={allCourses} />} />
-          <Route path='/courses/add' element={<CourseForm addCourse={setAllCourses} />} />
-          <Route path='/courses/:courseId' element={<CourseInfo courses={allCourses} />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path='courses' element={<Courses courses={allCourses} />} />
+          <Route path='courses/add' element={<CourseForm addCourse={setAllCourses} />} />
+          <Route path='courses/:courseId' element={<CourseInfo courses={allCourses} />} />
         </Route>
 
         <Route path='*' element={<Navigate to={'/courses'} />} />
