@@ -7,8 +7,6 @@ import { Button } from "@common/Button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { IAuthorItem } from "@components/AuthorItem/types";
-import { CourseType } from "@components/Courses/types";
-import { CourseFormProps } from "./types";
 import { WrapperStyled } from "@common/Styled";
 import { NewCourseFormStyled } from "./styled";
 import { Authors } from "@components/Authors/Authors";
@@ -16,8 +14,9 @@ import { ActionButtonsWrapperStyled } from "@common/Styled/ActionButtons";
 import { PageWrapperStyled } from "@common/Styled/PageWrapper";
 import { InputType } from "@common/Input/types";
 import { ButtonType } from "@common/Button/types";
-import { generateDate } from "@helpers";
 import { HeadingStyled } from "@common/Styled/HeadingStyled";
+import { useDispatch } from "react-redux";
+import { addCourse } from "@store/coursesSlice";
 
 const formFieldsInitValue = {
   title: '',
@@ -40,11 +39,12 @@ const TITLE_IN_LOW_CASE = TITLE.toLowerCase();
 const DESCRIPTION = dictionary.inputLabelDescription;
 const DESCRIPTION_IN_LOW_CASE = DESCRIPTION.toLowerCase();
 
-export const CourseForm = ({ addCourse }: CourseFormProps) => {
+export const CourseForm = () => {
   const [authors, setAuthors] = useState<Array<IAuthorItem>>([]);
   const { formData, onChange } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const formattedDuration = formatDuration(Number(formData.duration));
 
@@ -54,19 +54,8 @@ export const CourseForm = ({ addCourse }: CourseFormProps) => {
 
   const handleCreateNewCourse = (e: React.FormEvent) => {
     e.preventDefault();
-    const newCourse: CourseType = {
-      id: createId(),
-      title: formData.title,
-      description: formData.description,
-      creationDate: generateDate(),
-      duration: Number(formData.duration),
-      authors: authors.filter(author => author.isCourseAuthor).map(author => author.id)
-    }
-
-    addCourse((prev) => ([
-      ...prev,
-      newCourse
-    ]))
+    const courseData = {...formData, authors}
+    dispatch(addCourse(courseData))
     navigate('/courses');
   }
 

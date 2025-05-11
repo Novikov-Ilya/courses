@@ -10,12 +10,12 @@ const isErrorResponse = <K extends IResponseWithResult>(result: K | IErrorRespon
     return 'errors' in result;
 }
 
-const handleFetch = async <T, K extends IResponseWithResult>(path: string, method: Method, userData: T): Promise<K> => {
+const handleFetch = async <T, K extends IResponseWithResult>(path: string, method: Method, data?: T): Promise<K> => {
     try {
         const response = await fetch(`${HOST}/${path}`, {
             method: method,
             headers: REQUEST_HEADERS,
-            body: JSON.stringify(userData)
+            body: JSON.stringify(data)
         });
         const result: K | IErrorResponse = await response.json();
         if (!response.ok) {
@@ -40,3 +40,5 @@ const handleFetch = async <T, K extends IResponseWithResult>(path: string, metho
 export const login = async (userData: IUserLogin) => await handleFetch<IUserLogin, ISuccessLogin>('login', Method.POST, userData);
 
 export const createUser = async (userData: IUserRegister) => await handleFetch<IUserRegister, ISuccessUserCration>('register', Method.POST, userData);
+
+export const getCourses = async () => await handleFetch('courses/all', Method.GET);
