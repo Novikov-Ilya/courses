@@ -5,9 +5,7 @@ import { IAddCoursePayload, IDeleteCoursePayload, ISetCoursesPayload } from "./t
 
 const courseSlice = createSlice({
   name: 'courseSlice',
-  initialState: {
-    courses: [] as CourseType[],
-  },
+  initialState: [] as CourseType[],
   reducers: {
     addCourse(state, action: PayloadAction<IAddCoursePayload>) {
       const newCourse: CourseType = {
@@ -18,14 +16,15 @@ const courseSlice = createSlice({
         duration: Number(action.payload.duration),
         authors: action.payload.authors.filter(author => author.isCourseAuthor).map(author => author.id)
       }
-      state.courses.push(newCourse);
+      state.push(newCourse);
     },
     setCourses(state, action: PayloadAction<ISetCoursesPayload>) {
-      state.courses = action.payload.result;
+      console.log(action)
+      state = action.payload;
     },
     updateCourse(state, action: PayloadAction<IAddCoursePayload>) { },
     deleteCourse(state, action: PayloadAction<IDeleteCoursePayload>) {
-      state.courses = state.courses.filter(course => course.id !== action.payload.id);
+      state = state.filter(course => course.id !== action.payload.id);
     },
   },
 });

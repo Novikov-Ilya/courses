@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import coursesReducer from './coursesSlice';
-import { loadUserState, saveUserState } from "@utils";
+import { loadState, saveState } from "@utils";
 
 
 
@@ -11,15 +11,13 @@ const store = configureStore({
     courses: coursesReducer,
     // authors: authorsReducer,
   },
-  preloadedState: {
-    user: loadUserState(),
-  },
+  preloadedState: loadState(),
   devTools: true,
 },
 )
 
 store.subscribe(() => {
-  saveUserState(store.getState().user);
+  saveState({user:store.getState().user});
 })
 export default store;
 

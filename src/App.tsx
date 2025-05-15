@@ -18,11 +18,12 @@ function App() {
 
   const fetchAllCourses = async () => {
     const courses = await getCourses();
-    dispatch(setCourses(courses));
+    console.log(courses)
+    dispatch(setCourses(courses.result));
   }
   useEffect(() => {
     fetchAllCourses();
-  });
+  }, []);
 
 
   return (

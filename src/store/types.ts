@@ -8,9 +8,7 @@ export interface IAddCoursePayload {
     authors: IAuthorItem[];
 }
 
-export interface ISetCoursesPayload {
-    result: CourseType[]
-}
+export type ISetCoursesPayload = CourseType[];
 
 export interface IDeleteCoursePayload {
     id: string
