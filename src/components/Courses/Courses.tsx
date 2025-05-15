@@ -1,19 +1,27 @@
 import { CourseCard } from "@components/Courses/CourseCard";
 import { getAuthorNames } from "@helpers";
 import { EmptyCourseList } from "@components/Courses/EmptyCourseList";
-import { mockedAuthorsList, mockedCoursesList } from "@constants";
+import { mockedAuthorsList } from "@constants";
 import { SearchBar } from "@common/SearchBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@common/Button";
 import { dictionary } from "@i18n/strings";
 import { CoursesTopBarStyled } from "./styled";
-import { CoursesProps } from "./types";
+import { CourseType } from "./types";
+import { getCoursesSelector } from "@store/selectors";
+import { useAppSelector } from "@store/hooks";
 
-export const Courses = ({ courses }: CoursesProps) => {
-  const [coursesList, setCoursesList] = useState(courses);
+
+export const Courses = () => {
+  const courses = useAppSelector(getCoursesSelector);
+  const [coursesList, setCoursesList] = useState<CourseType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setCoursesList(courses);
+  }, [courses])
 
   const showCourse = (id: string) => {
     navigate(`/courses/${id}`);
@@ -22,16 +30,18 @@ export const Courses = ({ courses }: CoursesProps) => {
   const handleSearchByButtonClick = (searchInputValue: string) => {
     setCoursesList(() => {
       if (!searchInputValue.trim()) return courses;
-      return coursesList.filter(
-        item =>
-          item.title.toLowerCase().includes(searchInputValue.toLowerCase()))
+      return courses.filter(
+        item => {
+          return item.title.toLowerCase().includes(searchInputValue.toLowerCase());
+        }
+      )
     })
   }
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchValue(e.target.value);
-    if (!e.target.value.trim()) {
-      setCoursesList(mockedCoursesList);
+    if (!e.target.value) {
+      setCoursesList(courses)
     }
   }
 
@@ -51,8 +61,7 @@ export const Courses = ({ courses }: CoursesProps) => {
           handleClick={addNewCourse}
         />
       </CoursesTopBarStyled>
-      {!coursesList.length && <EmptyCourseList />}
-      {coursesList.length &&
+      {!coursesList.length ? <EmptyCourseList /> :
         <div>
           {coursesList.map((item) => {
             const authorNames = getAuthorNames(item.authors, mockedAuthorsList);
@@ -64,6 +73,7 @@ export const Courses = ({ courses }: CoursesProps) => {
               creationDate={item.creationDate.replaceAll('/', '.')}
               key={item.id}
               buttonClick={() => showCourse(item.id)}
+              courseId={item.id}
             />
           }
           )}

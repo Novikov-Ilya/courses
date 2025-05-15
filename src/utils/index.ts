@@ -1,1 +1,1 @@
-export {setAuthData, clearAuthData} from './authStorage'
+export {saveState, loadState} from './storage'

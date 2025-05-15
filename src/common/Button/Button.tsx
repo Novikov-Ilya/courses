@@ -1,20 +1,33 @@
 import { ButtonProps, ButtonVariant, ButtonType } from "./types"
-import { ButtonIconStyled, ButtonStyled } from "./styled"
+import { BaseButtonStyled, ButtonIconStyled, ButtonStyled } from "./styled"
+import { ReactElement } from "react";
+
 
 export const Button = ({ buttonText, handleClick, type = ButtonType.BUTTON, icon, form, variant = ButtonVariant.WITH_TEXT }: ButtonProps) => {
-  return variant === ButtonVariant.WITH_TEXT ?
-    <ButtonStyled
+  const buttonVariantsMap = {
+    [ButtonVariant.WITH_TEXT]: <ButtonStyled
       onClick={handleClick}
       type={type}
       form={form}
     >
       {buttonText}
-    </ButtonStyled> :
-    <ButtonIconStyled
+    </ButtonStyled>,
+    [ButtonVariant.WITH_ICON]: <ButtonIconStyled
       onClick={handleClick}
       type={type}
       form={form}
     >
-      {icon ? <img src={icon} /> : buttonText}
-    </ButtonIconStyled>
+      <img src={icon} />
+    </ButtonIconStyled>,
+    [ButtonVariant.WITH_ICON_LARGE]: <BaseButtonStyled
+      onClick={handleClick}
+      type={type}
+      form={form}
+    >
+      <img src={icon} />
+    </BaseButtonStyled>
+  } as Record<string, ReactElement>
+
+  return buttonVariantsMap[variant];
+
 }

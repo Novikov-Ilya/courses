@@ -1,3 +1,5 @@
+import { CourseType } from "@components/Courses/types"
+
 export interface IUserLogin {
   email: string,
   password: string
@@ -7,26 +9,37 @@ export interface IUserRegister extends IUserLogin {
   name: string
 }
 
+export interface IAuthor {
+  name: string,
+  id: string,
+}
+
 export interface IResponse {
   successful: boolean,
 }
 
-export interface IResponseWithResult extends IResponse {
-  result: string
+
+export interface IResponseWithCourses extends IResponse {
+  result: CourseType[]
+}
+
+export interface IResponseWIthAuthors extends IResponse {
+  result: IAuthor[]
 }
 
 export interface IErrorResponse extends IResponse {
   errors: string[]
 }
 
-export interface ISuccessLogin extends IResponseWithResult {
+export interface ISuccessLogin extends IResponse {
   user: {
     email: string,
     name: string
   }
+  result: string
 }
 
-export type ISuccessUserCration = IResponseWithResult;
+export type ISuccessUserCration = IResponse;
 
 export interface IResponseRegister {
   successful: boolean,

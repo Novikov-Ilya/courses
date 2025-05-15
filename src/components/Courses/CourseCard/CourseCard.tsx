@@ -2,9 +2,17 @@ import { Button } from "@common/Button";
 import { ICourseCard } from "./types";
 import { formatDuration } from "@helpers";
 import { dictionary } from "@i18n/strings";
-import { CourseCardWrapper, DescriptionStyled, InfoSectionStyled } from "./styled";
+import { CourseCardActionButtonStyled, CourseCardWrapper, DescriptionStyled, InfoSectionStyled } from "./styled";
+import { ButtonVariant } from "@common/Button/types";
+import { useAppDispatch } from "@store/hooks";
+import { deleteCourse } from "@store/coursesSlice";
 
-export const CourseCard = ({ title, description, duration, authors, creationDate, buttonClick }: ICourseCard) => {
+export const CourseCard = ({ title, description, duration, authors, creationDate, buttonClick, courseId }: ICourseCard) => {
+  const dispatch = useAppDispatch();
+
+  const handleDeleteCourse = (id: string) => {
+    dispatch(deleteCourse({id}));
+  }
 
   return (
     <CourseCardWrapper>
@@ -18,12 +26,22 @@ export const CourseCard = ({ title, description, duration, authors, creationDate
           <p><b>{dictionary.courseDuration}: </b>{formatDuration(duration)}</p>
           <p><b>{dictionary.courseCreated}: </b>{creationDate}</p>
         </div>
-        <div>
+        <CourseCardActionButtonStyled>
           <Button
             buttonText={dictionary.buttonShowCourse}
             handleClick={buttonClick}
           />
-        </div>
+          <Button
+            icon="/src/assets/trash.png"
+            handleClick={() => handleDeleteCourse(courseId)}
+            variant={ButtonVariant.WITH_ICON_LARGE}
+          />
+          <Button
+            icon="/src/assets/edit.png"
+            handleClick={() => { }}
+            variant={ButtonVariant.WITH_ICON_LARGE}
+          />
+        </CourseCardActionButtonStyled>
       </InfoSectionStyled>
     </CourseCardWrapper>
   )

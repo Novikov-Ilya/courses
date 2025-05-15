@@ -1,32 +1,11 @@
-import { useEffect, useState } from "react";
+import { getUserSelector } from "@store/selectors";
+import { useAppSelector } from "@store/hooks";
 
 export const useLoggedIn = () => {
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(() => 
-    Boolean(localStorage.getItem('token'))
-  );
-  const [userName, setUserName] = useState<string | null>(() => 
-    localStorage.getItem('userName') ?? null
-  );
-
-  useEffect(() => {
-    const checkAuthorization = () => {
-      const token = localStorage.getItem('token');
-      const userNameFromLS = localStorage.getItem('userName');
-  
-      setIsAuthorized(Boolean(token));
-      setUserName(userNameFromLS ?? null);
-    }
-
-    window.addEventListener('storage', checkAuthorization);
-
-    return () => {
-      window.removeEventListener('storage', checkAuthorization)
-    }
-    
-  }, []);
+  const user = useAppSelector(getUserSelector);
 
   return {
-    isAuthorized,
-    userName
+    isAuthorized: user.isAuth,
+    userName: user.userName
   };
 }

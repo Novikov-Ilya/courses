@@ -6,4 +6,5 @@ export interface ICourseCard {
   duration: number,
   creationDate: string,
   buttonClick?: () => void,
+  courseId: string,
 }

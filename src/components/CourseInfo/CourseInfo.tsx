@@ -4,11 +4,13 @@ import { dictionary } from "@i18n/strings";
 import { CourseInfoWrapper, InfoSectionStyled, DescriptionStyled } from './styled';
 import { mockedAuthorsList } from "@constants";
 import { useNavigate, useParams } from "react-router-dom";
-import { CourseInfoProps } from "./types";
+import { useSelector } from "react-redux";
+import { getCoursesSelector } from "@store/selectors";
 
-export const CourseInfo = ({courses}: CourseInfoProps) => {
+export const CourseInfo = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
+  const courses = useSelector(getCoursesSelector);
 
   const onBack = () => {
     navigate('/courses');
