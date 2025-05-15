@@ -51,20 +51,21 @@ export const CourseForm = () => {
 
   const formattedDuration = formatDuration(Number(formData.duration));
 
+
   const buttonCancelHandle = () => {
     navigate('/courses');
   }
 
   const handleCreateNewCourse = (e: React.FormEvent) => {
     e.preventDefault();
-    const courseData = {...formData, authors}
+    const courseData = { ...formData, authors }
     dispatch(addCourse(courseData))
     navigate('/courses');
   }
 
   const createAuthor = (authorName: string) => {
     const authorId = createId();
-    dispatch(addAuthor({name: authorName, id: authorId}));
+    dispatch(addAuthor({ name: authorName, id: authorId }));
   }
 
   const deleteAuthor = (authorId: string) => {
@@ -83,8 +84,13 @@ export const CourseForm = () => {
       ))
   }
 
+
+
   useEffect(() => {
-    setAuthors(authorsFromStore);
+    setAuthors(authorsFromStore.map(author => ({
+      ...author,
+      isCourseAuthor: false
+    })));
   }, [authorsFromStore])
 
 

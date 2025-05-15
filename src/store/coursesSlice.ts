@@ -23,7 +23,6 @@ const courseSlice = createSlice({
     },
     updateCourse(state, action: PayloadAction<IAddCoursePayload>) { },
     deleteCourse(state, action: PayloadAction<IDeleteCoursePayload>) {
-      console.log('delete action', state);
       return state.filter(course => course.id !== action.payload.id);
     },
   },

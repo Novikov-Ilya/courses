@@ -30,10 +30,8 @@ export const Courses = () => {
   const handleSearchByButtonClick = (searchInputValue: string) => {
     setCoursesList(() => {
       if (!searchInputValue.trim()) return courses;
-      console.log(courses);
       return courses.filter(
         item => {
-          console.log(item);
           return item.title.toLowerCase().includes(searchInputValue.toLowerCase());
         }
       )

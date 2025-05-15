@@ -35,7 +35,6 @@ export const Login = () => {
     event.preventDefault();
     try {
       const loginResult = await login(formData);
-      console.log(loginResult)
       dispatch(loginUser(loginResult));
       navigate('/courses');
     }
