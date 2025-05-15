@@ -5,13 +5,14 @@ import { Link, useNavigate } from "react-router-dom"
 import { login } from "@services"
 import { useFormValidate, useInputHandler } from "@hooks"
 import { WrapperStyled, SimpleFormStyled } from "@common/Styled"
-import { setAuthData } from "@utils"
 import { useState } from "react"
 import { InputType } from "@common/Input/types"
 import { ButtonType } from "@common/Button/types"
 import { PageWrapperStyled } from "@common/Styled/PageWrapper"
 import { FormErrorStyled } from "@common/Styled/FormErrorStyled"
 import { Align, HeadingStyled } from "@common/Styled/HeadingStyled"
+import { useAppDispatch } from "@store/hooks"
+import { loginUser } from "@store/userSlice"
 
 const formFieldsInitValue = {
   email: '',
@@ -28,12 +29,14 @@ export const Login = () => {
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
   const [loginError, setLoginError] = useState<string | null>(null)
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       const loginResult = await login(formData);
-      setAuthData(loginResult.result, loginResult.user?.name);
+      console.log(loginResult)
+      dispatch(loginUser(loginResult));
       navigate('/courses');
     }
     catch (error) {

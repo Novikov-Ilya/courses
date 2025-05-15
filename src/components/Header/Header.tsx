@@ -4,14 +4,17 @@ import { HeaderStyled, LoginWrapper } from "./styled";
 import { useNavigate } from "react-router-dom";
 import { dictionary } from "@i18n/strings";
 import { useLoggedIn } from "@hooks";
-import { clearAuthData } from "@utils";
+import { useAppDispatch } from "@store/hooks";
+import { logoutUser } from "@store/userSlice";
 
 export const Header = () => {
   const navigate = useNavigate();
   const { isAuthorized, userName } = useLoggedIn();
+  const dispatch = useAppDispatch();
 
   const loginButtonAction = () => {
-    clearAuthData();
+    
+    dispatch(logoutUser());
     navigate('/login')
   }
 

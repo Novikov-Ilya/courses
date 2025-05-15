@@ -15,8 +15,8 @@ import { PageWrapperStyled } from "@common/Styled/PageWrapper";
 import { InputType } from "@common/Input/types";
 import { ButtonType } from "@common/Button/types";
 import { HeadingStyled } from "@common/Styled/HeadingStyled";
-import { useDispatch } from "react-redux";
 import { addCourse } from "@store/coursesSlice";
+import { useAppDispatch } from "@store/hooks";
 
 const formFieldsInitValue = {
   title: '',
@@ -44,7 +44,7 @@ export const CourseForm = () => {
   const { formData, onChange } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const formattedDuration = formatDuration(Number(formData.duration));
 

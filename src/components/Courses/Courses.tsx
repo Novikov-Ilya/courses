@@ -8,11 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@common/Button";
 import { dictionary } from "@i18n/strings";
 import { CoursesTopBarStyled } from "./styled";
-import { useSelector } from "react-redux";
 import { CourseType } from "./types";
+import { getCoursesSelector } from "@selectors";
+import { useAppSelector } from "@store/hooks";
+
 
 export const Courses = () => {
-  const courses = useSelector(state => state.courses.courses);
+  const courses = useAppSelector(getCoursesSelector);
   const [coursesList, setCoursesList] = useState<CourseType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ export const Courses = () => {
       return courses.filter(
         item => {
           console.log(item);
-          return item.title.toLowerCase().includes(searchInputValue.toLowerCase())
+          return item.title.toLowerCase().includes(searchInputValue.toLowerCase());
         }
       )
     })
@@ -62,7 +64,7 @@ export const Courses = () => {
         />
       </CoursesTopBarStyled>
       {!coursesList.length && <EmptyCourseList />}
-      {coursesList.length &&
+      {Boolean(coursesList.length) &&
         <div>
           {coursesList.map((item) => {
             const authorNames = getAuthorNames(item.authors, mockedAuthorsList);
@@ -74,6 +76,7 @@ export const Courses = () => {
               creationDate={item.creationDate.replaceAll('/', '.')}
               key={item.id}
               buttonClick={() => showCourse(item.id)}
+              courseId={item.id}
             />
           }
           )}

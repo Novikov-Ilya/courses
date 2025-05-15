@@ -1,7 +1,7 @@
 import { createId, generateDate } from "@helpers";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CourseType } from "@components/Courses/types";
-import { IAuthorItem } from "@components/AuthorItem/types";
+import { IAddCoursePayload, IDeleteCoursePayload, ISetCoursesPayload } from "./types";
 
 const courseSlice = createSlice({
   name: 'courseSlice',
@@ -9,10 +9,7 @@ const courseSlice = createSlice({
     courses: [] as CourseType[],
   },
   reducers: {
-    addCourse(state, action: PayloadAction<{ authors: IAuthorItem[] }>) {
-      console.log('state', state);
-      console.log('action', action);
-
+    addCourse(state, action: PayloadAction<IAddCoursePayload>) {
       const newCourse: CourseType = {
         id: createId(),
         title: action.payload.title,
@@ -23,11 +20,15 @@ const courseSlice = createSlice({
       }
       state.courses.push(newCourse);
     },
-    setCourses(state, action: PayloadAction) {
+    setCourses(state, action: PayloadAction<ISetCoursesPayload>) {
       state.courses = action.payload.result;
-    }
+    },
+    updateCourse(state, action: PayloadAction<IAddCoursePayload>) { },
+    deleteCourse(state, action: PayloadAction<IDeleteCoursePayload>) {
+      state.courses = state.courses.filter(course => course.id !== action.payload.id);
+    },
   },
 });
 
-export const { addCourse, setCourses } = courseSlice.actions;
+export const { addCourse, setCourses, deleteCourse } = courseSlice.actions;
 export default courseSlice.reducer;

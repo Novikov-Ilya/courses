@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IUserLoginPayload } from "./types";
 
 const userSlice = createSlice({
   name: 'userSlice',
@@ -6,17 +7,24 @@ const userSlice = createSlice({
     userName: '',
     email: '',
     token: '',
+    isAuth: false,
   },
   reducers: {
-    loginUser(state, action) {
-      console.log(state);
-      console.log(action)
+    loginUser(state, action: PayloadAction<IUserLoginPayload>) {
+      state.userName = action.payload.user.name;
+      state.email = action.payload.user.email;
+      state.token = action.payload.result;
+      state.isAuth = true;
     },
-    createUser() { },
-    logoutUser() { },
+    logoutUser(state) {
+      state.userName = '';
+      state.email = '';
+      state.token = '';
+      state.isAuth = false;
+     },
   }
 });
 
-export const { loginUser, createUser, logoutUser } = userSlice.actions;
+export const { loginUser, logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

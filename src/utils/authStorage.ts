@@ -1,15 +1,12 @@
-    export const setAuthData = (token: string, userName: string = '') => {
-        localStorage.setItem('token', token);
-        localStorage.setItem('userName', userName);
-        dispatchStorageEvent();
-    }
+import { IUser } from "./types";
 
-    export const clearAuthData = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('userName');
-        dispatchStorageEvent();
-    }
+export const saveUserState = (userStore: IUser) => {
+    const userString = JSON.stringify(userStore);
+    localStorage.setItem('userState', userString);
+}
 
-    const dispatchStorageEvent = () => {
-        window.dispatchEvent(new Event('storage'));
-    }
+export const loadUserState = () => {
+    const userDataString = localStorage.getItem('userState');
+    if (userDataString === null) return undefined;
+    return JSON.parse(userDataString);
+}

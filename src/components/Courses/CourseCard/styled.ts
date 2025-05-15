@@ -28,3 +28,8 @@ export const InfoSectionStyled = styled.section`
   flex-direction: column;
   justify-content: space-between;
 `
+
+export const CourseCardActionButtonStyled = styled.div`
+  display: flex;
+  gap: 10px;
+`

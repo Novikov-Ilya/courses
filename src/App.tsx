@@ -6,17 +6,15 @@ import { Registration } from '@components/Registration';
 import { CourseInfo } from '@components/CourseInfo';
 import { Login } from '@components/Login';
 import { CourseForm } from '@components/CourseForm/CourseForm';
-import { mockedCoursesList } from '@constants';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { PublicOnlyRoute } from '@components/RouteComponents/PublicOnlyRoute';
 import { ProtectedRoute } from '@components/RouteComponents/ProtectedRoute';
-import { useDispatch } from 'react-redux';
 import { getCourses } from '@services';
 import { setCourses } from '@store/coursesSlice';
+import { useAppDispatch } from '@store/hooks';
 
 function App() {
-  const [allCourses, setAllCourses] = useState(mockedCoursesList);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const fetchAllCourses = async () => {
     const courses = await getCourses();
@@ -37,7 +35,7 @@ function App() {
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route path='courses' element={<Courses />} />
-          <Route path='courses/add' element={<CourseForm addCourse={setAllCourses} />} />
+          <Route path='courses/add' element={<CourseForm />} />
           <Route path='courses/:courseId' element={<CourseInfo />} />
         </Route>
 

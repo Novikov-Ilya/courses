@@ -6,7 +6,8 @@ export enum ButtonType {
 
 export enum ButtonVariant {
   WITH_TEXT = 'text',
-  WITH_ICON = 'icon'
+  WITH_ICON = 'icon',
+  WITH_ICON_LARGE = 'icon-large',
 }
 
 export interface ButtonProps {
