@@ -7,5 +7,5 @@ export interface AuthorItemProps {
 export interface IAuthorItem {
   name: string,
   id: string,
-  isCourseAuthor?: boolean,
+  isCourseAuthor: boolean,
 }
