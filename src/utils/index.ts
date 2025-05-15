@@ -1,1 +1,1 @@
-export {saveState, loadState} from './authStorage'
+export {saveState, loadState} from './storage'

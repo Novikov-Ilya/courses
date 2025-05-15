@@ -9,20 +9,27 @@ import { CourseForm } from '@components/CourseForm/CourseForm';
 import { useEffect } from 'react';
 import { PublicOnlyRoute } from '@components/RouteComponents/PublicOnlyRoute';
 import { ProtectedRoute } from '@components/RouteComponents/ProtectedRoute';
-import { getCourses } from '@services';
+import { getAuthors, getCourses } from '@services';
 import { setCourses } from '@store/coursesSlice';
 import { useAppDispatch } from '@store/hooks';
+import { setAuthors } from '@store/authorsSlice';
 
 function App() {
   const dispatch = useAppDispatch();
 
   const fetchAllCourses = async () => {
     const courses = await getCourses();
-    console.log(courses)
     dispatch(setCourses(courses.result));
   }
+
+  const fetchAllAuthors = async () => {
+    const authors = await getAuthors();
+    dispatch(setAuthors(authors.result));
+  }
+
   useEffect(() => {
     fetchAllCourses();
+    fetchAllAuthors();
   }, []);
 
 

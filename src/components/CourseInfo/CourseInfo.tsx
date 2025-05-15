@@ -5,11 +5,12 @@ import { CourseInfoWrapper, InfoSectionStyled, DescriptionStyled } from './style
 import { mockedAuthorsList } from "@constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getCoursesSelector } from "@store/selectors";
 
 export const CourseInfo = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const courses = useSelector(state => state.courses.courses);
+  const courses = useSelector(getCoursesSelector);
 
   const onBack = () => {
     navigate('/courses');

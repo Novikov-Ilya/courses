@@ -5,7 +5,7 @@ import { TextArea } from "@common/TextArea";
 import { createId, formatDuration } from "@helpers";
 import { Button } from "@common/Button";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IAuthorItem } from "@components/AuthorItem/types";
 import { WrapperStyled } from "@common/Styled";
 import { NewCourseFormStyled } from "./styled";
@@ -16,7 +16,9 @@ import { InputType } from "@common/Input/types";
 import { ButtonType } from "@common/Button/types";
 import { HeadingStyled } from "@common/Styled/HeadingStyled";
 import { addCourse } from "@store/coursesSlice";
-import { useAppDispatch } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { getAuthorsSelector } from "@store/selectors";
+import { addAuthor } from "@store/authorsSlice";
 
 const formFieldsInitValue = {
   title: '',
@@ -40,6 +42,7 @@ const DESCRIPTION = dictionary.inputLabelDescription;
 const DESCRIPTION_IN_LOW_CASE = DESCRIPTION.toLowerCase();
 
 export const CourseForm = () => {
+  const authorsFromStore = useAppSelector(getAuthorsSelector)
   const [authors, setAuthors] = useState<Array<IAuthorItem>>([]);
   const { formData, onChange } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
@@ -61,13 +64,7 @@ export const CourseForm = () => {
 
   const createAuthor = (authorName: string) => {
     const authorId = createId();
-    setAuthors(prev => ([
-      ...prev, {
-        name: authorName,
-        id: authorId,
-        isCourseAuthor: false,
-      }
-    ]))
+    dispatch(addAuthor({name: authorName, id: authorId}));
   }
 
   const deleteAuthor = (authorId: string) => {
@@ -85,6 +82,10 @@ export const CourseForm = () => {
         } : author
       ))
   }
+
+  useEffect(() => {
+    setAuthors(authorsFromStore);
+  }, [authorsFromStore])
 
 
   return (

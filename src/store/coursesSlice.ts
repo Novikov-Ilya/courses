@@ -18,13 +18,13 @@ const courseSlice = createSlice({
       }
       state.push(newCourse);
     },
-    setCourses(state, action: PayloadAction<ISetCoursesPayload>) {
-      console.log(action)
-      state = action.payload;
+    setCourses(_, action: PayloadAction<ISetCoursesPayload>) {
+      return action.payload;
     },
     updateCourse(state, action: PayloadAction<IAddCoursePayload>) { },
     deleteCourse(state, action: PayloadAction<IDeleteCoursePayload>) {
-      state = state.filter(course => course.id !== action.payload.id);
+      console.log('delete action', state);
+      return state.filter(course => course.id !== action.payload.id);
     },
   },
 });

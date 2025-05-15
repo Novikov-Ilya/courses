@@ -1,5 +1,5 @@
 import { getErrorMessage } from "@helpers";
-import { IErrorResponse, IResponseWithCourses, ISuccessLogin, ISuccessUserCration, IUserLogin, IUserRegister, Method, IResponse } from "./types";
+import { IErrorResponse, IResponseWithCourses, ISuccessLogin, ISuccessUserCration, IUserLogin, IUserRegister, Method, IResponse, IResponseWIthAuthors } from "./types";
 import { CourseType } from "@components/Courses/types";
 
 const HOST = 'http://localhost:4000';
@@ -41,3 +41,5 @@ export const login = async (userData: IUserLogin) => await handleFetch<IUserLogi
 export const createUser = async (userData: IUserRegister) => await handleFetch<IUserRegister, ISuccessUserCration>('register', Method.POST, userData);
 
 export const getCourses = async () => await handleFetch<undefined, IResponseWithCourses>('courses/all', Method.GET);
+
+export const getAuthors = async () => await handleFetch<undefined, IResponseWIthAuthors>('authors/all', Method.GET);

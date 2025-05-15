@@ -9,6 +9,11 @@ export interface IUserRegister extends IUserLogin {
   name: string
 }
 
+export interface IAuthor {
+  name: string,
+  id: string,
+}
+
 export interface IResponse {
   successful: boolean,
 }
@@ -16,6 +21,10 @@ export interface IResponse {
 
 export interface IResponseWithCourses extends IResponse {
   result: CourseType[]
+}
+
+export interface IResponseWIthAuthors extends IResponse {
+  result: IAuthor[]
 }
 
 export interface IErrorResponse extends IResponse {

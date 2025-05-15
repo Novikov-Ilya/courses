@@ -1,4 +1,4 @@
-import { getUserSelector } from "@selectors";
+import { getUserSelector } from "@store/selectors";
 import { useAppSelector } from "@store/hooks";
 
 export const useLoggedIn = () => {

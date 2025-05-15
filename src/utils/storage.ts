@@ -5,8 +5,8 @@ export const saveState = (store: Partial<RootState>) => {
     localStorage.setItem('state', userString);
 }
 
-export const loadState = (): any => {
-    const userDataString = localStorage.getItem('state');
-    if (userDataString === null) return undefined;
-    return JSON.parse(userDataString);
+export const loadState = (): Partial<RootState> => {
+    const loadDataString = localStorage.getItem('state');
+    if (loadDataString === null) return {};
+    return JSON.parse(loadDataString);
 }

@@ -1,16 +1,17 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import coursesReducer from './coursesSlice';
+import authorsReducer from './authorsSlice';
 import { loadState, saveState } from "@utils";
 
-
+const rootReducer = combineReducers({
+  user: userReducer,
+  courses: coursesReducer,
+  authors: authorsReducer,
+})
 
 const store = configureStore({
-  reducer: {
-    user: userReducer,
-    courses: coursesReducer,
-    // authors: authorsReducer,
-  },
+  reducer: rootReducer,
   preloadedState: loadState(),
   devTools: true,
 },
@@ -21,6 +22,6 @@ store.subscribe(() => {
 })
 export default store;
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
 
 export type AppDispatch = typeof store.dispatch;

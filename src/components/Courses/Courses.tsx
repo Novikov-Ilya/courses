@@ -9,7 +9,7 @@ import { Button } from "@common/Button";
 import { dictionary } from "@i18n/strings";
 import { CoursesTopBarStyled } from "./styled";
 import { CourseType } from "./types";
-import { getCoursesSelector } from "@selectors";
+import { getCoursesSelector } from "@store/selectors";
 import { useAppSelector } from "@store/hooks";
 
 
@@ -20,7 +20,7 @@ export const Courses = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setCoursesList(courses)
+    setCoursesList(courses);
   }, [courses])
 
   const showCourse = (id: string) => {
@@ -63,8 +63,7 @@ export const Courses = () => {
           handleClick={addNewCourse}
         />
       </CoursesTopBarStyled>
-      {!coursesList.length && <EmptyCourseList />}
-      {Boolean(coursesList.length) &&
+      {!coursesList.length ? <EmptyCourseList /> :
         <div>
           {coursesList.map((item) => {
             const authorNames = getAuthorNames(item.authors, mockedAuthorsList);
