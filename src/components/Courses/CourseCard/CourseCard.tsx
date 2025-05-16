@@ -4,15 +4,10 @@ import { formatDuration } from "@helpers";
 import { dictionary } from "@i18n/strings";
 import { CourseCardActionButtonStyled, CourseCardWrapper, DescriptionStyled, InfoSectionStyled } from "./styled";
 import { ButtonVariant } from "@common/Button/types";
-import { useAppDispatch } from "@store/hooks";
-import { deleteCourse } from "@store/coursesSlice";
+import { useCourses } from "src/hooks/useCourses";
 
 export const CourseCard = ({ title, description, duration, authors, creationDate, buttonClick, courseId }: ICourseCard) => {
-  const dispatch = useAppDispatch();
-
-  const handleDeleteCourse = (id: string) => {
-    dispatch(deleteCourse({id}));
-  }
+  const {deleteCourse} = useCourses();
 
   return (
     <CourseCardWrapper>
@@ -33,7 +28,7 @@ export const CourseCard = ({ title, description, duration, authors, creationDate
           />
           <Button
             icon="/src/assets/trash.png"
-            handleClick={() => handleDeleteCourse(courseId)}
+            handleClick={() => deleteCourse(courseId)}
             variant={ButtonVariant.WITH_ICON_LARGE}
           />
           <Button

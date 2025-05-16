@@ -3,7 +3,7 @@ import { Input } from "@common/Input"
 import { dictionary } from "@i18n/strings"
 import { Link, useNavigate } from "react-router-dom"
 import { login } from "@services"
-import { useFormValidate, useInputHandler } from "@hooks"
+import { useFormValidate, useInputHandler, useUser } from "@hooks"
 import { WrapperStyled, SimpleFormStyled } from "@common/Styled"
 import { useState } from "react"
 import { InputType } from "@common/Input/types"
@@ -11,8 +11,6 @@ import { ButtonType } from "@common/Button/types"
 import { PageWrapperStyled } from "@common/Styled/PageWrapper"
 import { FormErrorStyled } from "@common/Styled/FormErrorStyled"
 import { Align, HeadingStyled } from "@common/Styled/HeadingStyled"
-import { useAppDispatch } from "@store/hooks"
-import { loginUser } from "@store/userSlice"
 
 const formFieldsInitValue = {
   email: '',
@@ -29,13 +27,13 @@ export const Login = () => {
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
   const [loginError, setLoginError] = useState<string | null>(null)
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const { logIn } = useUser();
 
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       const loginResult = await login(formData);
-      dispatch(loginUser(loginResult));
+      logIn(loginResult);
       navigate('/courses');
     }
     catch (error) {

@@ -2,7 +2,7 @@ import { Input } from "@common/Input"
 import { dictionary } from "@i18n/strings"
 import { useInputHandler, useFormValidate } from "@hooks"
 import { TextArea } from "@common/TextArea";
-import { createId, formatDuration } from "@helpers";
+import { formatDuration } from "@helpers";
 import { Button } from "@common/Button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -15,10 +15,10 @@ import { PageWrapperStyled } from "@common/Styled/PageWrapper";
 import { InputType } from "@common/Input/types";
 import { ButtonType } from "@common/Button/types";
 import { HeadingStyled } from "@common/Styled/HeadingStyled";
-import { addCourse } from "@store/coursesSlice";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { useAppSelector } from "@store/hooks";
 import { getAuthorsSelector } from "@store/selectors";
-import { addAuthor } from "@store/authorsSlice";
+import { useCourses } from "src/hooks/useCourses";
+import { useAuthors } from "src/hooks/useAuthors";
 
 const formFieldsInitValue = {
   title: '',
@@ -42,12 +42,13 @@ const DESCRIPTION = dictionary.inputLabelDescription;
 const DESCRIPTION_IN_LOW_CASE = DESCRIPTION.toLowerCase();
 
 export const CourseForm = () => {
-  const authorsFromStore = useAppSelector(getAuthorsSelector)
+  const authorsFromStore = useAppSelector(getAuthorsSelector);
   const [authors, setAuthors] = useState<Array<IAuthorItem>>([]);
   const { formData, onChange } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const { addCourse } = useCourses();
+  const { addAuthor } = useAuthors();
 
   const formattedDuration = formatDuration(Number(formData.duration));
 
@@ -59,13 +60,8 @@ export const CourseForm = () => {
   const handleCreateNewCourse = (e: React.FormEvent) => {
     e.preventDefault();
     const courseData = { ...formData, authors }
-    dispatch(addCourse(courseData))
+    addCourse(courseData);
     navigate('/courses');
-  }
-
-  const createAuthor = (authorName: string) => {
-    const authorId = createId();
-    dispatch(addAuthor({ name: authorName, id: authorId }));
   }
 
   const deleteAuthor = (authorId: string) => {
@@ -147,7 +143,7 @@ export const CourseForm = () => {
         </NewCourseFormStyled>
         <Authors
           authors={authors}
-          createAuthor={createAuthor}
+          createAuthor={addAuthor}
           setCourseAuthor={setCourseAuthor}
           deleteAuthor={deleteAuthor}
         />
