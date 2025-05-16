@@ -1,6 +1,5 @@
 import { getErrorMessage } from "@helpers";
 import { IErrorResponse, IResponseWithCourses, ISuccessLogin, ISuccessUserCration, IUserLogin, IUserRegister, Method, IResponse, IResponseWIthAuthors } from "./types";
-import { CourseType } from "@components/Courses/types";
 
 const HOST = 'http://localhost:4000';
 const REQUEST_HEADERS = {

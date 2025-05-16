@@ -8,7 +8,7 @@ const authorsSlice = createSlice({
         setAuthors(_, action: PayloadAction<IAuthor[]>) {
             return action.payload;
         },
-        addAuthor(state, action) {
+        addAuthor(state, action: PayloadAction<IAuthor>) {
             state.push(action.payload);
         },
     }

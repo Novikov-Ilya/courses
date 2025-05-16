@@ -10,21 +10,21 @@ import { useEffect } from 'react';
 import { PublicOnlyRoute } from '@components/RouteComponents/PublicOnlyRoute';
 import { ProtectedRoute } from '@components/RouteComponents/ProtectedRoute';
 import { getAuthors, getCourses } from '@services';
-import { setCourses } from '@store/coursesSlice';
-import { useAppDispatch } from '@store/hooks';
-import { setAuthors } from '@store/authorsSlice';
+import { useCourses } from './hooks/useCourses';
+import { useAuthors } from './hooks/useAuthors';
 
 function App() {
-  const dispatch = useAppDispatch();
+  const { setCourses } = useCourses();
+  const { setAuthors } = useAuthors();
 
   const fetchAllCourses = async () => {
     const courses = await getCourses();
-    dispatch(setCourses(courses.result));
+    setCourses(courses.result);
   }
 
   const fetchAllAuthors = async () => {
     const authors = await getAuthors();
-    dispatch(setAuthors(authors.result));
+    setAuthors(authors.result);
   }
 
   useEffect(() => {
