@@ -4,7 +4,7 @@ import { formatDuration } from "@helpers";
 import { dictionary } from "@i18n/strings";
 import { CourseCardActionButtonStyled, CourseCardWrapper, DescriptionStyled, InfoSectionStyled } from "./styled";
 import { ButtonVariant } from "@common/Button/types";
-import { useCourses } from "src/hooks/useCourses";
+import { useCourses } from "@hooks";
 
 export const CourseCard = ({ title, description, duration, authors, creationDate, buttonClick, courseId }: ICourseCard) => {
   const {deleteCourse} = useCourses();

@@ -17,8 +17,8 @@ import { ButtonType } from "@common/Button/types";
 import { HeadingStyled } from "@common/Styled/HeadingStyled";
 import { useAppSelector } from "@store/hooks";
 import { getAuthorsSelector } from "@store/selectors";
-import { useCourses } from "src/hooks/useCourses";
-import { useAuthors } from "src/hooks/useAuthors";
+import { useCourses } from "@hooks";
+import { useAuthors } from "@hooks";
 
 const formFieldsInitValue = {
   title: '',
