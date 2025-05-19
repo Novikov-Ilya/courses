@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 import {
     addCourse as addCourseToStore,
     deleteCourse as removeCourse,
@@ -6,9 +6,11 @@ import {
 } from "@store/coursesSlice";
 import { IAddCoursePayload } from "@store/types";
 import { CourseType } from "@components/Courses/types";
+import { getCoursesSelector } from "@store/selectors";
 
 export const useCourses = () => {
     const dispatch = useAppDispatch();
+    const courses = useAppSelector(getCoursesSelector);
 
     const addCourse = (courseData: IAddCoursePayload) => {
         dispatch(addCourseToStore(courseData));
@@ -26,5 +28,6 @@ export const useCourses = () => {
         addCourse,
         deleteCourse,
         setCourses,
+        courses,
     }
 }

@@ -1,10 +1,12 @@
 import { createId } from "@helpers";
-import { useAppDispatch } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { addAuthor as createAuthor, setAuthors as setAuthorsToStore } from "@store/authorsSlice";
 import { IAuthor } from "src/types";
+import { getAuthorsSelector } from "@store/selectors";
 
 export const useAuthors = () => {
     const dispatch = useAppDispatch();
+    const authors = useAppSelector(getAuthorsSelector);
 
     const addAuthor = (authorName: string) => {
         const authorId = createId();
@@ -18,5 +20,6 @@ export const useAuthors = () => {
     return {
         addAuthor,
         setAuthors,
+        authors,
     }
 }

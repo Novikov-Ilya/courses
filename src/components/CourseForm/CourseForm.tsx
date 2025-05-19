@@ -15,8 +15,6 @@ import { PageWrapperStyled } from "@common/Styled/PageWrapper";
 import { InputType } from "@common/Input/types";
 import { ButtonType } from "@common/Button/types";
 import { HeadingStyled } from "@common/Styled/HeadingStyled";
-import { useAppSelector } from "@store/hooks";
-import { getAuthorsSelector } from "@store/selectors";
 import { useCourses } from "@hooks";
 import { useAuthors } from "@hooks";
 
@@ -42,7 +40,7 @@ const DESCRIPTION = dictionary.inputLabelDescription;
 const DESCRIPTION_IN_LOW_CASE = DESCRIPTION.toLowerCase();
 
 export const CourseForm = () => {
-  const authorsFromStore = useAppSelector(getAuthorsSelector);
+  const { authors: authorsFromStore } = useAuthors();
   const [authors, setAuthors] = useState<Array<IAuthorItem>>([]);
   const { formData, onChange } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
@@ -81,13 +79,16 @@ export const CourseForm = () => {
   }
 
 
-
   useEffect(() => {
-    setAuthors(authorsFromStore.map(author => ({
-      ...author,
-      isCourseAuthor: false
-    })));
-  }, [authorsFromStore])
+    setAuthors((prev) => {
+      const prevMap = new Map(prev.map((prevAuthor) => [prevAuthor.id, prevAuthor.isCourseAuthor]));
+      return authorsFromStore.map((author) => ({
+        ...author,
+        isCourseAuthor: prevMap.get(author.id) ?? false,
+      }));
+    });
+  }, [authorsFromStore]);
+
 
 
   return (
