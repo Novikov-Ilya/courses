@@ -21,7 +21,7 @@ const courseSlice = createSlice({
     setCourses(_, action: PayloadAction<ISetCoursesPayload>) {
       return action.payload;
     },
-    updateCourse(state, action: PayloadAction<IAddCoursePayload>) { },
+    // updateCourse(state, action: PayloadAction<IAddCoursePayload>) { },
     deleteCourse(state, action: PayloadAction<IDeleteCoursePayload>) {
       return state.filter(course => course.id !== action.payload.id);
     },
