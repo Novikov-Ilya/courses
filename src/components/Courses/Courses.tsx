@@ -9,12 +9,11 @@ import { Button } from "@common/Button";
 import { dictionary } from "@i18n/strings";
 import { CoursesTopBarStyled } from "./styled";
 import { CourseType } from "./types";
-import { getCoursesSelector } from "@store/selectors";
-import { useAppSelector } from "@store/hooks";
+import { useCourses } from "@hooks";
 
 
 export const Courses = () => {
-  const courses = useAppSelector(getCoursesSelector);
+  const { courses } = useCourses();
   const [coursesList, setCoursesList] = useState<CourseType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const navigate = useNavigate();

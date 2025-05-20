@@ -3,18 +3,14 @@ import { Logo } from "@components/Logo";
 import { HeaderStyled, LoginWrapper } from "./styled";
 import { useNavigate } from "react-router-dom";
 import { dictionary } from "@i18n/strings";
-import { useLoggedIn } from "@hooks";
-import { useAppDispatch } from "@store/hooks";
-import { logoutUser } from "@store/userSlice";
+import { useUser } from "@hooks";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const { isAuthorized, userName } = useLoggedIn();
-  const dispatch = useAppDispatch();
+  const { isAuthorized, userName, logOut } = useUser();
 
-  const loginButtonAction = () => {
-    
-    dispatch(logoutUser());
+  const loginButtonAction = () => { 
+    logOut();
     navigate('/login')
   }
 
