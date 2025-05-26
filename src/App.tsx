@@ -14,7 +14,7 @@ import { useAuthors } from './hooks/useAuthors';
 import { useCourses } from '@hooks';
 
 function App() {
-  const {setCourses} = useCourses()
+  const { getCourses } = useCourses()
   const { setAuthors } = useAuthors();
 
   const fetchAllAuthors = async () => {
@@ -23,7 +23,7 @@ function App() {
   }
 
   useEffect(() => {
-    setCourses();
+    getCourses();
     fetchAllAuthors();
   }, []);
 

@@ -19,7 +19,7 @@ export const Courses = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setCoursesList(courses.data);
+    setCoursesList(courses);
   }, [courses])
 
   const showCourse = (id: string) => {
@@ -28,8 +28,8 @@ export const Courses = () => {
 
   const handleSearchByButtonClick = (searchInputValue: string) => {
     setCoursesList(() => {
-      if (!searchInputValue.trim()) return courses.data;
-      return courses.data.filter(
+      if (!searchInputValue.trim()) return courses;
+      return courses.filter(
         item => {
           return item.title.toLowerCase().includes(searchInputValue.toLowerCase());
         }
@@ -40,7 +40,7 @@ export const Courses = () => {
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchValue(e.target.value);
     if (!e.target.value) {
-      setCoursesList(courses.data)
+      setCoursesList(courses)
     }
   }
 

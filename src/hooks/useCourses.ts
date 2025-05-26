@@ -19,14 +19,14 @@ export const useCourses = () => {
         dispatch(removeCourse({ id }));
     };
 
-    const setCourses = () => {
+    const getCourses = () => {
         dispatch(fetchCourses());
     };
 
     return {
         addCourse,
         deleteCourse,
-        setCourses,
+        getCourses,
         courses,
     }
 }
