@@ -10,7 +10,8 @@ import {
     IResponse,
     IResponseWIthAuthors,
     ICurrentUser,
-    FetchParams
+    FetchParams,
+    ISuccessUserLogout,
 } from "./types";
 
 const HOST = 'http://localhost:4000';
@@ -32,6 +33,11 @@ const handleFetch = async <T, K extends IResponse>({ path, method, data, headers
             },
             body: JSON.stringify(data),
         });
+        const contentLength = response.headers.get("content-length");
+        if (contentLength === '0') {
+            const result = { successful: true } as K;
+            return result;
+        }
         const result: K | IErrorResponse = await response.json();
         if (!response.ok) {
             let errorMessage;
@@ -58,6 +64,6 @@ export const getCourses = async () => await handleFetch<undefined, IResponseWith
 
 export const getAuthors = async () => await handleFetch<undefined, IResponseWIthAuthors>({ path: 'authors/all', method: Method.GET });
 
-export const getCurrentUser = async (token: string) => await handleFetch<string, ICurrentUser>({ path: 'users/me', method: Method.GET, headers: { 'Authorization': token } });
+export const getCurrentUser = async (token: string) => await handleFetch<undefined, ICurrentUser>({ path: 'users/me', method: Method.GET, headers: { 'Authorization': token } });
 
-export const logOutUser = async (token: string) => await handleFetch({path: 'logout', method: Method.DELETE, headers: { 'Authorization': token }});
+export const logOutUser = async (token: string) => await handleFetch<undefined, ISuccessUserLogout>({ path: 'logout', method: Method.DELETE, headers: { 'Authorization': token } });

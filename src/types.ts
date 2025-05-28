@@ -56,6 +56,8 @@ export interface IResponseRegister {
   errors?: string[],
 }
 
+export type ISuccessUserLogout = IResponse;
+
 export interface FetchParams<T> {
   path: string,
   method: Method,

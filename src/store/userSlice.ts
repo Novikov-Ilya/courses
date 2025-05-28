@@ -12,9 +12,10 @@ const userSlice = createSlice({
   },
   reducers: {
     loginUser(state, action: PayloadAction<IUserLoginPayload>) {
-      state.userName = action.payload.user.name;
-      state.email = action.payload.user.email;
-      state.token = action.payload.result;
+      state.userName = action.payload.name;
+      state.email = action.payload.email;
+      state.token = action.payload.token;
+      state.role = action.payload.role;
       state.isAuth = true;
     },
     logoutUser(state) {
@@ -23,12 +24,9 @@ const userSlice = createSlice({
       state.token = '';
       state.isAuth = false;
      },
-     setUserRole(state, action) {
-      state.role = action.payload
-     }
   }
 });
 
-export const { loginUser, logoutUser, setUserRole } = userSlice.actions;
+export const { loginUser, logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

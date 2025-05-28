@@ -14,12 +14,9 @@ export interface IDeleteCoursePayload {
     id: string
 }
 
-interface IUser {
+export interface IUserLoginPayload {
+    token: string,
     name: string,
     email: string,
-}
-
-export interface IUserLoginPayload {
-    result: string,
-    user: IUser
+    role: string,
 }
