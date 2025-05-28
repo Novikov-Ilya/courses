@@ -1,5 +1,17 @@
 import { getErrorMessage } from "@helpers";
-import { IErrorResponse, IResponseWithCourses, ISuccessLogin, ISuccessUserCration, IUserLogin, IUserRegister, Method, IResponse, IResponseWIthAuthors } from "./types";
+import {
+    IErrorResponse,
+    IResponseWithCourses,
+    ISuccessLogin,
+    ISuccessUserCration,
+    IUserLogin,
+    IUserRegister,
+    Method,
+    IResponse,
+    IResponseWIthAuthors,
+    ICurrentUser,
+    FetchParams
+} from "./types";
 
 const HOST = 'http://localhost:4000';
 const REQUEST_HEADERS = {
@@ -10,12 +22,15 @@ const isErrorResponse = <K extends IResponse>(result: K | IErrorResponse): resul
     return 'errors' in result;
 }
 
-const handleFetch = async <T, K extends IResponse>(path: string, method: Method, data?: T): Promise<K> => {
+const handleFetch = async <T, K extends IResponse>({ path, method, data, headers }: FetchParams<T>): Promise<K> => {
     try {
         const response = await fetch(`${HOST}/${path}`, {
-            method: method,
-            headers: REQUEST_HEADERS,
-            body: JSON.stringify(data)
+            method,
+            headers: {
+                ...REQUEST_HEADERS,
+                ...headers,
+            },
+            body: JSON.stringify(data),
         });
         const result: K | IErrorResponse = await response.json();
         if (!response.ok) {
@@ -35,10 +50,14 @@ const handleFetch = async <T, K extends IResponse>(path: string, method: Method,
     }
 }
 
-export const login = async (userData: IUserLogin) => await handleFetch<IUserLogin, ISuccessLogin>('login', Method.POST, userData);
+export const login = async (userData: IUserLogin) => await handleFetch<IUserLogin, ISuccessLogin>({ path: 'login', method: Method.POST, data: userData });
 
-export const createUser = async (userData: IUserRegister) => await handleFetch<IUserRegister, ISuccessUserCration>('register', Method.POST, userData);
+export const createUser = async (userData: IUserRegister) => await handleFetch<IUserRegister, ISuccessUserCration>({ path: 'register', method: Method.POST, data: userData });
 
-export const getCourses = async () => await handleFetch<undefined, IResponseWithCourses>('courses/all', Method.GET);
+export const getCourses = async () => await handleFetch<undefined, IResponseWithCourses>({ path: 'courses/all', method: Method.GET });
 
-export const getAuthors = async () => await handleFetch<undefined, IResponseWIthAuthors>('authors/all', Method.GET);
+export const getAuthors = async () => await handleFetch<undefined, IResponseWIthAuthors>({ path: 'authors/all', method: Method.GET });
+
+export const getCurrentUser = async (token: string) => await handleFetch<string, ICurrentUser>({ path: 'users/me', method: Method.GET, headers: { 'Authorization': token } });
+
+export const logOutUser = async (token: string) => await handleFetch({path: 'logout', method: Method.DELETE, headers: { 'Authorization': token }});

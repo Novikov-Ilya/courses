@@ -18,7 +18,7 @@ const store = configureStore({
 )
 
 store.subscribe(() => {
-  saveState({user:store.getState().user});
+  saveState({ user: store.getState().user });
 })
 export default store;
 

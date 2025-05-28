@@ -1,8 +1,8 @@
 import { createId } from "@helpers";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { addAuthor as createAuthor, setAuthors as setAuthorsToStore } from "@store/authorsSlice";
-import { IAuthor } from "src/types";
+import { addAuthor as createAuthor } from "@store/authorsSlice";
 import { getAuthorsSelector } from "@store/selectors";
+import { authorsThunk } from "@store/thunks/authorsThunk";
 
 export const useAuthors = () => {
     const dispatch = useAppDispatch();
@@ -13,13 +13,13 @@ export const useAuthors = () => {
         dispatch(createAuthor({ name: authorName, id: authorId }));
     }
 
-    const setAuthors = (authors: IAuthor[]) => {
-        dispatch(setAuthorsToStore(authors));
+    const getAuthors = () => {
+        dispatch(authorsThunk());
     };
 
     return {
         addAuthor,
-        setAuthors,
+        getAuthors,
         authors,
     }
 }

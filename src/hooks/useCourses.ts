@@ -5,7 +5,7 @@ import {
 } from "@store/coursesSlice";
 import { IAddCoursePayload } from "@store/types";
 import { getCoursesSelector } from "@store/selectors";
-import { fetchCourses } from "@store/thunks/coursesThunk";
+import { coursesThunk } from "@store/thunks/coursesThunk";
 
 export const useCourses = () => {
     const dispatch = useAppDispatch();
@@ -20,7 +20,7 @@ export const useCourses = () => {
     };
 
     const getCourses = () => {
-        dispatch(fetchCourses());
+        dispatch(coursesThunk());
     };
 
     return {

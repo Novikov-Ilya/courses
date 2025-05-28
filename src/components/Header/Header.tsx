@@ -11,7 +11,7 @@ export const Header = () => {
 
   const loginButtonAction = () => { 
     logOut();
-    navigate('/login')
+    navigate('/login');
   }
 
   return (

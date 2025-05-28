@@ -39,6 +39,16 @@ export interface ISuccessLogin extends IResponse {
   result: string
 }
 
+export interface ICurrentUser extends IResponse {
+  result: {
+    name: string,
+    email: string,
+    password: string,
+    role: string,
+    id: string,
+  }
+}
+
 export type ISuccessUserCration = IResponse;
 
 export interface IResponseRegister {
@@ -46,7 +56,15 @@ export interface IResponseRegister {
   errors?: string[],
 }
 
+export interface FetchParams<T> {
+  path: string,
+  method: Method,
+  data?: T,
+  headers?: Record<string, string>
+}
+
 export enum Method {
   POST = 'POST',
-  GET = 'GET'
+  GET = 'GET',
+  DELETE = 'DELETE',
 }

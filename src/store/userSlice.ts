@@ -7,6 +7,7 @@ const userSlice = createSlice({
     userName: '',
     email: '',
     token: '',
+    role: '',
     isAuth: false,
   },
   reducers: {
@@ -22,9 +23,12 @@ const userSlice = createSlice({
       state.token = '';
       state.isAuth = false;
      },
+     setUserRole(state, action) {
+      state.role = action.payload
+     }
   }
 });
 
-export const { loginUser, logoutUser } = userSlice.actions;
+export const { loginUser, logoutUser, setUserRole } = userSlice.actions;
 
 export default userSlice.reducer;

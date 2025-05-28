@@ -2,7 +2,6 @@ import { createId, generateDate } from "@helpers";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CourseType } from "@components/Courses/types";
 import { IAddCoursePayload, IDeleteCoursePayload, ISetCoursesPayload } from "./types";
-import { fetchCourses } from "./thunks/coursesThunk";
 
 const courseSlice = createSlice({
   name: 'courseSlice',
@@ -27,12 +26,6 @@ const courseSlice = createSlice({
       return state.filter(course => course.id !== action.payload.id);
     },
   },
-  extraReducers: (builder) => {
-    builder
-    .addCase(fetchCourses.fulfilled, (_, action) => {
-      return action.payload;
-    })
-  }
 });
 
 export const { addCourse, setCourses, deleteCourse } = courseSlice.actions;

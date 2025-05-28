@@ -1,14 +1,12 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getCourses } from "@services";
+import { AppThunk } from "./types";
+import { setCourses } from "@store/coursesSlice";
 
-export const fetchCourses = createAsyncThunk(
-    'courses/fetchCourses',
-    async (_, { rejectWithValue }) => {
-        try {
-            const response = await getCourses();
-            return response.result;
-        } catch(error) {
-            return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
-        }
+export const coursesThunk = (): AppThunk => async (dispatch) => {
+    try {
+        const response = await getCourses();
+        dispatch(setCourses(response.result));
+    } catch (error) {
+        console.error(error);
     }
-)
+}

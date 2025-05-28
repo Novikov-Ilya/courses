@@ -2,7 +2,6 @@ import { Button } from "@common/Button"
 import { Input } from "@common/Input"
 import { dictionary } from "@i18n/strings"
 import { Link, useNavigate } from "react-router-dom"
-import { login } from "@services"
 import { useFormValidate, useInputHandler, useUser } from "@hooks"
 import { WrapperStyled, SimpleFormStyled } from "@common/Styled"
 import { useState } from "react"
@@ -32,8 +31,7 @@ export const Login = () => {
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const loginResult = await login(formData);
-      logIn(loginResult);
+      logIn(formData);
       navigate('/courses');
     }
     catch (error) {
