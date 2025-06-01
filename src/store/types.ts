@@ -20,3 +20,8 @@ export interface IUserLoginPayload {
     email: string,
     role: string,
 }
+
+export enum UserRoles {
+  ADMIN = 'admin',
+  USER = 'user',
+}

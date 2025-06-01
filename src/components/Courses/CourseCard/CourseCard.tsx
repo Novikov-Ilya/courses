@@ -4,10 +4,12 @@ import { formatDuration } from "@helpers";
 import { dictionary } from "@i18n/strings";
 import { CourseCardActionButtonStyled, CourseCardWrapper, DescriptionStyled, InfoSectionStyled } from "./styled";
 import { ButtonVariant } from "@common/Button/types";
-import { useCourses } from "@hooks";
+import { useCourses, useUser } from "@hooks";
+import { UserRoles } from "@store/types";
 
 export const CourseCard = ({ title, description, duration, authors, creationDate, buttonClick, courseId }: ICourseCard) => {
-  const {deleteCourse} = useCourses();
+  const { deleteCourse } = useCourses();
+  const { userRole } = useUser();
 
   return (
     <CourseCardWrapper>
@@ -26,16 +28,16 @@ export const CourseCard = ({ title, description, duration, authors, creationDate
             buttonText={dictionary.buttonShowCourse}
             handleClick={buttonClick}
           />
-          <Button
+          {userRole === UserRoles.ADMIN && <Button
             icon="/src/assets/trash.png"
             handleClick={() => deleteCourse(courseId)}
             variant={ButtonVariant.WITH_ICON_LARGE}
-          />
-          <Button
+          />}
+          {userRole === UserRoles.ADMIN && <Button
             icon="/src/assets/edit.png"
             handleClick={() => { }}
             variant={ButtonVariant.WITH_ICON_LARGE}
-          />
+          />}
         </CourseCardActionButtonStyled>
       </InfoSectionStyled>
     </CourseCardWrapper>
