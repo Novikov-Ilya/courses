@@ -26,18 +26,21 @@ function App() {
     <>
       <Header />
       <Routes>
-        <Route element={<PublicOnlyRoute />}>
-          <Route path='registration' element={<Registration />} />
-          <Route path='login' element={<Login />} />
-        </Route>
-        <Route element={<ProtectedRoute />}>
-          <Route path='courses' element={<Courses />} />
-          <Route path='courses/add' element={<CourseForm />} />
-          <Route path='courses/:courseId' element={<CourseInfo />} />
-        </Route>
+  <Route element={<PublicOnlyRoute />}>
+    <Route path='registration' element={<Registration />} />
+    <Route path='login' element={<Login />} />
+  </Route>
+  <Route element={<ProtectedRoute />}>
+    <Route path='courses' element={<Courses />} />
+    <Route path='courses/:courseId' element={<CourseInfo />} />
+  </Route>
+  <Route element={<ProtectedRoute adminOnly={true} />}>
+    <Route path='courses/add' element={<CourseForm />} />
+    <Route path='courses/edit/:courseId' element={<CourseForm />} />
+  </Route>
 
-        <Route path='*' element={<Navigate to={'/courses'} />} />
-      </Routes>
+  <Route path='*' element={<Navigate to={'/courses'} />} />
+</Routes>
     </>
   )
 }
