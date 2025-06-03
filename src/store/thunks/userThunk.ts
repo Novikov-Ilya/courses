@@ -1,8 +1,8 @@
 import { getCurrentUser, login, logOutUser } from "@services";
 import { AppThunk } from "./types";
-import { loadState } from "@utils";
 import { loginUser, logoutUser } from "@store/userSlice";
 import { IUserLogin } from "src/types";
+
 
 export const getUserThunk = (formData: IUserLogin): AppThunk => async (dispatch) => {
     try {
@@ -15,15 +15,16 @@ export const getUserThunk = (formData: IUserLogin): AppThunk => async (dispatch)
         }
     } catch (error) {
         console.error(error);
+        throw error;
     }
 }
 
-export const logOutThunk = (): AppThunk => async (dispatch) => {
-    const currentState = loadState();
+export const logOutThunk = (): AppThunk => async (dispatch, getState) => {
+    const state = getState();
+    const user = state.user;
     try {
-        if (currentState.user) {
-            const { token } = currentState.user;
-            await logOutUser(token);
+        if (user.token) {
+            await logOutUser(user.token);
             dispatch(logoutUser());
         }
     } catch (error) {

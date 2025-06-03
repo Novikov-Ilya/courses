@@ -31,7 +31,7 @@ export const Login = () => {
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      logIn(formData);
+      await logIn(formData);
       navigate('/courses');
     }
     catch (error) {

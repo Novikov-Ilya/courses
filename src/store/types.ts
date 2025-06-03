@@ -14,14 +14,15 @@ export interface IDeleteCoursePayload {
     id: string
 }
 
-export interface IUserLoginPayload {
-    token: string,
-    name: string,
-    email: string,
-    role: string,
-}
-
 export enum UserRoles {
   ADMIN = 'admin',
   USER = 'user',
 }
+
+export interface IUserLoginPayload {
+    token: string,
+    name: string,
+    email: string,
+    role: UserRoles,
+}
+

@@ -23,6 +23,11 @@ const isErrorResponse = <K extends IResponse>(result: K | IErrorResponse): resul
     return 'errors' in result;
 }
 
+const responseEmptyCheck = (response: Response): boolean => {
+    const contentLength = response.headers.get("content-length") ?? '0';
+    return contentLength === '0';
+}
+
 const handleFetch = async <T, K extends IResponse>({ path, method, data, headers }: FetchParams<T>): Promise<K> => {
     try {
         const response = await fetch(`${HOST}/${path}`, {
@@ -33,19 +38,16 @@ const handleFetch = async <T, K extends IResponse>({ path, method, data, headers
             },
             body: JSON.stringify(data),
         });
-        const contentLength = response.headers.get("content-length");
-        if (contentLength === '0') {
-            const result = { successful: true } as K;
-            return result;
-        }
-        const result: K | IErrorResponse = await response.json();
+
+        const result = responseEmptyCheck(response) ? {successful: true} : await response.json();
+        
         if (!response.ok) {
             let errorMessage;
-
+            
             if (isErrorResponse(result)) {
                 errorMessage = getErrorMessage(result.errors?.[0])
             }
-
+            console.log('response is not ok', errorMessage);
             throw new Error(errorMessage ?? 'Unknown Error');
         }
         return result as K;

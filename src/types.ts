@@ -1,4 +1,5 @@
 import { CourseType } from "@components/Courses/types"
+import { UserRoles } from "@store/types"
 
 export interface IUserLogin {
   email: string,
@@ -44,7 +45,7 @@ export interface ICurrentUser extends IResponse {
     name: string,
     email: string,
     password: string,
-    role: string,
+    role: UserRoles,
     id: string,
   }
 }

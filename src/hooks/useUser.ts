@@ -7,18 +7,16 @@ export const useUser = () => {
   const user = useAppSelector(getUserSelector);
   const dispatch = useAppDispatch();
 
-  const logIn = (userData: IUserLogin) => {
-    dispatch(getUserThunk(userData))
-  };
+  const logIn = (userData: IUserLogin) => dispatch(getUserThunk(userData));
 
-  const logOut = () => {
-    dispatch(logOutThunk());
-  }
+  const logOut = () => dispatch(logOutThunk());
 
   return {
     isAuthorized: user.isAuth,
     userName: user.userName,
     userRole: user.role,
+    userEmail: user.email,
+    token: user.token,
     logIn,
     logOut,
   };

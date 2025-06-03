@@ -6,10 +6,16 @@ import { CourseCardActionButtonStyled, CourseCardWrapper, DescriptionStyled, Inf
 import { ButtonVariant } from "@common/Button/types";
 import { useCourses, useUser } from "@hooks";
 import { UserRoles } from "@store/types";
+import { useNavigate } from "react-router-dom";
 
 export const CourseCard = ({ title, description, duration, authors, creationDate, buttonClick, courseId }: ICourseCard) => {
   const { deleteCourse } = useCourses();
   const { userRole } = useUser();
+  const navigate = useNavigate()
+
+  const editCourseHandleClick = () => {
+    return navigate(`/courses/edit/${courseId}`);
+  }
 
   return (
     <CourseCardWrapper>
@@ -28,16 +34,20 @@ export const CourseCard = ({ title, description, duration, authors, creationDate
             buttonText={dictionary.buttonShowCourse}
             handleClick={buttonClick}
           />
-          {userRole === UserRoles.ADMIN && <Button
-            icon="/src/assets/trash.png"
-            handleClick={() => deleteCourse(courseId)}
-            variant={ButtonVariant.WITH_ICON_LARGE}
-          />}
-          {userRole === UserRoles.ADMIN && <Button
-            icon="/src/assets/edit.png"
-            handleClick={() => { }}
-            variant={ButtonVariant.WITH_ICON_LARGE}
-          />}
+          {userRole === UserRoles.ADMIN &&
+            <>
+              <Button
+                icon="/src/assets/trash.png"
+                handleClick={() => deleteCourse(courseId)}
+                variant={ButtonVariant.WITH_ICON_LARGE}
+              />
+              <Button
+                icon="/src/assets/edit.png"
+                handleClick={editCourseHandleClick}
+                variant={ButtonVariant.WITH_ICON_LARGE}
+              />
+            </>
+          }
         </CourseCardActionButtonStyled>
       </InfoSectionStyled>
     </CourseCardWrapper>
