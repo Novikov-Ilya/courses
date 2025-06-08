@@ -30,12 +30,11 @@ export const Login = () => {
 
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      await logIn(formData);
+    const error = await logIn(formData);
+    if (error) {
+      setLoginError(error);
+    } else {
       navigate('/courses');
-    }
-    catch (error) {
-      setLoginError((error as Error).message);
     }
   }
 

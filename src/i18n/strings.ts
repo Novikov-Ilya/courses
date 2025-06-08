@@ -7,6 +7,7 @@ export const dictionary = {
   buttonCancel: 'CANCEL',
   buttonCreateCourse: 'CREATE COURSE',
   buttonNewCourse: 'ADD NEW COURSE',
+  buttonUpdateCourse: 'UPDATE COURSE',
   buttonCreateAuthor: 'CREATE AUTHOR',
   linkLogin: 'Login',
   linkRegistration: 'Registration',

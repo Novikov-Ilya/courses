@@ -47,7 +47,6 @@ const handleFetch = async <T, K extends IResponse>({ path, method, data, headers
             if (isErrorResponse(result)) {
                 errorMessage = getErrorMessage(result.errors?.[0])
             }
-            console.log('response is not ok', errorMessage);
             throw new Error(errorMessage ?? 'Unknown Error');
         }
         return result as K;

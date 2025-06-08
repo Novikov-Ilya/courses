@@ -13,8 +13,12 @@ export const CourseCard = ({ title, description, duration, authors, creationDate
   const { userRole } = useUser();
   const navigate = useNavigate()
 
-  const editCourseHandleClick = () => {
+  const handleEdit = () => {
     return navigate(`/courses/edit/${courseId}`);
+  }
+
+  const handleDelete = () => {
+    deleteCourse(courseId);
   }
 
   return (
@@ -38,12 +42,12 @@ export const CourseCard = ({ title, description, duration, authors, creationDate
             <>
               <Button
                 icon="/src/assets/trash.png"
-                handleClick={() => deleteCourse(courseId)}
+                handleClick={handleDelete}
                 variant={ButtonVariant.WITH_ICON_LARGE}
               />
               <Button
                 icon="/src/assets/edit.png"
-                handleClick={editCourseHandleClick}
+                handleClick={handleEdit}
                 variant={ButtonVariant.WITH_ICON_LARGE}
               />
             </>

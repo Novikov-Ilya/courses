@@ -3,7 +3,7 @@ import { TextAreaProps } from "./types"
 import { TextAreaStyled } from "./styled"
 import { InputErroMessageStyled } from "@common/Styled/InputErrorMessage"
 
-export const TextArea = ({ placeholderText, labelText, rows, onChange, required, name, isError, onBlur, id }: TextAreaProps) => {
+export const TextArea = ({ placeholderText, labelText, rows, onChange, required, name, isError, onBlur, id, value }: TextAreaProps) => {
   return (
     <TextAreaStyled>
       <label htmlFor={id}>{labelText}</label>
@@ -16,6 +16,7 @@ export const TextArea = ({ placeholderText, labelText, rows, onChange, required,
         rows={rows}
         id={id}
         className={isError ? 'error' : ''}
+        value={value}
       />
       <InputErroMessageStyled>
         {isError && `${labelText}${dictionary.filedIsRequired}`}

@@ -4,20 +4,18 @@ import { loginUser, logoutUser } from "@store/userSlice";
 import { IUserLogin } from "src/types";
 
 
-export const getUserThunk = (formData: IUserLogin): AppThunk => async (dispatch) => {
+export const getUserThunk = (formData: IUserLogin): AppThunk<Promise<string | undefined>> => async (dispatch) => {
     try {
         const loginResult = await login(formData);
-        if (loginResult) {
-            const token = loginResult.result;
-            const response = await getCurrentUser(token);
-            const { name, email, role } = response.result;
-            dispatch(loginUser({ name, email, token, role }));
-        }
+        const token = loginResult.result;
+        const response = await getCurrentUser(token);
+        const { name, email, role } = response.result;
+        dispatch(loginUser({ name, email, token, role }));
+
     } catch (error) {
         console.error(error);
-        throw error;
+        return (error as Error).message };
     }
-}
 
 export const logOutThunk = (): AppThunk => async (dispatch, getState) => {
     const state = getState();
