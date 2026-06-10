@@ -7,13 +7,15 @@ const userSlice = createSlice({
     userName: '',
     email: '',
     token: '',
+    role: '',
     isAuth: false,
   },
   reducers: {
     loginUser(state, action: PayloadAction<IUserLoginPayload>) {
-      state.userName = action.payload.user.name;
-      state.email = action.payload.user.email;
-      state.token = action.payload.result;
+      state.userName = action.payload.name;
+      state.email = action.payload.email;
+      state.token = action.payload.token;
+      state.role = action.payload.role;
       state.isAuth = true;
     },
     logoutUser(state) {

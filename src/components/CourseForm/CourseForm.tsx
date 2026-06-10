@@ -4,7 +4,7 @@ import { useInputHandler, useFormValidate } from "@hooks"
 import { TextArea } from "@common/TextArea";
 import { formatDuration } from "@helpers";
 import { Button } from "@common/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { IAuthorItem } from "@components/AuthorItem/types";
 import { WrapperStyled } from "@common/Styled";
@@ -42,11 +42,13 @@ const DESCRIPTION_IN_LOW_CASE = DESCRIPTION.toLowerCase();
 export const CourseForm = () => {
   const { authors: authorsFromStore } = useAuthors();
   const [authors, setAuthors] = useState<Array<IAuthorItem>>([]);
-  const { formData, onChange } = useInputHandler(formFieldsInitValue);
+  const { formData, onChange, loadCurrentValues } = useInputHandler(formFieldsInitValue);
   const { inputError, onBlur } = useFormValidate(formFieldsInitError);
   const navigate = useNavigate();
   const { addCourse } = useCourses();
   const { addAuthor } = useAuthors();
+  const { courseId } = useParams();
+  const { courses } = useCourses();
 
   const formattedDuration = formatDuration(Number(formData.duration));
 
@@ -88,6 +90,17 @@ export const CourseForm = () => {
       }));
     });
   }, [authorsFromStore]);
+
+  useEffect(() => {
+    if (courseId) {
+      const currentCourse = courses.find(course => course.id === courseId);
+      if (currentCourse) {
+        const { title, description, duration } = currentCourse;
+        const courseDuration = duration.toString();
+        loadCurrentValues({ title, description, duration: courseDuration });
+      }
+    }
+  }, [courseId, courses, loadCurrentValues]);
 
 
 
@@ -155,7 +168,7 @@ export const CourseForm = () => {
           handleClick={buttonCancelHandle}
         />
         <Button
-          buttonText={dictionary.buttonCreateCourse}
+          buttonText={courseId ? dictionary.buttonUpdateCourse : dictionary.buttonCreateCourse}
           type={ButtonType.SUBMIT}
           form={COURSE_FORM_ID}
         />

@@ -21,6 +21,7 @@ export function useInputHandler<T extends Record<string, string>>(
         ...prevData,
         [fieldName]: ''
       }))
-    }
+    },
+    loadCurrentValues: (preloadedState) => setFormData(preloadedState)
   }
 }

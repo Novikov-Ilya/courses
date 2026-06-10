@@ -1,23 +1,22 @@
 import { getUserSelector } from "@store/selectors";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { loginUser, logoutUser } from "@store/userSlice";
-import { IUserLoginPayload } from "@store/types";
+import { getUserThunk, logOutThunk } from "@store/thunks/userThunk";
+import { IUserLogin } from "src/types";
 
 export const useUser = () => {
   const user = useAppSelector(getUserSelector);
   const dispatch = useAppDispatch();
 
-  const logIn = (userData: IUserLoginPayload) => {
-    dispatch(loginUser(userData));
-  };
+  const logIn = (userData: IUserLogin) => dispatch(getUserThunk(userData));
 
-  const logOut = () => {
-    dispatch(logoutUser());
-  }
+  const logOut = () => dispatch(logOutThunk());
 
   return {
     isAuthorized: user.isAuth,
     userName: user.userName,
+    userRole: user.role,
+    userEmail: user.email,
+    token: user.token,
     logIn,
     logOut,
   };

@@ -9,27 +9,16 @@ import { CourseForm } from '@components/CourseForm/CourseForm';
 import { useEffect } from 'react';
 import { PublicOnlyRoute } from '@components/RouteComponents/PublicOnlyRoute';
 import { ProtectedRoute } from '@components/RouteComponents/ProtectedRoute';
-import { getAuthors, getCourses } from '@services';
-import { useCourses } from './hooks/useCourses';
 import { useAuthors } from './hooks/useAuthors';
+import { useCourses } from '@hooks';
 
 function App() {
-  const { setCourses } = useCourses();
-  const { setAuthors } = useAuthors();
-
-  const fetchAllCourses = async () => {
-    const courses = await getCourses();
-    setCourses(courses.result);
-  }
-
-  const fetchAllAuthors = async () => {
-    const authors = await getAuthors();
-    setAuthors(authors.result);
-  }
+  const { getCourses } = useCourses()
+  const { getAuthors } = useAuthors();
 
   useEffect(() => {
-    fetchAllCourses();
-    fetchAllAuthors();
+    getCourses();
+    getAuthors();
   }, []);
 
 
@@ -37,18 +26,21 @@ function App() {
     <>
       <Header />
       <Routes>
-        <Route element={<PublicOnlyRoute />}>
-          <Route path='registration' element={<Registration />} />
-          <Route path='login' element={<Login />} />
-        </Route>
-        <Route element={<ProtectedRoute />}>
-          <Route path='courses' element={<Courses />} />
-          <Route path='courses/add' element={<CourseForm />} />
-          <Route path='courses/:courseId' element={<CourseInfo />} />
-        </Route>
+  <Route element={<PublicOnlyRoute />}>
+    <Route path='registration' element={<Registration />} />
+    <Route path='login' element={<Login />} />
+  </Route>
+  <Route element={<ProtectedRoute />}>
+    <Route path='courses' element={<Courses />} />
+    <Route path='courses/:courseId' element={<CourseInfo />} />
+  </Route>
+  <Route element={<ProtectedRoute adminOnly={true} />}>
+    <Route path='courses/add' element={<CourseForm />} />
+    <Route path='courses/edit/:courseId' element={<CourseForm />} />
+  </Route>
 
-        <Route path='*' element={<Navigate to={'/courses'} />} />
-      </Routes>
+  <Route path='*' element={<Navigate to={'/courses'} />} />
+</Routes>
     </>
   )
 }

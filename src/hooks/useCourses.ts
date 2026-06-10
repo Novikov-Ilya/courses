@@ -2,11 +2,10 @@ import { useAppDispatch, useAppSelector } from "@store/hooks";
 import {
     addCourse as addCourseToStore,
     deleteCourse as removeCourse,
-    setCourses as setCoursesToStore
 } from "@store/coursesSlice";
 import { IAddCoursePayload } from "@store/types";
-import { CourseType } from "@components/Courses/types";
 import { getCoursesSelector } from "@store/selectors";
+import { coursesThunk } from "@store/thunks/coursesThunk";
 
 export const useCourses = () => {
     const dispatch = useAppDispatch();
@@ -20,14 +19,14 @@ export const useCourses = () => {
         dispatch(removeCourse({ id }));
     };
 
-    const setCourses = (courses: CourseType[]) => {
-        dispatch(setCoursesToStore(courses));
+    const getCourses = () => {
+        dispatch(coursesThunk());
     };
 
     return {
         addCourse,
         deleteCourse,
-        setCourses,
+        getCourses,
         courses,
     }
 }
