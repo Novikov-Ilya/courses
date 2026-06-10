@@ -95,14 +95,12 @@ export const CourseForm = () => {
     if (courseId) {
       const currentCourse = courses.find(course => course.id === courseId);
       if (currentCourse) {
-        console.log('current course', currentCourse)
         const { title, description, duration } = currentCourse;
         const courseDuration = duration.toString();
         loadCurrentValues({ title, description, duration: courseDuration });
-        console.log(description);
       }
     }
-  }, [courseId, courses]);
+  }, [courseId, courses, loadCurrentValues]);
 
 
 
