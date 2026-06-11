@@ -40,4 +40,8 @@ export const mockedAuthorsList = [
       id: '095a1817-d45b-4ed7-9cf7-b2417bcbf748',
       name: 'Valentina Larina'
   },
+  {
+      id: '9b87e8b8-6ba5-40fc-a439-c4e30a373d36',
+      name: 'Agent Smith'
+  },
 ]
