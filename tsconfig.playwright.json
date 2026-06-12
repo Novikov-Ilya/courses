@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "types": ["node"]
+  },
+  "include": [
+    "playwright.config.ts",
+    "tests/**/*",
+    "qa-ai-framework/**/*"
+  ]
+}
