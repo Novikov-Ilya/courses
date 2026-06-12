@@ -1,0 +1,47 @@
+name: AI-Augmented Quality Gate
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  ai-test-selection:
+    runs-on: self-hosted # Жестко отправляем задачу на твой ПК
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Качаем историю для корректного git diff
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run AI Impact Analysis
+        shell: bash # Форсируем использование bash (он идет в комплекте с Git на Windows)
+        run: |
+          echo "========================================="
+          echo "🤖 Starting AI Impact Analysis..."
+          echo "========================================="
+          
+          # На всякий случай проверяем, есть ли измененные файлы
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD || git diff --name-only)
+          echo "Detected changed files:"
+          echo "$CHANGED_FILES"
+          
+          # Запрос к твоей локальной Ollama API
+          PROMPT="Analyze these changed files in React project: $CHANGED_FILES. Based on our suite, choose test tags to run: @login, @courses. Return ONLY tags format like '@login|@courses' or '@smoke'. No explanation, no markdown blocks, just raw string."
+          
+          RESPONSE=$(curl -s http://localhost:11434/api/generate -d "{
+            \"model\": \"qwen3.5:9b\",
+            \"prompt\": \"$PROMPT\",
+            \"stream\": false
+          }")
+          
+          TAGS=$(echo "$RESPONSE" | node -e "console.parse ? console.log(JSON.parse(fs.readFileSync(0, 'utf-8')).response.trim()) : const fs = require('fs'); console.log(JSON.parse(fs.readFileSync(0, 'utf-8')).response.trim())")
+          echo "Selected Target Tags: $TAGS"
+          
+          # Запускаем Playwright выборочно
+          npx playwright test --grep "$TAGS"
