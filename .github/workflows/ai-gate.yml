@@ -2,37 +2,53 @@ name: AI-Augmented Quality Gate
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ master, main ] # Добавили master, так как ты мержишь в него
   push:
-    branches: [ main ]
+    branches: [ master, main ]
 
 jobs:
   ai-test-selection:
-    runs-on: self-hosted # Жестко отправляем задачу на твой ПК
+    runs-on: self-hosted # Задача пойдет строго на твой ПК
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Качаем историю для корректного git diff
+          fetch-depth: 0
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Run AI Impact Analysis
-        shell: bash # Форсируем использование bash (он идет в комплекте с Git на Windows)
+      - name: Start React Application in Background
+        shell: bash
+        run: |
+          echo "🚀 Starting React App..."
+          npm run dev & # Запуск фронтенда в фоне
+          
+          echo "⏳ Waiting for port 5173 to become active..."
+          # Легковесный способ подождать порт в Windows/Bash без сторонних библиотек
+          for i in {1..30}; do
+            if curl -s http://localhost:5173 > /dev/null; then
+              echo "✅ React App is up and running!"
+              break
+            fi
+            sleep 2
+          done
+
+      - name: Run AI Impact Analysis & Smart Regression
+        shell: bash
         run: |
           echo "========================================="
           echo "🤖 Starting AI Impact Analysis..."
           echo "========================================="
           
-          # На всякий случай проверяем, есть ли измененные файлы
-          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD || git diff --name-only)
+          # Берем измененные файлы между текущей веткой и master
+          CHANGED_FILES=$(git diff --name-only origin/master...HEAD || git diff --name-only HEAD~1 HEAD)
           echo "Detected changed files:"
           echo "$CHANGED_FILES"
           
           # Запрос к твоей локальной Ollama API
-          PROMPT="Analyze these changed files in React project: $CHANGED_FILES. Based on our suite, choose test tags to run: @login, @courses. Return ONLY tags format like '@login|@courses' or '@smoke'. No explanation, no markdown blocks, just raw string."
+          PROMPT="Analyze these changed files in React project: $CHANGED_FILES. Based on our suite, choose test tags to run: @login, @courses, @smoke. Return ONLY tags format like '@login|@smoke'. No explanation, no markdown blocks, just raw string."
           
           RESPONSE=$(curl -s http://localhost:11434/api/generate -d "{
             \"model\": \"qwen3.5:9b\",
@@ -40,8 +56,19 @@ jobs:
             \"stream\": false
           }")
           
-          TAGS=$(echo "$RESPONSE" | node -e "console.parse ? console.log(JSON.parse(fs.readFileSync(0, 'utf-8')).response.trim()) : const fs = require('fs'); console.log(JSON.parse(fs.readFileSync(0, 'utf-8')).response.trim())")
+          # Безопасный парсинг ответа
+          TAGS=$(echo "$RESPONSE" | node -e "
+            const fs = require('fs');
+            try {
+              const obj = JSON.parse(fs.readFileSync(0, 'utf-8'));
+              console.log(obj.response.trim());
+            } catch(e) {
+              console.log('@smoke');
+            }
+          ")
           echo "Selected Target Tags: $TAGS"
           
-          # Запускаем Playwright выборочно
+          echo "========================================="
+          echo "🎭 Executing Filtered Playwright Tests..."
+          echo "========================================="
           npx playwright test --grep "$TAGS"
