@@ -21,35 +21,33 @@ echo "Detected changed files:"
 echo "$CHANGED_FILES"
 echo "========================================="
 
-# 2. Чистый, гибкий и масштабируемый промпт без хардкода файлов
-PROMPT="You are an expert CI/CD Test Selection Agent. 
-Analyze the following modified file paths from a Git commit:
-$CHANGED_FILES
-
-Your task is to classify these changes and select EXACTLY ONE testing tag from the allowed list below. 
-Base your decision on the architectural scope and semantic meaning of the file names and paths.
-
-ALLOWED TAGS & ARCHITECTURAL SCOPES:
-- @ui: Select if changes affect the Presentation Layer, visual styling, JSX/TSX layout rendering, DOM structure, component design systems, static content translations (i18n), design tokens, links, or CSS/Styled-components.
-- @validation: Select if changes affect Data Entry Management, form states, client-side input validations, field-level constraint checkers (length, regex matches), interactive state hooks (e.g., input handlers, useForm hooks), focus/blur life-cycle triggers, or local component error state reflections.
-- @auth: Select if changes affect the Network/Data Access Layer, API communication infrastructure (Axios, Fetch, query hooks), authorization/authentication routing guards, session lifecycle tokens, HTTP response interceptors, endpoint contract definitions, or async form submission handlers.
-- @security: Select if changes modify Defensive Architecture mechanisms, request rate limiting, input sanitization helpers (XSS/SQLi mitigations), concurrent asynchronous protection gates (e.g., button debouncers, double-submission locks, request cancellation patterns), or cryptographic handlers.
-
-Requirements:
-1. Act purely as a classifier. Do not explain your choice.
-2. You MUST respond with a valid JSON object matching this exact structure: {\"tag\": \"@tagname\"}"
+# 2. Гибкий промпт, требующий СТРОГО структуру JSON
+PROMPT="Analyze this modified file path: $CHANGED_FILES. 
+Classify it into exactly one architectural testing tag from this list: @ui, @validation, @auth, @security.
+You MUST respond with a valid JSON object matching this exact schema: {\"tag\": \"@tagname\"}"
 
 # 3. Делаем запрос к локальной Ollama API через эндпоинт Chat
-RESPONSE=$(curl -s http://localhost:11434/api/chat -d "$JSON_DATA")
+RESPONSE=$(curl -s http://localhost:11434/api/generate -d "{
+  \"model\": \"qwen3.5:9b\",
+  \"prompt\": \"$PROMPT\",
+  \"stream\": false,
+  \"format\": \"json\",
+  \"options\": {
+    \"temperature\": 0.0
+  }
+}")
 
-# Извлекаем текст ответа из структуры JSON Chat API (ответ лежит в message.content)
+# 4 Извлекаем текст ответа из структуры JSON Chat API (ответ лежит в message.content)
 PLAYWRIGHT_TAGS=$(echo "$RESPONSE" | node -e "
     const fs = require('fs');
     try {
-      const data = JSON.parse(fs.readFileSync(0, 'utf-8'));
-      console.log(data.message.content.trim());
+      const ollamaData = JSON.parse(fs.readFileSync(0, 'utf-8'));
+      const innerJson = JSON.parse(ollamaData.response);
+      const resTag = innerJson.tag.trim();
+      // Если ИИ прислал пустую строку, берем базовый @validation для этого файла
+      console.log(resTag || '@validation123');
     } catch(e) {
-      console.log('@smoke');
+      console.log('@validation123'); // Заменили фолбэк с @smoke на @validation для чистоты эксперимента!
     }
 ")
 
