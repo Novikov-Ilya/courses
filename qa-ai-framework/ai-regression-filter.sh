@@ -5,7 +5,7 @@ echo "🔄 Fetching latest changes from master..."
 git fetch origin master
 
 # Получаем список измененных файлов между текущей веткой и актуальным master
-CHANGED_FILES=$(git diff --name-only origin/master...HEAD)
+CHANGED_FILES=$(git diff --name-only origin/master...HEAD 2>/dev/null && git diff --name-only 2>/dev/null && git diff --cached --name-only 2>/dev/null | sort -u)
 
 # ЖЕСТКАЯ ПРОВЕРКА: Если изменений нет — тесты вообще не запускаются
 if [ -z "$CHANGED_FILES" ]; then
