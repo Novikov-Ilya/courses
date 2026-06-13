@@ -2,73 +2,62 @@ name: AI-Augmented Quality Gate
 
 on:
   pull_request:
-    branches: [ master, main ] # Добавили master, так как ты мержишь в него
+    branches: [ master, main ]
   push:
     branches: [ master, main ]
 
 jobs:
   ai-test-selection:
-    runs-on: self-hosted # Задача пойдет строго на твой ПК
+    runs-on: self-hosted # Задача идет строго на твой ПК
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Качаем всю историю для git diff
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Start React Application in Background
+      - name: Start Backend & Frontend Applications
         shell: bash
         run: |
-          echo "🚀 Starting React App..."
-          npm run dev & # Запуск фронтенда в фоне
+          echo "🚀 Installing Backend Dependencies & Starting NestJS Backend..."
+          # Переходим в точную папку бэкенда
+          cd ../courses-app-backend
+          npm ci || npm install
+          npm run start &
           
-          echo "⏳ Waiting for port 5173 to become active..."
-          # Легковесный способ подождать порт в Windows/Bash без сторонних библиотек
+          echo "🚀 Starting Frontend App..."
+          # Возвращаемся в корневую папку фронтенда раннера
+          cd $GITHUB_WORKSPACE
+          npm run dev &
+          
+          echo "⏳ Waiting for NestJS (4000) and Vite (5173) to become active..."
           for i in {1..30}; do
-            if curl -s http://localhost:5173 > /dev/null; then
-              echo "✅ React App is up and running!"
+            if curl -s http://localhost:5173 > /dev/null && curl -s http://localhost:4000/api > /dev/null; then
+              echo "✅ Complete Infrastructure (Frontend + NestJS Backend) is up and running!"
               break
             fi
             sleep 2
           done
 
-      - name: Run AI Impact Analysis & Smart Regression
+
+      - name: Run AI Impact Analysis & Smart Regression via Script
         shell: bash
         run: |
-          echo "========================================="
-          echo "🤖 Starting AI Impact Analysis..."
-          echo "========================================="
+          # Даем права на исполнение скрипту (актуально для Bash-окружения)
+          chmod +x ./ai-regression-filter.sh
           
-          # Берем измененные файлы между текущей веткой и master
-          CHANGED_FILES=$(git diff --name-only origin/master...HEAD || git diff --name-only HEAD~1 HEAD)
-          echo "Detected changed files:"
-          echo "$CHANGED_FILES"
-          
-          # Запрос к твоей локальной Ollama API
-          PROMPT="Analyze these changed files in React project: $CHANGED_FILES. Based on our suite, choose test tags to run: @login, @courses, @smoke. Return ONLY tags format like '@login|@smoke'. No explanation, no markdown blocks, just raw string."
-          
-          RESPONSE=$(curl -s http://localhost:11434/api/generate -d "{
-            \"model\": \"qwen3.5:9b\",
-            \"prompt\": \"$PROMPT\",
-            \"stream\": false
-          }")
-          
-          # Безопасный парсинг ответа
-          TAGS=$(echo "$RESPONSE" | node -e "
-            const fs = require('fs');
-            try {
-              const obj = JSON.parse(fs.readFileSync(0, 'utf-8'));
-              console.log(obj.response.trim());
-            } catch(e) {
-              console.log('@smoke');
-            }
-          ")
-          echo "Selected Target Tags: $TAGS"
-          
-          echo "========================================="
-          echo "🎭 Executing Filtered Playwright Tests..."
-          echo "========================================="
-          npx playwright test --grep "$TAGS"
+          # Запускаем наш единый скрипт автоматизации
+          ./ai-regression-filter.sh
+
+      - name: Upload Playwright HTML Report to GitHub
+        if: always() # Выгружаем отчет в любом случае (даже при падении тестов)
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-artifact
+          path: |
+            qa-ai-framework/playwright-report/
+            playwright-report/
+          retention-days: 7
