@@ -109,7 +109,7 @@ echo "🌐 Checking local environment ports..."
 # Проверяем NestJS бэкенд на порту 4000
 if ! curl -s http://localhost:4000/api > /dev/null; then
     echo "⚙️ NestJS Backend is offline. Starting automatically from courses-app-backend..."
-    (cd ../courses-app-backend && npm run start &)
+    (cd "E:/JS/courses-app-backend" && npm run start &)
 fi
 
 # Проверяем Vite фронтенд на порту 5173
