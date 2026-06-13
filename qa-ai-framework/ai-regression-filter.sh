@@ -21,48 +21,38 @@ echo "Detected changed files:"
 echo "$CHANGED_FILES"
 echo "========================================="
 
-# 2. Модифицированный промпт с учетом расширенной матрицы тегов
-PROMPT="You are a strict CI/CD Test Selection Automation Agent. 
-Analyze these changed files in a React project:
-$CHANGED_FILES
-
-You MUST choose and return EXACTLY ONE or TWO tags from the allowed list below that best match the modified files.
-
-ALLOWED TAGS:
-- @ui (Use if CSS, layout, placeholders, HTML tags, links, or styles are changed)
-- @validation (Use if validation hooks, useFormValidate, inputError, length checks, or onBlur/onChange logic are changed)
-- @auth (Use if submithForm, API contracts, status codes 201/401, or logIn methods are changed)
-- @security (Use if XSS containers, sanitization, rapid clicks, or race conditions are changed)
-- @smoke (Use ONLY if multiple unrelated modules are changed at once or global config files are modified)
-
-CRITICAL EXAMPLES FOR TRAINING:
-Example 1: If changed files contains 'useFormValidate.ts' -> output strictly: @validation
-Example 2: If changed files contains 'Login.tsx' link updates -> output strictly: @ui
-Example 3: If changed files contains 'submitForm' API modifications -> output strictly: @auth
-
-Rules:
-1. Do not use your imagination. Match the filename directly with the ALLOWED TAGS.
-2. Return ONLY the raw tag string (e.g., '@validation' or '@ui'). 
-3. No explanations, no markdown formatting, no preamble, no backticks. Just the raw text."
-
-# 3. Запрос к локальной Ollama API
-RESPONSE=$(curl -s http://localhost:11434/api/generate -d "{
-  \"model\": \"qwen3.5:9b\",
-  \"prompt\": \"$PROMPT\",
-  \"stream\": false
-  \"options\": {
-    \"temperature\": 0.0,
-    \"top_p\": 0.1,
-    \"num_predict\": 10
+# 2. Формируем структурированный JSON для эндпоинта /api/chat с системной ролью
+JSON_DATA=$(cat <<EOF
+{
+  "model": "qwen3.5:9b",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a strict CI/CD Test Selection Automation Agent. Analyze the user's modified files list and return EXACTLY ONE tag from this allowed list: @ui, @validation, @auth, @security, @smoke. Direct rules: 1. If files contain 'useFormValidate.ts', output strictly: @validation. 2. If files contain CSS/layout/links in 'Login.tsx', output strictly: @ui. 3. If files contain API/submitForm/logIn, output strictly: @auth. Return ONLY the raw tag string. No explanations, no markdown blocks, no quotes. Just the raw text."
+    },
+    {
+      "role": "user",
+      "content": "Modified files in this commit: $CHANGED_FILES"
+    }
+  ],
+  "stream": false,
+  "options": {
+    "temperature": 0.0,
+    "num_predict": 10
   }
-}")
+}
+EOF
+)
 
-# Извлекаем текст ответа ИИ с безопасным фолбэком
+# 3. Делаем запрос к локальной Ollama API через эндпоинт Chat
+RESPONSE=$(curl -s http://localhost:11434/api/chat -d "$JSON_DATA")
+
+# Извлекаем текст ответа из структуры JSON Chat API (ответ лежит в message.content)
 PLAYWRIGHT_TAGS=$(echo "$RESPONSE" | node -e "
     const fs = require('fs');
     try {
       const data = JSON.parse(fs.readFileSync(0, 'utf-8'));
-      console.log(data.response.trim());
+      console.log(data.message.content.trim());
     } catch(e) {
       console.log('@smoke');
     }
