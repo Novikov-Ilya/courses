@@ -22,23 +22,28 @@ echo "$CHANGED_FILES"
 echo "========================================="
 
 # 2. Модифицированный промпт с учетом расширенной матрицы тегов
-PROMPT="You are a CI/CD Test Selection Agent. Given the following modified files in a React project:
+PROMPT="You are a strict CI/CD Test Selection Automation Agent. 
+Analyze these changed files in a React project:
 $CHANGED_FILES
 
-Our Playwright test suite has a granular tagging system structured inside describe blocks:
-- @login (Global login module identifier)
-- @ui (Layout, initial structural states, rendering placeholders)
-- @navigation (SPA routing paths, route access pathways, link integrity)
-- @validation (Forms validation, field blur sequences, error states)
-- @state (Active data bindings, client-side boundary interceptions)
-- @auth (Authentication flows, positive/negative API response scenarios)
-- @regression (Core functional regression contract handlers)
-- @security (Defensive risk assessments, XSS sanitization, race conditions)
-- @asynchrony (Inflight state mutations, async network speed drops)
-- @smoke (Critical path sanity scenarios across blocks)
+You MUST choose and return EXACTLY ONE or TWO tags from the allowed list below that best match the modified files.
 
-Determine the most accurate and narrow logical combination of test tags that MUST be executed based on the code changes (e.g. '@validation|@state' or '@ui|@navigation'). If changes are highly critical or broad, return '@smoke' or '@login'. 
-Return ONLY the tags separated by OR operator for Playwright (e.g. '@ui|@validation'). Do not write any explanations, code blocks, or preamble. Just the raw string."
+ALLOWED TAGS:
+- @ui (Use if CSS, layout, placeholders, HTML tags, links, or styles are changed)
+- @validation (Use if validation hooks, useFormValidate, inputError, length checks, or onBlur/onChange logic are changed)
+- @auth (Use if submithForm, API contracts, status codes 201/401, or logIn methods are changed)
+- @security (Use if XSS containers, sanitization, rapid clicks, or race conditions are changed)
+- @smoke (Use ONLY if multiple unrelated modules are changed at once or global config files are modified)
+
+CRITICAL EXAMPLES FOR TRAINING:
+Example 1: If changed files contains 'useFormValidate.ts' -> output strictly: @validation
+Example 2: If changed files contains 'Login.tsx' link updates -> output strictly: @ui
+Example 3: If changed files contains 'submitForm' API modifications -> output strictly: @auth
+
+Rules:
+1. Do not use your imagination. Match the filename directly with the ALLOWED TAGS.
+2. Return ONLY the raw tag string (e.g., '@validation' or '@ui'). 
+3. No explanations, no markdown formatting, no preamble, no backticks. Just the raw text."
 
 # 3. Запрос к локальной Ollama API
 RESPONSE=$(curl -s http://localhost:11434/api/generate -d "{
