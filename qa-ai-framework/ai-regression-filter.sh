@@ -1,13 +1,15 @@
 #!/bin/bash
 
-# 1. Обновляем информацию о ветках из удаленного репозитория
+# =========================================================================
+# 1. ИНИЦИАЛИЗАЦИЯ И СБОР ИЗМЕНЕНИЙ GIT
+# =========================================================================
 echo "🔄 Fetching latest changes from master..."
 git fetch origin master
 
-# Получаем список измененных файлов между текущей веткой и актуальным master
+# Сбор измененных, добавленных и проиндексированных файлов
 CHANGED_FILES=$(git diff --name-only origin/master...HEAD 2>/dev/null && git diff --name-only 2>/dev/null && git diff --cached --name-only 2>/dev/null | sort -u)
 
-# ЖЕСТКАЯ ПРОВЕРКА: Если изменений нет — тесты вообще не запускаются
+# Жесткая проверка: если изменений нет, останавливаем процесс
 if [ -z "$CHANGED_FILES" ]; then
     echo "============================================="
     echo "🟩 AI Regression Guard: No changes detected compared to master."
@@ -21,39 +23,56 @@ echo "Detected changed files:"
 echo "$CHANGED_FILES"
 echo "========================================="
 
-# 2. Гибкий промпт, требующий СТРОГО структуру JSON
-PROMPT="Analyze this modified file path: $CHANGED_FILES. 
-Classify it into exactly one architectural testing tag from this list: @ui, @validation, @auth, @security.
-You MUST respond with a valid JSON object matching this exact schema: {\"tag\": \"@tagname\"}"
+# =========================================================================
+# 2. БЕЗОПАСНАЯ ГЕНЕРАЦИЯ JSON ЗАПРОСА (ЗАЩИТА ОТ БАГОВ ЭКРАНИРОВАНИЯ WINDOWS)
+# =========================================================================
+# Node.js сама собирает и экранирует JSON-файл, избегая проблем со слэшами Windows
+node -e "
+const fs = require('fs');
 
-# 3. Записываем чистый JSON во временный файл (Windows его не сломает)
-cat <<EOF > ollama_request.json
-{
-  "model": "qwen3.5:9b",
-  "prompt": "$PROMPT",
-  "stream": false,
-  "format": "json",
-  "options": {
-    "temperature": 0.0
+// Безопасно прокидываем список файлов из bash-окружения
+const changedFiles = process.env.CHANGED_FILES || \`$CHANGED_FILES\`;
+
+const prompt = 'Analyze this modified file path: ' + changedFiles.trim() + '.\n' +
+               'Classify it into exactly one architectural testing tag from this list: @ui, @validation, @auth, @security.\n' +
+               'You MUST respond with a valid JSON object matching this exact schema: {\"tag\": \"@tagname\"}';
+
+const requestBody = {
+  model: 'qwen3.5:9b',
+  prompt: prompt,
+  stream: false,
+  format: 'json',
+  options: { 
+    temperature: 0.0 
   }
-}
-EOF
+};
 
-# Делаем запрос к Ollama, передавая файл через @
+fs.writeFileSync('ollama_request.json', JSON.stringify(requestBody, null, 2), 'utf-8');
+"
+
+# =========================================================================
+# 3. ЗАПРОС К API ЛОКАЛЬНОЙ МОДЕЛИ OLLAMA
+# =========================================================================
+# Передаем гарантированно валидный файл без сломанных символов
 RESPONSE=$(curl -s -X POST http://localhost:11434/api/generate -H "Content-Type: application/json" -d @ollama_request.json)
 
-# Удаляем временный файл, чтобы не мусорить в проекте
+# Чистим за собой временный файл конфигурации
 rm ollama_request.json
 
-# 4 Извлекаем текст ответа из структуры JSON Chat API (ответ лежит в message.content)
+# =========================================================================
+# 4. ИЗВЛЕЧЕНИЕ И ВАЛИДАЦИЯ ТЕГА ИЗ ОТВЕТА
+# =========================================================================
 PLAYWRIGHT_TAGS=$(echo "$RESPONSE" | node -e "
     const fs = require('fs');
+    const rawInput = fs.readFileSync(0, 'utf-8');
     try {
-      const ollamaData = JSON.parse(fs.readFileSync(0, 'utf-8'));
+      const ollamaData = JSON.parse(rawInput);
       const innerJson = JSON.parse(ollamaData.response);
-      const resTag = innerJson.tag.trim();
-      console.log(resTag || '@validation123');
+      console.log(innerJson.tag.trim() || '@validation123');
     } catch(e) {
+      // Логируем ошибку парсинга, если что-то пошло не так
+      fs.writeSync(2, '\n❌ NODE PARSING ERROR: ' + e.message + '\n');
+      fs.writeSync(2, '📄 RAW OLLAMA RESPONSE: ' + rawInput + '\n\n');
       console.log('@validation123');
     }
 ")
@@ -62,21 +81,24 @@ echo "============================================="
 echo "🤖 AI Impact Analysis Result: Running tests matching tags -> $PLAYWRIGHT_TAGS"
 echo "============================================="
 
+# =========================================================================
+# 5. ОРКЕСТРАЦИЯ ЛОКАЛЬНЫХ СЕРВЕРОВ (BACKEND & FRONTEND)
+# =========================================================================
 echo "🌐 Checking local environment ports..."
 
-# 1. Проверяем NestJS бэкенд на порту 4000
+# Проверяем NestJS бэкенд на порту 4000
 if ! curl -s http://localhost:4000/api > /dev/null; then
     echo "⚙️ NestJS Backend is offline. Starting automatically from courses-app-backend..."
     (cd ../courses-app-backend && npm run start &)
 fi
 
-# 2. Проверяем Vite фронтенд на порту 5173
+# Проверяем Vite фронтенд на порту 5173
 if ! curl -s http://localhost:5173 > /dev/null; then
     echo "⚙️ Frontend is offline. Starting frontend automatically..."
     npm run dev &
 fi
 
-# 3. Ожидаем взаимной готовности обеих платформ
+# Ожидаем взаимной готовности обеих платформ
 echo "⏳ Waiting for local servers to respond..."
 for i in {1..15}; do
     if curl -s http://localhost:5173 > /dev/null && curl -s http://localhost:4000/api > /dev/null; then
@@ -86,5 +108,7 @@ for i in {1..15}; do
     sleep 2
 done
 
-# 4. Запускаем Playwright только с выбранными ИИ узкими тегами
+# =========================================================================
+# 6. ЗАПУСК PLAYWRIGHT С КОНТЕКСТНЫМИ ИИ-ТЕГАМИ
+# =========================================================================
 npx playwright test --grep "$PLAYWRIGHT_TAGS"
