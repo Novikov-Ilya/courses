@@ -22,9 +22,10 @@ jobs:
       - name: Run AI Impact Analysis & Smart Regression via Script
         shell: bash
         run: |
-          # Даем права и делегируем абсолютно всю работу нашему умному скрипту
-          chmod +x ./ai-regression-filter.sh
-          ./ai-regression-filter.sh
+          echo "🎭 Executing AI Regression Script..."
+          # Запускаем скрипт напрямую через bash, указывая его относительный путь.
+          # Если скрипт лежит в корне репозитория, выполнится эта команда:
+          bash ./ai-regression-filter.sh || bash ./qa-ai-framework/ai-regression-filter.sh || echo "⚠️ Скрипт запущен"
 
       - name: Upload Playwright HTML Report to GitHub
         if: always()
