@@ -34,7 +34,6 @@ ALLOWED TAGS & ARCHITECTURAL SCOPES:
 - @validation: Select if changes affect Data Entry Management, form states, client-side input validations, field-level constraint checkers (length, regex matches), interactive state hooks (e.g., input handlers, useForm hooks), focus/blur life-cycle triggers, or local component error state reflections.
 - @auth: Select if changes affect the Network/Data Access Layer, API communication infrastructure (Axios, Fetch, query hooks), authorization/authentication routing guards, session lifecycle tokens, HTTP response interceptors, endpoint contract definitions, or async form submission handlers.
 - @security: Select if changes modify Defensive Architecture mechanisms, request rate limiting, input sanitization helpers (XSS/SQLi mitigations), concurrent asynchronous protection gates (e.g., button debouncers, double-submission locks, request cancellation patterns), or cryptographic handlers.
-- @smoke: Select ONLY as a safe fallback if changes alter global infrastructure configurations (e.g., package.json, vite.config, playwright.config, CI/CD workflows, tsconfig) or modify multiple tightly coupled core business domains at the same time.
 
 Requirements:
 1. Act purely as a classifier. Do not explain your choice.
