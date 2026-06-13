@@ -26,16 +26,24 @@ PROMPT="Analyze this modified file path: $CHANGED_FILES.
 Classify it into exactly one architectural testing tag from this list: @ui, @validation, @auth, @security.
 You MUST respond with a valid JSON object matching this exact schema: {\"tag\": \"@tagname\"}"
 
-# 3. Делаем запрос к локальной Ollama API через эндпоинт Chat
-RESPONSE=$(curl -s http://localhost:11434/api/generate -d "{
-  \"model\": \"qwen3.5:9b\",
-  \"prompt\": \"$PROMPT\",
-  \"stream\": false,
-  \"format\": \"json\",
-  \"options\": {
-    \"temperature\": 0.0
+# 3. Записываем чистый JSON во временный файл (Windows его не сломает)
+cat <<EOF > ollama_request.json
+{
+  "model": "qwen3.5:9b",
+  "prompt": "$PROMPT",
+  "stream": false,
+  "format": "json",
+  "options": {
+    "temperature": 0.0
   }
-}")
+}
+EOF
+
+# Делаем запрос к Ollama, передавая файл через @
+RESPONSE=$(curl -s -X POST http://localhost:11434/api/generate -H "Content-Type: application/json" -d @ollama_request.json)
+
+# Удаляем временный файл, чтобы не мусорить в проекте
+rm ollama_request.json
 
 # 4 Извлекаем текст ответа из структуры JSON Chat API (ответ лежит в message.content)
 PLAYWRIGHT_TAGS=$(echo "$RESPONSE" | node -e "
@@ -44,10 +52,9 @@ PLAYWRIGHT_TAGS=$(echo "$RESPONSE" | node -e "
       const ollamaData = JSON.parse(fs.readFileSync(0, 'utf-8'));
       const innerJson = JSON.parse(ollamaData.response);
       const resTag = innerJson.tag.trim();
-      // Если ИИ прислал пустую строку, берем базовый @validation для этого файла
       console.log(resTag || '@validation123');
     } catch(e) {
-      console.log('@validation123'); // Заменили фолбэк с @smoke на @validation для чистоты эксперимента!
+      console.log('@validation123');
     }
 ")
 
