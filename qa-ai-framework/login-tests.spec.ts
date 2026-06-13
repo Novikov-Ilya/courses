@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from './pom/login.page';
 import { LoginDictionary } from './types/i18n';
 
-// Unified i18n vocabulary conforming strictly to the LoginDictionary type definition
 const dictionary: LoginDictionary = {
   loginPageTitle: 'Login',
   inputLabelEmail: 'Email Address',
@@ -16,18 +15,16 @@ const dictionary: LoginDictionary = {
   linkRegistration: 'Register here'
 };
 
-test.describe('Login Module - TypeScript Page Object Model Verification Suite @login', () => {
+/* =========================================================================
+   BLOCK 1: CORE LAYOUT, NAVIGATION & ACCESSIBILITY
+   ========================================================================= */
+test.describe('Login Module - Layout & Navigation Verifications @login @ui @navigation', () => {
   let loginPage: LoginPage;
 
   test.beforeEach(async ({ page }) => {
-    // Instantiate Page Object Model infrastructure prior to executing scenarios
     loginPage = new LoginPage(page, dictionary);
     await loginPage.navigateTo();
   });
-
-  /* =========================================================================
-     BUSINESS REQUIREMENTS TESTS (BRD COVERAGE)
-     ========================================================================= */
 
   test('REQ-01 & REQ-10: Initial Layout Structural Validity and State Blank Baselines @smoke', async () => {
     await expect(loginPage.headingTitle).toBeVisible();
@@ -37,7 +34,7 @@ test.describe('Login Module - TypeScript Page Object Model Verification Suite @l
     await expect(loginPage.passwordInput).not.toHaveAttribute('data-error', 'true');
   });
 
-  test('REQ-02: Registration Route Access Pathway Access Verification', async ({ page }) => {
+  test('REQ-02: Registration Route Access Pathway Access Verification @smoke', async ({ page }) => {
     const contextText = page.getByText(dictionary.registerIfNoAccount, { exact: false });
     await expect(contextText).toBeVisible();
     await expect(loginPage.registrationLink).toBeVisible();
@@ -46,7 +43,7 @@ test.describe('Login Module - TypeScript Page Object Model Verification Suite @l
     await expect(page).toHaveURL(/\/registration$/);
   });
 
-  test('REQ-03 & REQ-04: Form Identity Fields Structural Attributes Configuration', async () => {
+  test('REQ-03 & REQ-04: Form Identity Fields Structural Attributes Configuration @ui', async () => {
     await expect(loginPage.emailInput).toHaveAttribute('placeholder', dictionary.inputPlaceholderEmail);
     await expect(loginPage.emailInput).toHaveAttribute('id', dictionary.inputNameEmail);
     await expect(loginPage.emailInput).toHaveAttribute('type', 'email');
@@ -54,6 +51,31 @@ test.describe('Login Module - TypeScript Page Object Model Verification Suite @l
     await expect(loginPage.passwordInput).toHaveAttribute('placeholder', dictionary.inputPlaceholderPassword);
     await expect(loginPage.passwordInput).toHaveAttribute('id', dictionary.inputNamePassword);
     await expect(loginPage.passwordInput).toHaveAttribute('type', 'password');
+  });
+
+  test('BUG-05: Standard Context Keyboard Submission Mapping Functionality @auth', async () => {
+    let formsRouted = false;
+    await loginPage.page.route('**/api/login', async (route) => {
+      formsRouted = true;
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true }) });
+    });
+
+    await loginPage.fillCredentials('accessibility@compliance.org', 'KeyboardDriven123!');
+    await loginPage.passwordInput.press('Enter');
+
+    expect(formsRouted).toBe(true);
+  });
+});
+
+/* =========================================================================
+   BLOCK 2: FORMS VALIDATION & INTERACTIVE STATE MANAGEMENT
+   ========================================================================= */
+test.describe('Login Module - Form Validation & Active Data Bindings @login @validation @state', () => {
+  let loginPage: LoginPage;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page, dictionary);
+    await loginPage.navigateTo();
   });
 
   test('REQ-05 & REQ-12: Client-Side Focus Loss Field-Level Validation Triggers', async () => {
@@ -73,6 +95,29 @@ test.describe('Login Module - TypeScript Page Object Model Verification Suite @l
     await expect(loginPage.passwordInput).toHaveValue(testPassword);
   });
 
+  test('BUG-03: Empty Data Submission Client Boundary Interception Validation', async () => {
+    let apiCalled = false;
+    await loginPage.page.route('**/api/login', async (route) => {
+      apiCalled = true;
+      await route.abort();
+    });
+
+    await loginPage.clickSubmitButton();
+    expect(apiCalled).toBe(false);
+  });
+});
+
+/* =========================================================================
+   BLOCK 3: AUTHENTICATION FLOWS & ROUTER TARGET RESOLUTION
+   ========================================================================= */
+test.describe('Login Module - Authentication Workflows & API Contract Handlers @login @auth @regression', () => {
+  let loginPage: LoginPage;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page, dictionary);
+    await loginPage.navigateTo();
+  });
+
   test('REQ-06 & REQ-07 & REQ-09: Post-Successful Authentication Router Target Resolution @smoke', async ({ page }) => {
     await page.route('**/api/login', async (route) => {
       await route.fulfill({
@@ -83,7 +128,7 @@ test.describe('Login Module - TypeScript Page Object Model Verification Suite @l
     });
 
     await expect(loginPage.submitButton).toHaveAttribute('type', 'submit');
-    await loginPage.executeLoginWorkflow('student@academy.com', 'PassingPass77!');
+    await loginPage.executeLoginWorkflow('admin@email.com', 'admin123');
     await expect(page).toHaveURL(/\/courses$/);
   });
 
@@ -105,10 +150,18 @@ test.describe('Login Module - TypeScript Page Object Model Verification Suite @l
     await expect(localErrorMsg).toHaveText(errorPayloadMessage);
     await expect(page).toHaveURL(/\/login$/);
   });
+});
 
-  /* =========================================================================
-     DEFENSIVE APP RISK ASSESSMENTS (BUG RISK COVERAGE)
-     ========================================================================= */
+/* =========================================================================
+   BLOCK 4: DEFENSIVE RISK ASSESSMENTS & ASYNCHRONOUS SECURITY
+   ========================================================================= */
+test.describe('Login Module - Defensive App Edge Cases & Security Mitigations @login @security @asynchrony', () => {
+  let loginPage: LoginPage;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page, dictionary);
+    await loginPage.navigateTo();
+  });
 
   test('BUG-01: Resilience Against Malformed API Responses and Gateway Drops', async () => {
     await loginPage.page.route('**/api/login', async (route) => {
@@ -135,7 +188,6 @@ test.describe('Login Module - TypeScript Page Object Model Verification Suite @l
 
     await loginPage.fillCredentials('user@example.com', 'Password123!');
     
-    // Fire concurrent duplicate user submission events via the Page Object model
     await Promise.all([
       loginPage.clickSubmitButton(),
       loginPage.clickSubmitButton(),
@@ -145,18 +197,7 @@ test.describe('Login Module - TypeScript Page Object Model Verification Suite @l
     expect(requestCount).toBe(1);
   });
 
-  test('BUG-03: Empty Data Submission Client Boundary Interception Validation', async () => {
-    let apiCalled = false;
-    await loginPage.page.route('**/api/login', async (route) => {
-      apiCalled = true;
-      await route.abort();
-    });
-
-    await loginPage.clickSubmitButton();
-    expect(apiCalled).toBe(false);
-  });
-
-  test('BUG-04: Cross-Site Scripting (XSS) Error Container Render Sanitization @security', async () => {
+  test('BUG-04: Cross-Site Scripting (XSS) Error Container Render Sanitization', async () => {
     const dangerousPayload = '<script>alert("XSS_EXPLOIT")</script><img src=x onerror=alert(1)>';
 
     await loginPage.page.route('**/api/login', async (route) => {
@@ -176,19 +217,6 @@ test.describe('Login Module - TypeScript Page Object Model Verification Suite @l
     expect(innerHTML).toContain('&lt;script&gt;');
   });
 
-  test('BUG-05: Standard Context Keyboard Submission Mapping Functionality', async () => {
-    let formsRouted = false;
-    await loginPage.page.route('**/api/login', async (route) => {
-      formsRouted = true;
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true }) });
-    });
-
-    await loginPage.fillCredentials('accessibility@compliance.org', 'KeyboardDriven123!');
-    await loginPage.passwordInput.press('Enter');
-
-    expect(formsRouted).toBe(true);
-  });
-
   test('BUG-06 & BUG-07: Inflight State Mutation Adjustments Under Slow API Flights', async () => {
     await loginPage.page.route('**/api/login', async (route) => {
       await new Promise(resolve => setTimeout(resolve, 200));
@@ -202,7 +230,6 @@ test.describe('Login Module - TypeScript Page Object Model Verification Suite @l
     await loginPage.fillCredentials('stale@closure.net', 'PendingPass44!');
     await loginPage.clickSubmitButton();
 
-    // Mutate state mid-flight to verify consistency
     await loginPage.emailInput.fill('mutated.data@closure.net');
     await loginPage.page.waitForTimeout(250);
 
