@@ -62,18 +62,41 @@ rm ollama_request.json
 # =========================================================================
 # 4. ИЗВЛЕЧЕНИЕ И ВАЛИДАЦИЯ ТЕГА ИЗ ОТВЕТА
 # =========================================================================
+# =========================================================================
+# 4. ИЗВЛЕЧЕНИЕ И ВАЛИДАЦИЯ ТЕГА ИЗ ОТВЕТА (С ЗАЩИТОЙ ОТ THINKING-КЭША)
+# =========================================================================
 PLAYWRIGHT_TAGS=$(echo "$RESPONSE" | node -e "
     const fs = require('fs');
     const rawInput = fs.readFileSync(0, 'utf-8');
     try {
       const ollamaData = JSON.parse(rawInput);
-      const innerJson = JSON.parse(ollamaData.response);
-      console.log(innerJson.tag.trim() || '@validation123');
+      
+      let finalTag = '';
+      
+      // 1. Пытаемся распарсить стандартный JSON из поля response
+      if (ollamaData.response && ollamaData.response.trim().length > 0) {
+        try {
+          const innerJson = JSON.parse(ollamaData.response);
+          finalTag = innerJson.tag;
+        } catch(e) {}
+      }
+      
+      // 2. Если response пуст, вытаскиваем тег напрямую из цепочки рассуждений (thinking)
+      if (!finalTag && ollamaData.thinking) {
+        const thought = ollamaData.thinking;
+        // Ищем регулярным выражением любой из разрешенных тегов в тексте рассуждений
+        const match = thought.match(/@(auth|ui|validation|security|smoke)/i);
+        if (match) {
+          finalTag = match[0].toLowerCase();
+        }
+      }
+      
+      // Выводим результат, убирая лишние кавычки. Если совсем пусто — ставим дефолтный @smoke
+      console.log(finalTag.trim().replace(/['\"\`]/g, '') || '@smoke');
+      
     } catch(e) {
-      // Логируем ошибку парсинга, если что-то пошло не так
       fs.writeSync(2, '\n❌ NODE PARSING ERROR: ' + e.message + '\n');
-      fs.writeSync(2, '📄 RAW OLLAMA RESPONSE: ' + rawInput + '\n\n');
-      console.log('@validation123');
+      console.log('@smoke');
     }
 ")
 
