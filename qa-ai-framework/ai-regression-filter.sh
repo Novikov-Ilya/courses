@@ -50,6 +50,11 @@ RESPONSE=$(curl -s http://localhost:11434/api/generate -d "{
   \"model\": \"qwen3.5:9b\",
   \"prompt\": \"$PROMPT\",
   \"stream\": false
+  \"options\": {
+    \"temperature\": 0.0,
+    \"top_p\": 0.1,
+    \"num_predict\": 10
+  }
 }")
 
 # Извлекаем текст ответа ИИ с безопасным фолбэком
