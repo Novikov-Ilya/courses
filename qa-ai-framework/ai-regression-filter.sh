@@ -29,12 +29,12 @@ $CHANGED_FILES
 Your task is to classify these changes and select EXACTLY ONE testing tag from the allowed list below. 
 Base your decision on the architectural scope and semantic meaning of the file names and paths.
 
-ALLOWED TAGS:
-- @ui: Select if changes affect the visual layer, layout rendering, UI components, placeholders, CSS, or links.
-- @validation: Select if changes affect form validations, fields input state management, business validation logic, input error states, or field focus/blur behaviors.
-- @auth: Select if changes affect backend API communication contracts, login/logout workflow handling, session tokens, or submission handlers.
-- @security: Select if changes target security mitigations, XSS defense, inputs sanitization, or asynchronous race conditions (e.g., duplicate submissions).
-- @smoke: Select ONLY if changes modify global infrastructure configuration files, package dependencies, or multiple unrelated modules simultaneously.
+ALLOWED TAGS & ARCHITECTURAL SCOPES:
+- @ui: Select if changes affect the Presentation Layer, visual styling, JSX/TSX layout rendering, DOM structure, component design systems, static content translations (i18n), design tokens, links, or CSS/Styled-components.
+- @validation: Select if changes affect Data Entry Management, form states, client-side input validations, field-level constraint checkers (length, regex matches), interactive state hooks (e.g., input handlers, useForm hooks), focus/blur life-cycle triggers, or local component error state reflections.
+- @auth: Select if changes affect the Network/Data Access Layer, API communication infrastructure (Axios, Fetch, query hooks), authorization/authentication routing guards, session lifecycle tokens, HTTP response interceptors, endpoint contract definitions, or async form submission handlers.
+- @security: Select if changes modify Defensive Architecture mechanisms, request rate limiting, input sanitization helpers (XSS/SQLi mitigations), concurrent asynchronous protection gates (e.g., button debouncers, double-submission locks, request cancellation patterns), or cryptographic handlers.
+- @smoke: Select ONLY as a safe fallback if changes alter global infrastructure configurations (e.g., package.json, vite.config, playwright.config, CI/CD workflows, tsconfig) or modify multiple tightly coupled core business domains at the same time.
 
 Requirements:
 1. Act purely as a classifier. Do not explain your choice.
