@@ -21,28 +21,24 @@ echo "Detected changed files:"
 echo "$CHANGED_FILES"
 echo "========================================="
 
-# 2. Формируем структурированный JSON для эндпоинта /api/chat с системной ролью
-JSON_DATA=$(cat <<EOF
-{
-  "model": "qwen3.5:9b",
-  "messages": [
-    {
-      "role": "system",
-      "content": "You are a strict CI/CD Test Selection Automation Agent. Analyze the user's modified files list and return EXACTLY ONE tag from this allowed list: @ui, @validation, @auth, @security, @smoke. Direct rules: 1. If files contain 'useFormValidate.ts', output strictly: @validation. 2. If files contain CSS/layout/links in 'Login.tsx', output strictly: @ui. 3. If files contain API/submitForm/logIn, output strictly: @auth. Return ONLY the raw tag string. No explanations, no markdown blocks, no quotes. Just the raw text."
-    },
-    {
-      "role": "user",
-      "content": "Modified files in this commit: $CHANGED_FILES"
-    }
-  ],
-  "stream": false,
-  "options": {
-    "temperature": 0.0,
-    "num_predict": 10
-  }
-}
-EOF
-)
+# 2. Чистый, гибкий и масштабируемый промпт без хардкода файлов
+PROMPT="You are an expert CI/CD Test Selection Agent. 
+Analyze the following modified file paths from a Git commit:
+$CHANGED_FILES
+
+Your task is to classify these changes and select EXACTLY ONE testing tag from the allowed list below. 
+Base your decision on the architectural scope and semantic meaning of the file names and paths.
+
+ALLOWED TAGS:
+- @ui: Select if changes affect the visual layer, layout rendering, UI components, placeholders, CSS, or links.
+- @validation: Select if changes affect form validations, fields input state management, business validation logic, input error states, or field focus/blur behaviors.
+- @auth: Select if changes affect backend API communication contracts, login/logout workflow handling, session tokens, or submission handlers.
+- @security: Select if changes target security mitigations, XSS defense, inputs sanitization, or asynchronous race conditions (e.g., duplicate submissions).
+- @smoke: Select ONLY if changes modify global infrastructure configuration files, package dependencies, or multiple unrelated modules simultaneously.
+
+Requirements:
+1. Act purely as a classifier. Do not explain your choice.
+2. You MUST respond with a valid JSON object matching this exact structure: {\"tag\": \"@tagname\"}"
 
 # 3. Делаем запрос к локальной Ollama API через эндпоинт Chat
 RESPONSE=$(curl -s http://localhost:11434/api/chat -d "$JSON_DATA")
