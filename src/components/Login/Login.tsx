@@ -77,7 +77,7 @@ export const Login = () => {
 
           <p>{dictionary.registerIfNoAccount}
             <Link to={'/registration'}>{dictionary.linkRegistration}</Link>
-            
+            <p>new into</p>
           </p>
         </SimpleFormStyled>
       </WrapperStyled>
